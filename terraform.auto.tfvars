@@ -234,10 +234,10 @@ txt_records = {
     ttl                 = 300
     records = {
       "txtrecordA" = {
-        value   = "apple"
+        value = "apple"
       }
       "txtrecordB" = {
-        value   = "banana"
+        value = "banana"
       }
     }
     tags = {
@@ -252,10 +252,10 @@ txt_records = {
     ttl                 = 300
     records = {
       "txtrecordC" = {
-        value   = "orange"
+        value = "orange"
       }
       "txtrecordD" = {
-        value   = "durian"
+        value = "durian"
       }
     }
     tags = {

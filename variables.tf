@@ -38,6 +38,7 @@ variable "soa_record" {
     ttl          = optional(number, 3600)
     tags         = optional(map(string), null)
   })
+  default = null
 }
 
 

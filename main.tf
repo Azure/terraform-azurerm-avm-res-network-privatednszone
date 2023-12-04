@@ -12,7 +12,7 @@ resource "azurerm_private_dns_zone" "example" {
 
   # create the soa_record block only if the var.soa_record is not empty
   dynamic "soa_record" {
-    for_each = length(var.soa_record) > 0 ? [1] : []
+    for_each = var.soa_record != null ? [1] : []
     content {
       email        = var.soa_record.email
       expire_time  = var.soa_record.expire_time
