@@ -1,7 +1,19 @@
 <!-- BEGIN_TF_DOCS -->
-# terraform-azurerm-avm-res-network-privatednszone
+# terraform-azurerm-avm-template
 
-This is a module developed as part of Terraform Azure Verified Modules project and can be used to deploy Private DNS Zones.
+This is a template repo for Terraform Azure Verified Modules.
+
+Things to do:
+
+1. Set up a GitHub repo environment called `test`.
+1. Configure environment protection rule to ensure that approval is required before deploying to this environment.
+1. Create a user-assigned managed identity in your test subscription.
+1. Create a role assignment for the managed identity on your test subscription, use the minimum required role.
+1. Configure federated identity credentials on the user assigned managed identity. Use the GitHub environment.
+1. Create the following environment secrets on the `test` environment:
+   1. AZURE\_CLIENT\_ID
+   1. AZURE\_TENANT\_ID
+   1. AZURE\_SUBSCRIPTION\_ID
 
 Major version Zero (0.y.z) is for initial development. Anything MAY change at any time. A module SHOULD NOT be considered stable till at least it is major version one (1.0.0) or greater. Changes will always be via new versions being published and no changes will be made to existing published versions. For more details please go to https://semver.org/
 
@@ -63,7 +75,7 @@ The following input variables are optional (have default values):
 
 ### <a name="input_a_records"></a> [a\_records](#input\_a\_records)
 
-Description: n/a
+Description: A map of objects where each object contains information to create a A record.
 
 Type:
 
@@ -82,7 +94,7 @@ Default: `{}`
 
 ### <a name="input_aaaa_records"></a> [aaaa\_records](#input\_aaaa\_records)
 
-Description: n/a
+Description: A map of objects where each object contains information to create a AAAA record.
 
 Type:
 
@@ -101,7 +113,7 @@ Default: `{}`
 
 ### <a name="input_cname_records"></a> [cname\_records](#input\_cname\_records)
 
-Description: n/a
+Description: A map of objects where each object contains information to create a CNAME record.
 
 Type:
 
@@ -138,7 +150,7 @@ Default: `true`
 
 ### <a name="input_mx_records"></a> [mx\_records](#input\_mx\_records)
 
-Description: n/a
+Description: A map of objects where each object contains information to create a MX record.
 
 Type:
 
@@ -160,7 +172,7 @@ Default: `{}`
 
 ### <a name="input_ptr_records"></a> [ptr\_records](#input\_ptr\_records)
 
-Description: n/a
+Description: A map of objects where each object contains information to create a PTR record.
 
 Type:
 
@@ -199,7 +211,7 @@ Default: `null`
 
 ### <a name="input_srv_records"></a> [srv\_records](#input\_srv\_records)
 
-Description: n/a
+Description: A map of objects where each object contains information to create a SRV record.
 
 Type:
 
@@ -223,7 +235,7 @@ Default: `{}`
 
 ### <a name="input_txt_records"></a> [txt\_records](#input\_txt\_records)
 
-Description: n/a
+Description: A map of objects where each object contains information to create a TXT record.
 
 Type:
 
@@ -244,7 +256,7 @@ Default: `{}`
 
 ### <a name="input_virtual_network_links"></a> [virtual\_network\_links](#input\_virtual\_network\_links)
 
-Description: a map of objects where each object contains information to create virtual network link
+Description: A map of objects where each object contains information to create a virtual network link.
 
 Type:
 
@@ -265,39 +277,39 @@ The following outputs are exported:
 
 ### <a name="output_a_record_outputs"></a> [a\_record\_outputs](#output\_a\_record\_outputs)
 
-Description: n/a
+Description: The a record output
 
 ### <a name="output_aaaa_record_outputs"></a> [aaaa\_record\_outputs](#output\_aaaa\_record\_outputs)
 
-Description: n/a
+Description: The aaaa record output
 
 ### <a name="output_cname_record_outputs"></a> [cname\_record\_outputs](#output\_cname\_record\_outputs)
 
-Description: n/a
+Description: The cname record output
 
 ### <a name="output_mx_record_outputs"></a> [mx\_record\_outputs](#output\_mx\_record\_outputs)
 
-Description: n/a
+Description: The mx record output
 
 ### <a name="output_private_dnz_zone_output"></a> [private\_dnz\_zone\_output](#output\_private\_dnz\_zone\_output)
 
-Description: TODO: insert outputs here.
+Description: The private dns zone output
 
 ### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
 
-Description: n/a
+Description: The ptr record output
 
 ### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
 
-Description: n/a
+Description: The srv record output
 
 ### <a name="output_txt_record_outputs"></a> [txt\_record\_outputs](#output\_txt\_record\_outputs)
 
-Description: n/a
+Description: The txt record output
 
 ### <a name="output_virtual_network_link_outputs"></a> [virtual\_network\_link\_outputs](#output\_virtual\_network\_link\_outputs)
 
-Description: n/a
+Description: The virtual network link output
 
 ## Modules
 

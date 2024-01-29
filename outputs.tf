@@ -1,6 +1,7 @@
-# TODO: insert outputs here.
+
 output "private_dnz_zone_output" {
   value = azurerm_private_dns_zone.example
+  description = "The private dns zone output"
 }
 
 
@@ -12,6 +13,7 @@ output "a_record_outputs" {
       fqdn = record.fqdn
     }
   }
+  description = "The a record output"
 }
 
 output "aaaa_record_outputs" {
@@ -22,6 +24,7 @@ output "aaaa_record_outputs" {
       fqdn = record.fqdn
     }
   }
+  description = "The aaaa record output"
 }
 
 
@@ -32,6 +35,7 @@ output "virtual_network_link_outputs" {
       id = link.id
     }
   }
+  description = "The virtual network link output"
 }
 
 output "cname_record_outputs" {
@@ -42,6 +46,7 @@ output "cname_record_outputs" {
       fqdn = record.fqdn
     }
   }
+  description = "The cname record output"
 }
 
 output "mx_record_outputs" {
@@ -52,6 +57,7 @@ output "mx_record_outputs" {
       fqdn = record.fqdn
     }
   }
+  description = "The mx record output"
 }
 
 output "ptr_record_outputs" {
@@ -62,6 +68,7 @@ output "ptr_record_outputs" {
       fqdn = record.fqdn
     }
   }
+  description = "The ptr record output"
 }
 
 output "srv_record_outputs" {
@@ -72,6 +79,7 @@ output "srv_record_outputs" {
       fqdn = record.fqdn
     }
   }
+  description = "The srv record output"
 }
 
 output "txt_record_outputs" {
@@ -82,4 +90,5 @@ output "txt_record_outputs" {
       fqdn = record.fqdn
     }
   }
+  description = "The txt record output"
 }
