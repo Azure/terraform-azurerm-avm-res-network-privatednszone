@@ -14,7 +14,7 @@ locals {
   virtual_network_links = {
     vnetlink1 = {
       vnetlinkname     = "vnetlink1"
-      vnetid           = "/subscriptions/68be2809-9674-447c-a43d-261ef2862c29/resourceGroups/testrg/providers/Microsoft.Network/virtualNetworks/testvnet1"
+      vnetid           = "/subscriptions/00000000-0000-0000-0000-0000000000/resourceGroups/testrg/providers/Microsoft.Network/virtualNetworks/testvnet1"
       autoregistration = true
       tags = {
         "env" = "prod"
@@ -22,7 +22,7 @@ locals {
     }
     vnetlink2 = {
       vnetlinkname     = "vnetlink2"
-      vnetid           = "/subscriptions/68be2809-9674-447c-a43d-261ef2862c29/resourceGroups/testrg/providers/Microsoft.Network/virtualNetworks/testvnet2"
+      vnetid           = "/subscriptions/00000000-0000-0000-0000-0000000000/resourceGroups/testrg/providers/Microsoft.Network/virtualNetworks/testvnet2"
       autoregistration = false
       tags = {
         "env" = "dev"
