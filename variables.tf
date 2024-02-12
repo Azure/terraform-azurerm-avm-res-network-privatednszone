@@ -37,7 +37,7 @@ variable "soa_record" {
     ttl          = optional(number, 3600)
     tags         = optional(map(string), null)
   })
-  default = null
+  default     = null
   description = "optional soa_record variable, if included only email is required, rest are optional. Email must use username.corp.com and not username@corp.com"
 }
 
@@ -49,7 +49,7 @@ variable "virtual_network_links" {
     autoregistration = optional(bool, false)
     tags             = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a virtual network link."
 }
 
@@ -62,7 +62,7 @@ variable "a_records" {
     records             = list(string)
     tags                = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a A record."
 }
 
@@ -75,7 +75,7 @@ variable "aaaa_records" {
     records             = list(string)
     tags                = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a AAAA record."
 }
 
@@ -88,7 +88,7 @@ variable "cname_records" {
     record              = string
     tags                = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
 
 }
@@ -105,7 +105,7 @@ variable "mx_records" {
     }))
     tags = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a MX record."
 }
 
@@ -118,7 +118,7 @@ variable "ptr_records" {
     records             = list(string)
     tags                = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a PTR record."
 }
 
@@ -136,7 +136,7 @@ variable "srv_records" {
     }))
     tags = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a SRV record."
 }
 
@@ -151,6 +151,6 @@ variable "txt_records" {
     }))
     tags = optional(map(string), null)
   }))
-  default = {}
+  default     = {}
   description = "A map of objects where each object contains information to create a TXT record."
 }

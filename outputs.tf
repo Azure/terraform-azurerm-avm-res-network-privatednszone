@@ -1,6 +1,6 @@
 
 output "private_dnz_zone_output" {
-  value = azurerm_private_dns_zone.example
+  value       = azurerm_private_dns_zone.example
   description = "The private dns zone output"
 }
 
