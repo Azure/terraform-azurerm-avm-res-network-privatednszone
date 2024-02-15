@@ -1,43 +1,18 @@
-terraform {
-  required_version = ">= 1.3.0"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 3.7.0, < 4.0.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-}
-
-variable "enable_telemetry" {
-  type        = bool
-  default     = true
-  description = <<DESCRIPTION
-This variable controls whether or not telemetry is enabled for the module.
-For more information see https://aka.ms/avm/telemetryinfo.
-If it is set to false, then no telemetry will be collected.
-DESCRIPTION
-}
-
-# This ensures we have unique CAF compliant names for our resources.
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "0.3.0"
-}
-
-# This is required for resource modules
-resource "azurerm_resource_group" "this" {
-  name     = module.naming.resource_group.name_unique
-  location = "MYLOCATION"
-}
-
-# This is the module call
-module "MYMODULE" {
-  source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  enable_telemetry = var.enable_telemetry
-  # ...
+module "private_dns_zones" {
+  #source                = "./modules/private_dns_zones"
+  #replace source with the correct link to the private_dns_zones module
+  source                = "Azure/avm-res-network-privatednszone/azurerm"
+  enable_telemetry      = local.enable_telemetry
+  resource_group_name   = local.resource_group_name
+  domain_name           = local.domain_name
+  dns_zone_tags         = local.dns_zone_tags
+  soa_record            = local.soa_record
+  virtual_network_links = local.virtual_network_links
+  a_records             = local.a_records
+  aaaa_records          = local.aaaa_records
+  cname_records         = local.cname_records
+  mx_records            = local.mx_records
+  ptr_records           = local.ptr_records
+  srv_records           = local.srv_records
+  txt_records           = local.txt_records
 }
