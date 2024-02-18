@@ -1,7 +1,7 @@
 module "private_dns_zones" {
-  #source                = "./modules/private_dns_zones"
-  #replace source with the correct link to the private_dns_zones module
-  source                = "Azure/avm-res-network-privatednszone/azurerm"
+  # replace source with the correct link to the private_dns_zones module
+  # source                = "Azure/avm-res-network-privatednszone/azurerm"  
+  source                = "../../"
   enable_telemetry      = local.enable_telemetry
   resource_group_name   = local.resource_group_name
   domain_name           = local.domain_name
