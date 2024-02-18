@@ -43,6 +43,7 @@ resource "azurerm_private_dns_a_record" "example" {
   zone_name           = each.value.zone_name
   ttl                 = each.value.ttl
   records             = each.value.records
+  tags                = lookup(each.value, "tags", null)
 }
 
 
@@ -54,6 +55,7 @@ resource "azurerm_private_dns_aaaa_record" "example" {
   zone_name           = each.value.zone_name
   ttl                 = each.value.ttl
   records             = each.value.records
+  tags                = lookup(each.value, "tags", null)
 }
 
 resource "azurerm_private_dns_cname_record" "example" {
@@ -64,6 +66,7 @@ resource "azurerm_private_dns_cname_record" "example" {
   zone_name           = each.value.zone_name
   ttl                 = each.value.ttl
   record              = each.value.record
+  tags                = lookup(each.value, "tags", null)
 }
 
 resource "azurerm_private_dns_mx_record" "example" {
@@ -80,6 +83,7 @@ resource "azurerm_private_dns_mx_record" "example" {
       preference = record.value.preference
     }
   }
+  tags = lookup(each.value, "tags", null)
 }
 
 resource "azurerm_private_dns_ptr_record" "example" {
@@ -90,6 +94,7 @@ resource "azurerm_private_dns_ptr_record" "example" {
   zone_name           = each.value.zone_name
   ttl                 = each.value.ttl
   records             = each.value.records
+  tags                = lookup(each.value, "tags", null)
 }
 
 resource "azurerm_private_dns_srv_record" "example" {
@@ -108,6 +113,7 @@ resource "azurerm_private_dns_srv_record" "example" {
       port     = record.value.port
     }
   }
+  tags = lookup(each.value, "tags", null)
 }
 
 
@@ -124,4 +130,5 @@ resource "azurerm_private_dns_txt_record" "example" {
       value = record.value.value
     }
   }
+  tags = lookup(each.value, "tags", null)
 }
