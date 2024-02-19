@@ -233,6 +233,14 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_telem_tags"></a> [telem\_tags](#input\_telem\_tags)
+
+Description: A mapping of tags to assign to the telemetry resources.
+
+Type: `map(string)`
+
+Default: `{}`
+
 ### <a name="input_txt_records"></a> [txt\_records](#input\_txt\_records)
 
 Description: A map of objects where each object contains information to create a TXT record.

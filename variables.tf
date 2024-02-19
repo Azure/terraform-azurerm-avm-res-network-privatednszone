@@ -154,3 +154,9 @@ variable "txt_records" {
   default     = {}
   description = "A map of objects where each object contains information to create a TXT record."
 }
+
+variable "telem_tags" {
+  type        = map(string)
+  description = "A mapping of tags to assign to the telemetry resources."
+  default     = {}
+}
