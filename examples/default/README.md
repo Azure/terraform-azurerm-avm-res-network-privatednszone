@@ -58,39 +58,39 @@ The following outputs are exported:
 
 ### <a name="output_a_record_outputs"></a> [a\_record\_outputs](#output\_a\_record\_outputs)
 
-Description: n/a
+Description: The a record output
 
 ### <a name="output_aaaa_record_outputs"></a> [aaaa\_record\_outputs](#output\_aaaa\_record\_outputs)
 
-Description: n/a
+Description: The aaaa record output
 
 ### <a name="output_cname_record_outputs"></a> [cname\_record\_outputs](#output\_cname\_record\_outputs)
 
-Description: n/a
+Description: The cname record output
 
 ### <a name="output_mx_record_outputs"></a> [mx\_record\_outputs](#output\_mx\_record\_outputs)
 
-Description: n/a
+Description: The mx record output
 
 ### <a name="output_private_dns_zone_output"></a> [private\_dns\_zone\_output](#output\_private\_dns\_zone\_output)
 
-Description: n/a
+Description: The private dns zone output
 
 ### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
 
-Description: n/a
+Description: The ptr record output
 
 ### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
 
-Description: n/a
+Description: The srv record output
 
 ### <a name="output_txt_record_outputs"></a> [txt\_record\_outputs](#output\_txt\_record\_outputs)
 
-Description: n/a
+Description: The txt record output
 
 ### <a name="output_virtual_network_link_outputs"></a> [virtual\_network\_link\_outputs](#output\_virtual\_network\_link\_outputs)
 
-Description: n/a
+Description: The virtual network link output
 
 ## Modules
 
