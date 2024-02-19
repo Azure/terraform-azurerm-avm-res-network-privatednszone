@@ -4,12 +4,45 @@
 This deploys the module in its simplest form.
 
 ```hcl
+# create the resource group
+resource "azurerm_resource_group" "avmrg" {
+  name     = "avmrg"
+  location = "EastUS"
+}
+
+# create first sample virtual network
+resource "azurerm_virtual_network" "vnet1" {
+  name                = "vnet1"
+  location            = azurerm_resource_group.avmrg.location
+  resource_group_name = azurerm_resource_group.avmrg.name
+  address_space       = ["10.0.0.0/16"]
+
+  subnet {
+    name           = "subnet1"
+    address_prefix = "10.0.1.0/24"
+  }
+}
+
+# create second sample virtual network
+resource "azurerm_virtual_network" "vnet2" {
+  name                = "vnet2"
+  location            = azurerm_resource_group.avmrg.location
+  resource_group_name = azurerm_resource_group.avmrg.name
+  address_space       = ["10.1.0.0/16"]
+
+  subnet {
+    name           = "subnet2"
+    address_prefix = "10.1.1.0/24"
+  }
+}
+
+# reference the module and pass in variables as needed
 module "private_dns_zones" {
   # replace source with the correct link to the private_dns_zones module
   # source                = "Azure/avm-res-network-privatednszone/azurerm"  
   source                = "../../"
   enable_telemetry      = local.enable_telemetry
-  resource_group_name   = local.resource_group_name
+  resource_group_name   = azurerm_resource_group.avmrg.name
   domain_name           = local.domain_name
   dns_zone_tags         = local.dns_zone_tags
   soa_record            = local.soa_record
@@ -35,11 +68,17 @@ The following requirements are needed by this module:
 
 ## Providers
 
-No providers.
+The following providers are used by this module:
+
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.81.0)
 
 ## Resources
 
-No resources.
+The following resources are used by this module:
+
+- [azurerm_resource_group.avmrg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_virtual_network.vnet1](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
+- [azurerm_virtual_network.vnet2](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
