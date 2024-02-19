@@ -1,7 +1,6 @@
 locals {
-  enable_telemetry    = false
-  resource_group_name = "avmrg"
-  domain_name         = "testlab.io"
+  enable_telemetry = false
+  domain_name      = "testlab.io"
 
   dns_zone_tags = {
     environment = "test"
@@ -14,7 +13,7 @@ locals {
   virtual_network_links = {
     vnetlink1 = {
       vnetlinkname     = "vnetlink1"
-      vnetid           = "/subscriptions/c989d764-e476-48f3-a67b-95a7f09c8ee6/resourceGroups/avmrg/providers/Microsoft.Network/virtualNetworks/testvnet1"
+      vnetid           = azurerm_virtual_network.vnet1.id
       autoregistration = true
       tags = {
         "env" = "prod"
@@ -22,7 +21,7 @@ locals {
     }
     vnetlink2 = {
       vnetlinkname     = "vnetlink2"
-      vnetid           = "/subscriptions/c989d764-e476-48f3-a67b-95a7f09c8ee6/resourceGroups/avmrg/providers/Microsoft.Network/virtualNetworks/testvnet2"
+      vnetid           = azurerm_virtual_network.vnet2.id
       autoregistration = false
       tags = {
         "env" = "dev"
