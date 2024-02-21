@@ -1,10 +1,3 @@
-
-output "private_dnz_zone_output" {
-  value       = azurerm_private_dns_zone.example
-  description = "The private dns zone output"
-}
-
-
 output "a_record_outputs" {
   value = {
     for record_name, record in azurerm_private_dns_a_record.example :
@@ -27,17 +20,6 @@ output "aaaa_record_outputs" {
   description = "The aaaa record output"
 }
 
-
-output "virtual_network_link_outputs" {
-  value = {
-    for link_name, link in azurerm_private_dns_zone_virtual_network_link.example :
-    link_name => {
-      id = link.id
-    }
-  }
-  description = "The virtual network link output"
-}
-
 output "cname_record_outputs" {
   value = {
     for record_name, record in azurerm_private_dns_cname_record.example :
@@ -58,6 +40,11 @@ output "mx_record_outputs" {
     }
   }
   description = "The mx record output"
+}
+
+output "private_dnz_zone_output" {
+  value       = azurerm_private_dns_zone.example
+  description = "The private dns zone output"
 }
 
 output "ptr_record_outputs" {
@@ -91,4 +78,14 @@ output "txt_record_outputs" {
     }
   }
   description = "The txt record output"
+}
+
+output "virtual_network_link_outputs" {
+  value = {
+    for link_name, link in azurerm_private_dns_zone_virtual_network_link.example :
+    link_name => {
+      id = link.id
+    }
+  }
+  description = "The virtual network link output"
 }
