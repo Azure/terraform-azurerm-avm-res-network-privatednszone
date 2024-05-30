@@ -1,13 +1,3 @@
-variable "enable_telemetry" {
-  type        = bool
-  default     = true
-  description = <<DESCRIPTION
-This variable controls whether or not telemetry is enabled for the module.
-For more information see https://aka.ms/avm/telemetryinfo.
-If it is set to false, then no telemetry will be collected.
-DESCRIPTION
-}
-
 variable "domain_name" {
   type        = string
   description = "The name of the private dns zone."
@@ -18,14 +8,6 @@ variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
 }
-
-variable "dns_zone_tags" {
-  type        = map(string)
-  description = "The tags to associate with your private dns zone."
-  default     = {}
-}
-
-
 
 variable "a_records" {
   type = map(object({
@@ -64,7 +46,16 @@ variable "cname_records" {
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
+}
 
+variable "enable_telemetry" {
+  type        = bool
+  default     = true
+  description = <<DESCRIPTION
+This variable controls whether or not telemetry is enabled for the module.
+For more information see https://aka.ms/avm/telemetryinfo.
+If it is set to false, then no telemetry will be collected.
+DESCRIPTION
 }
 
 variable "mx_records" {
@@ -128,6 +119,18 @@ variable "srv_records" {
   description = "A map of objects where each object contains information to create a SRV record."
 }
 
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "The tags to associate with your private dns zone."
+}
+
+variable "telem_tags" {
+  type        = map(string)
+  default     = {}
+  description = "A mapping of tags to assign to the telemetry resources."
+}
+
 variable "txt_records" {
   type = map(object({
     name                = string
@@ -141,12 +144,6 @@ variable "txt_records" {
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a TXT record."
-}
-
-variable "telem_tags" {
-  type        = map(string)
-  description = "A mapping of tags to assign to the telemetry resources."
-  default     = {}
 }
 
 variable "virtual_network_links" {

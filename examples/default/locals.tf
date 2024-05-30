@@ -1,35 +1,4 @@
 locals {
-  enable_telemetry = false
-  domain_name      = "testlab.io"
-
-  dns_zone_tags = {
-    environment = "test"
-  }
-
-  soa_record = {
-    email = "hostmaster.${local.domain_name}"
-  }
-
-  virtual_network_links = {
-    vnetlink1 = {
-      vnetlinkname     = "vnetlink1"
-      vnetid           = azurerm_virtual_network.vnet1.id
-      autoregistration = true
-      tags = {
-        "env" = "prod"
-      }
-    }
-    vnetlink2 = {
-      vnetlinkname     = "vnetlink2"
-      vnetid           = azurerm_virtual_network.vnet2.id
-      autoregistration = false
-      tags = {
-        "env" = "dev"
-      }
-    }
-  }
-
-
   a_records = {
     "a_record1" = {
       name                = "my_arecord1"
@@ -53,8 +22,6 @@ locals {
       }
     }
   }
-
-
   aaaa_records = {
     "aaaa_record1" = {
       name                = "my_aaaarecord1"
@@ -78,7 +45,6 @@ locals {
       }
     }
   }
-
   cname_records = {
     "cname_record1" = {
       name                = "my_cname1"
@@ -102,8 +68,8 @@ locals {
       }
     }
   }
-
-
+  domain_name      = "testlab.io"
+  enable_telemetry = false
   mx_records = {
     "mx_record1" = {
       resource_group_name = "avmrg"
@@ -144,8 +110,6 @@ locals {
       }
     }
   }
-
-
   ptr_records = {
     "ptr_record1" = {
       name                = "ptr1"
@@ -170,8 +134,9 @@ locals {
     }
 
   }
-
-
+  soa_record = {
+    email = "hostmaster.${local.domain_name}"
+  }
   srv_records = {
     "srv_record1" = {
       name                = "srv1"
@@ -221,7 +186,9 @@ locals {
       }
     }
   }
-
+  tags = {
+    environment = "test"
+  }
   txt_records = {
     "txt_record1" = {
       name                = "txt1"
@@ -260,6 +227,22 @@ locals {
     }
 
   }
-
-
+  virtual_network_links = {
+    vnetlink1 = {
+      vnetlinkname     = "vnetlink1"
+      vnetid           = azurerm_virtual_network.vnet1.id
+      autoregistration = true
+      tags = {
+        "env" = "prod"
+      }
+    }
+    vnetlink2 = {
+      vnetlinkname     = "vnetlink2"
+      vnetid           = azurerm_virtual_network.vnet2.id
+      autoregistration = false
+      tags = {
+        "env" = "dev"
+      }
+    }
+  }
 }

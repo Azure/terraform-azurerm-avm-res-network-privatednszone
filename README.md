@@ -40,15 +40,15 @@ The following providers are used by this module:
 
 The following resources are used by this module:
 
-- [azurerm_private_dns_a_record.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_a_record) (resource)
-- [azurerm_private_dns_aaaa_record.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_aaaa_record) (resource)
-- [azurerm_private_dns_cname_record.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_cname_record) (resource)
-- [azurerm_private_dns_mx_record.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_mx_record) (resource)
-- [azurerm_private_dns_ptr_record.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_ptr_record) (resource)
-- [azurerm_private_dns_srv_record.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_srv_record) (resource)
-- [azurerm_private_dns_txt_record.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_txt_record) (resource)
-- [azurerm_private_dns_zone.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) (resource)
-- [azurerm_private_dns_zone_virtual_network_link.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) (resource)
+- [azurerm_private_dns_a_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_a_record) (resource)
+- [azurerm_private_dns_aaaa_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_aaaa_record) (resource)
+- [azurerm_private_dns_cname_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_cname_record) (resource)
+- [azurerm_private_dns_mx_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_mx_record) (resource)
+- [azurerm_private_dns_ptr_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_ptr_record) (resource)
+- [azurerm_private_dns_srv_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_srv_record) (resource)
+- [azurerm_private_dns_txt_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_txt_record) (resource)
+- [azurerm_private_dns_zone.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) (resource)
+- [azurerm_private_dns_zone_virtual_network_link.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) (resource)
 - [azurerm_resource_group_template_deployment.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) (resource)
 - [random_id.telem](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) (resource)
 
@@ -127,14 +127,6 @@ map(object({
     tags                = optional(map(string), null)
   }))
 ```
-
-Default: `{}`
-
-### <a name="input_dns_zone_tags"></a> [dns\_zone\_tags](#input\_dns\_zone\_tags)
-
-Description: The tags to associate with your private dns zone.
-
-Type: `map(string)`
 
 Default: `{}`
 
@@ -230,6 +222,14 @@ map(object({
     tags = optional(map(string), null)
   }))
 ```
+
+Default: `{}`
+
+### <a name="input_tags"></a> [tags](#input\_tags)
+
+Description: The tags to associate with your private dns zone.
+
+Type: `map(string)`
 
 Default: `{}`
 
