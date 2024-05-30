@@ -42,9 +42,9 @@ output "mx_record_outputs" {
   }
 }
 
-output "private_dnz_zone_output" {
-  description = "The private dns zone output"
-  value       = azurerm_private_dns_zone.this
+output "name" {
+  description = "The name of private DNS zone"
+  value       = azurerm_private_dns_zone.this.name
 }
 
 output "ptr_record_outputs" {
@@ -56,6 +56,16 @@ output "ptr_record_outputs" {
       fqdn = record.fqdn
     }
   }
+}
+
+output "resource" {
+  description = "The private dns zone output"
+  value       = azurerm_private_dns_zone.this
+}
+
+output "resource_id" {
+  description = "The resource id of private DNS zone"
+  value       = azurerm_private_dns_zone.this.id
 }
 
 output "srv_record_outputs" {

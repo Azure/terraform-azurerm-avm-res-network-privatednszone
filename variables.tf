@@ -121,8 +121,8 @@ variable "srv_records" {
 
 variable "tags" {
   type        = map(string)
-  default     = {}
-  description = "The tags to associate with your private dns zone."
+  default     = null
+  description = "(Optional) Tags of the resource."
 }
 
 variable "telem_tags" {
