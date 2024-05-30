@@ -227,11 +227,11 @@ Default: `{}`
 
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
-Description: The tags to associate with your private dns zone.
+Description: (Optional) Tags of the resource.
 
 Type: `map(string)`
 
-Default: `{}`
+Default: `null`
 
 ### <a name="input_telem_tags"></a> [telem\_tags](#input\_telem\_tags)
 
@@ -299,13 +299,21 @@ Description: The cname record output
 
 Description: The mx record output
 
-### <a name="output_private_dnz_zone_output"></a> [private\_dnz\_zone\_output](#output\_private\_dnz\_zone\_output)
+### <a name="output_name"></a> [name](#output\_name)
 
-Description: The private dns zone output
+Description: The name of private DNS zone
 
 ### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
 
 Description: The ptr record output
+
+### <a name="output_resource"></a> [resource](#output\_resource)
+
+Description: The private dns zone output
+
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
+
+Description: The resource id of private DNS zone
 
 ### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
 

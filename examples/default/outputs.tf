@@ -20,7 +20,7 @@ output "mx_record_outputs" {
 
 output "private_dns_zone_output" {
   description = "The private dns zone output"
-  value       = module.private_dns_zones.private_dnz_zone_output
+  value       = module.private_dns_zones.resource
 }
 
 output "ptr_record_outputs" {
