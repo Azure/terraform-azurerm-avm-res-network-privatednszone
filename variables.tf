@@ -125,12 +125,6 @@ variable "tags" {
   description = "(Optional) Tags of the resource."
 }
 
-variable "telem_tags" {
-  type        = map(string)
-  default     = {}
-  description = "A mapping of tags to assign to the telemetry resources."
-}
-
 variable "txt_records" {
   type = map(object({
     name                = string
