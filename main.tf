@@ -13,6 +13,7 @@ resource "azurerm_private_dns_zone" "this" {
   # create the soa_record block only if the var.soa_record is not empty
   dynamic "soa_record" {
     for_each = var.soa_record != null ? [1] : []
+
     content {
       email        = var.soa_record.email
       expire_time  = var.soa_record.expire_time
@@ -87,6 +88,7 @@ resource "azurerm_private_dns_mx_record" "this" {
 
   dynamic "record" {
     for_each = each.value.records
+
     content {
       exchange   = record.value.exchange
       preference = record.value.preference
@@ -120,6 +122,7 @@ resource "azurerm_private_dns_srv_record" "this" {
 
   dynamic "record" {
     for_each = each.value.records
+
     content {
       port     = record.value.port
       priority = record.value.priority
@@ -143,6 +146,7 @@ resource "azurerm_private_dns_txt_record" "this" {
 
   dynamic "record" {
     for_each = each.value.records
+
     content {
       value = record.value.value
     }
