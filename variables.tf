@@ -125,6 +125,40 @@ variable "tags" {
   description = "(Optional) Tags of the resource."
 }
 
+variable "timeouts" {
+  type = object({
+    dns_zones = optional(object({
+      create = optional(string, "30m")
+      delete = optional(string, "30m")
+      update = optional(string, "30m")
+      read   = optional(string, "5m")
+      }), {}
+    )
+    vnet_links = optional(object({
+      create = optional(string, "30m")
+      delete = optional(string, "30m")
+      update = optional(string, "30m")
+      read   = optional(string, "5m")
+      }), {}
+    )
+  })
+  default     = {}
+  description = <<DESCRIPTION
+A map of timeouts objects, per resource type, to apply to the creation and destruction of resources the following resources:
+
+- `dns_zones` - (Optional) The timeouts for DNS Zones.
+- `vnet_links` - (Optional) The timeouts for DNS Zones Virtual Network Links.
+
+Each timeout object has the following optional attributes:
+
+- `create` - (Optional) The timeout for creating the resource. Defaults to `5m` apart from policy assignments, where this is set to `15m`.
+- `delete` - (Optional) The timeout for deleting the resource. Defaults to `5m`.
+- `update` - (Optional) The timeout for updating the resource. Defaults to `5m`.
+- `read` - (Optional) The timeout for reading the resource. Defaults to `5m`.
+
+DESCRIPTION
+}
+
 variable "txt_records" {
   type = map(object({
     name                = string

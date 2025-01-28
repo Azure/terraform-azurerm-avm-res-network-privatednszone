@@ -1,12 +1,5 @@
-# TODO: insert resources here.
-# resource "azurerm_resource_group" "this" {
-#   name     = var.resource_group_name
-#   location = var.resource_group_location
-# }
-
 resource "azurerm_private_dns_zone" "this" {
-  name = var.domain_name
-  #   resource_group_name = azurerm_resource_group.this.name
+  name                = var.domain_name
   resource_group_name = var.resource_group_name
   tags                = var.tags
 
@@ -23,8 +16,13 @@ resource "azurerm_private_dns_zone" "this" {
       ttl          = var.soa_record.ttl
     }
   }
+  timeouts {
+    create = var.timeouts.dns_zones.create
+    delete = var.timeouts.dns_zones.delete
+    read   = var.timeouts.dns_zones.read
+    update = var.timeouts.dns_zones.update
+  }
 }
-
 
 resource "azurerm_private_dns_zone_virtual_network_link" "this" {
   for_each = var.virtual_network_links
@@ -35,6 +33,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "this" {
   virtual_network_id    = each.value.vnetid
   registration_enabled  = lookup(each.value, "autoregistration", false)
   tags                  = lookup(each.value, "tags", null)
+
+  timeouts {
+    create = var.timeouts.vnet_links.create
+    delete = var.timeouts.vnet_links.delete
+    read   = var.timeouts.vnet_links.read
+    update = var.timeouts.vnet_links.update
+  }
 }
 
 resource "azurerm_private_dns_a_record" "this" {
