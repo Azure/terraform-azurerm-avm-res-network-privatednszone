@@ -2,7 +2,7 @@ locals {
   a_records = {
     "a_record1" = {
       name                = "my_arecord1"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["10.1.1.1", "10.1.1.2"]
@@ -13,7 +13,7 @@ locals {
 
     "a_record2" = {
       name                = "my_arecord2"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["10.2.1.1", "10.2.1.2"]
@@ -25,7 +25,7 @@ locals {
   aaaa_records = {
     "aaaa_record1" = {
       name                = "my_aaaarecord1"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["fd5d:70bc:930e:d008:0000:0000:0000:7334", "fd5d:70bc:930e:d008::7335"]
@@ -36,7 +36,7 @@ locals {
 
     "aaaa_record2" = {
       name                = "my_aaaarecord2"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 600
       records             = ["fd4d:70bc:930e:d008:0000:0000:0000:7334", "fd4d:70bc:930e:d008::7335"]
@@ -48,7 +48,7 @@ locals {
   cname_records = {
     "cname_record1" = {
       name                = "my_cname1"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       record              = "prod.testlab.io"
@@ -59,7 +59,7 @@ locals {
 
     "cname_record2" = {
       name                = "my_cname2"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       record              = "dev.testlab.io"
@@ -72,7 +72,7 @@ locals {
   enable_telemetry = false
   mx_records = {
     "mx_record1" = {
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records = {
@@ -92,7 +92,7 @@ locals {
 
     "msx_record2" = {
       name                = "backupmail"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records = {
@@ -113,7 +113,7 @@ locals {
   ptr_records = {
     "ptr_record1" = {
       name                = "ptr1"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["web1.testlab.io", "web2.testlab.io"]
@@ -124,7 +124,7 @@ locals {
 
     "ptr_record2" = {
       name                = "ptr2"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["web1.testlab.io", "web2.testlab.io"]
@@ -140,7 +140,7 @@ locals {
   srv_records = {
     "srv_record1" = {
       name                = "srv1"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records = {
@@ -164,7 +164,7 @@ locals {
 
     "srv_record2" = {
       name                = "srv2"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records = {
@@ -192,7 +192,7 @@ locals {
   txt_records = {
     "txt_record1" = {
       name                = "txt1"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records = {
@@ -210,7 +210,7 @@ locals {
 
     "txt_record2" = {
       name                = "txt2"
-      resource_group_name = "avmrg"
+      resource_group_name = azurerm_resource_group.this.name
       zone_name           = "testlab.io"
       ttl                 = 300
       records = {
