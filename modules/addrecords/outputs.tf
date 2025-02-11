@@ -1,31 +1,4 @@
-/*
-output "name" {
-  description = "The name of private DNS zone"
-  value       = azurerm_private_dns_zone.this.name
-}
-*/
-/*
-output "resource" {
-  description = "The private dns zone output"
-  value       = azurerm_private_dns_zone.this
-}
-
-output "resource_id" {
-  description = "The resource id of private DNS zone"
-  value       = azurerm_private_dns_zone.this.id
-}
-*/
-/*
-output "virtual_network_link_outputs" {
-  description = "The virtual network link output"
-  value = {
-    for link_name, link in azurerm_private_dns_zone_virtual_network_link.this :
-    link_name => {
-      id = link.id
-    }
-  }
-}
-*/ output "a_record_outputs" {
+output "a_record_outputs" {
   description = "The a record output"
   value = {
     for record_name, record in azurerm_private_dns_a_record.this :
