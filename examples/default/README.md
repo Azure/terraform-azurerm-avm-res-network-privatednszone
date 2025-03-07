@@ -36,6 +36,17 @@ resource "azurerm_virtual_network" "vnet2" {
   }
 }
 
+# create app registration
+resource "azuread_application" "this" {
+  display_name = "dnszonecontributor"
+}
+
+# create service principal from app
+resource "azuread_service_principal" "this" {
+  client_id = azuread_application.this.client_id
+}
+
+
 # reference the module and pass in variables as needed
 module "private_dns_zones" {
   # replace source with the correct link to the private_dns_zones module
@@ -54,6 +65,7 @@ module "private_dns_zones" {
   ptr_records           = local.ptr_records
   srv_records           = local.srv_records
   txt_records           = local.txt_records
+  role_assignments      = local.role_assignments
 }
 ```
 
@@ -64,12 +76,16 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
+- <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (>= 2.40)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.0, < 5.0)
 
 ## Resources
 
 The following resources are used by this module:
 
+- [azuread_application.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) (resource)
+- [azuread_service_principal.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) (resource)
 - [azurerm_resource_group.avmrg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_virtual_network.vnet1](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
 - [azurerm_virtual_network.vnet2](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)

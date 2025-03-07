@@ -30,6 +30,17 @@ resource "azurerm_virtual_network" "vnet2" {
   }
 }
 
+# create app registration
+resource "azuread_application" "this" {
+  display_name = "dnszonecontributor"
+}
+
+# create service principal from app
+resource "azuread_service_principal" "this" {
+  client_id = azuread_application.this.client_id
+}
+
+
 # reference the module and pass in variables as needed
 module "private_dns_zones" {
   # replace source with the correct link to the private_dns_zones module
@@ -48,4 +59,5 @@ module "private_dns_zones" {
   ptr_records           = local.ptr_records
   srv_records           = local.srv_records
   txt_records           = local.txt_records
+  role_assignments      = local.role_assignments
 }
