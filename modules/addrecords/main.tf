@@ -1,6 +1,6 @@
 resource "azapi_resource" "private_dns_zone_record" {
   # This resource creates all records types provided by the user in the Private DNS Zone using the Azure API
-  for_each = local.dns_records_by_type
+  for_each  = local.dns_records_by_type
   type      = "Microsoft.Network/privateDnsZones/${element(split(each.key, "/"), 0)}@2024-06-01"
   name      = element(split(each.key, "/"), 1)
   parent_id = azapi_resource.private_dns_zone.id
@@ -8,7 +8,7 @@ resource "azapi_resource" "private_dns_zone_record" {
   body = jsonencode({
     properties = {
       (local.dns_record_property_names[element(split(each.key, "/"), 0)]) = try(each.value.record, each.value.records)
-      ttl = each.value.ttl
+      ttl                                                                 = each.value.ttl
     }
   })
   tags = each.value.tags

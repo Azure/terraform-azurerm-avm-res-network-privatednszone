@@ -38,6 +38,8 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.2)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.0, < 5.0)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
@@ -48,15 +50,9 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azurerm_private_dns_a_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_a_record) (resource)
-- [azurerm_private_dns_aaaa_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_aaaa_record) (resource)
-- [azurerm_private_dns_cname_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_cname_record) (resource)
-- [azurerm_private_dns_mx_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_mx_record) (resource)
-- [azurerm_private_dns_ptr_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_ptr_record) (resource)
-- [azurerm_private_dns_srv_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_srv_record) (resource)
-- [azurerm_private_dns_txt_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_txt_record) (resource)
-- [azurerm_private_dns_zone.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) (resource)
-- [azurerm_private_dns_zone_virtual_network_link.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) (resource)
+- [azapi_resource.private_dns_zone](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.private_dns_zone_network_link](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.private_dns_zone_soa_record](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
@@ -268,6 +264,14 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
+
+Description: An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase.
+
+Type: `string`
+
+Default: `""`
+
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
 Description: (Optional) Tags of the resource.
@@ -345,6 +349,7 @@ map(object({
     vnetlinkname     = string
     vnetid           = string
     autoregistration = optional(bool, false)
+    resolutionPolicy = optional(string, "Default")
     tags             = optional(map(string), null)
   }))
 ```
@@ -355,29 +360,13 @@ Default: `{}`
 
 The following outputs are exported:
 
-### <a name="output_a_record_outputs"></a> [a\_record\_outputs](#output\_a\_record\_outputs)
+### <a name="output_dns_record_outputs"></a> [dns\_record\_outputs](#output\_dns\_record\_outputs)
 
-Description: The a record output
-
-### <a name="output_aaaa_record_outputs"></a> [aaaa\_record\_outputs](#output\_aaaa\_record\_outputs)
-
-Description: The aaaa record output
-
-### <a name="output_cname_record_outputs"></a> [cname\_record\_outputs](#output\_cname\_record\_outputs)
-
-Description: The cname record output
-
-### <a name="output_mx_record_outputs"></a> [mx\_record\_outputs](#output\_mx\_record\_outputs)
-
-Description: The mx record output
+Description: The outputs for all the records in the private DNS zone
 
 ### <a name="output_name"></a> [name](#output\_name)
 
 Description: The name of private DNS zone
-
-### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
-
-Description: The ptr record output
 
 ### <a name="output_resource"></a> [resource](#output\_resource)
 
@@ -387,21 +376,19 @@ Description: The private dns zone output
 
 Description: The resource id of private DNS zone
 
-### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
-
-Description: The srv record output
-
-### <a name="output_txt_record_outputs"></a> [txt\_record\_outputs](#output\_txt\_record\_outputs)
-
-Description: The txt record output
-
 ### <a name="output_virtual_network_link_outputs"></a> [virtual\_network\_link\_outputs](#output\_virtual\_network\_link\_outputs)
 
 Description: The virtual network link output
 
 ## Modules
 
-No modules.
+The following Modules are called:
+
+### <a name="module_dns_records"></a> [dns\_records](#module\_dns\_records)
+
+Source: ./modules/addrecords
+
+Version:
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection
