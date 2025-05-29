@@ -1,101 +1,34 @@
-output "a_record_outputs" {
-  description = "The a record output"
-  value = {
-    for record_name, record in azurerm_private_dns_a_record.this :
-    record_name => {
-      id   = record.id
-      fqdn = record.fqdn
+output "dns_record_outputs" {
+  description = "The outputs for all the records in the private DNS zone"
+  value = merge(var.soa_record != null ? {
+    "SOA/soa" = {
+      id   = azapi_resource.private_dns_zone_soa_record.output.id
+      fqdn = azapi_resource.private_dns_zone_soa_record.output.fqdn
     }
-  }
-}
-
-output "aaaa_record_outputs" {
-  description = "The aaaa record output"
-  value = {
-    for record_name, record in azurerm_private_dns_aaaa_record.this :
-    record_name => {
-      id   = record.id
-      fqdn = record.fqdn
-    }
-  }
-}
-
-output "cname_record_outputs" {
-  description = "The cname record output"
-  value = {
-    for record_name, record in azurerm_private_dns_cname_record.this :
-    record_name => {
-      id   = record.id
-      fqdn = record.fqdn
-    }
-  }
-}
-
-output "mx_record_outputs" {
-  description = "The mx record output"
-  value = {
-    for record_name, record in azurerm_private_dns_mx_record.this :
-    record_name => {
-      id   = record.id
-      fqdn = record.fqdn
-    }
-  }
+  } : {}, module.dns_records.dns_record_outputs)
 }
 
 output "name" {
   description = "The name of private DNS zone"
-  value       = azurerm_private_dns_zone.this.name
-}
-
-output "ptr_record_outputs" {
-  description = "The ptr record output"
-  value = {
-    for record_name, record in azurerm_private_dns_ptr_record.this :
-    record_name => {
-      id   = record.id
-      fqdn = record.fqdn
-    }
-  }
+  value       = azapi_resource.private_dns_zone.name
 }
 
 output "resource" {
   description = "The private dns zone output"
-  value       = azurerm_private_dns_zone.this
+  value       = azapi_resource.private_dns_zone.output
 }
 
 output "resource_id" {
   description = "The resource id of private DNS zone"
-  value       = azurerm_private_dns_zone.this.id
-}
-
-output "srv_record_outputs" {
-  description = "The srv record output"
-  value = {
-    for record_name, record in azurerm_private_dns_srv_record.this :
-    record_name => {
-      id   = record.id
-      fqdn = record.fqdn
-    }
-  }
-}
-
-output "txt_record_outputs" {
-  description = "The txt record output"
-  value = {
-    for record_name, record in azurerm_private_dns_txt_record.this :
-    record_name => {
-      id   = record.id
-      fqdn = record.fqdn
-    }
-  }
+  value       = azapi_resource.private_dns_zone.output.id
 }
 
 output "virtual_network_link_outputs" {
   description = "The virtual network link output"
   value = {
-    for link_name, link in azurerm_private_dns_zone_virtual_network_link.this :
+    for link_name, link in azapi_resource.azapi_resource.private_dns_zone_network_link :
     link_name => {
-      id = link.id
+      id = link.output.id
     }
   }
 }

@@ -1,12 +1,23 @@
-variable "domain_name" {
+variable "subscription_id" {
   type        = string
-  description = "The name of the private dns zone."
+  nullable    = false
+  default     = ""
+  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  validation {
+    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
+    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  }
 }
 
 # This assumes resource group is already created and its name passed to this module
 variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
+}
+
+variable "domain_name" {
+  type        = string
+  description = "The name of the private dns zone."
 }
 
 variable "a_records" {
@@ -208,6 +219,7 @@ variable "virtual_network_links" {
     vnetlinkname     = string
     vnetid           = string
     autoregistration = optional(bool, false)
+    resolutionPolicy = optional(string, "Default")
     tags             = optional(map(string), null)
   }))
   default     = {}
