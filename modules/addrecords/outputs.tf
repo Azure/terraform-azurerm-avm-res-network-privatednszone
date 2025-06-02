@@ -8,3 +8,9 @@ output "dns_record_outputs" {
     }
   }
 }
+
+# Ask Matt about this being required but being singular vs plural
+output "resource_id" {
+  description = "The resource IDs of the DNS records created"
+  value       = [for record in azapi_resource.private_dns_zone_record : record.id]
+}
