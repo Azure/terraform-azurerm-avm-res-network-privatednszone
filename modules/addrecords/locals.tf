@@ -1,5 +1,5 @@
 locals {
-  parent_resource_id = "/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group_name}"
+  parent_resource_id = "/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group_name}/providers/Microsoft.Network/privateDnsZones/${var.zone_name}"
 }
 
 # Block for DNS record variables

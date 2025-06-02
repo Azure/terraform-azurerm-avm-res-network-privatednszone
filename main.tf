@@ -28,7 +28,7 @@ resource "azapi_resource" "private_dns_zone_soa_record" {
       soaRecord = var.soa_record
     }
   })
-  tags = each.value.tags
+  tags = var.soa_record.tags
 
   timeouts {
     create = var.timeouts.dns_zones.create
@@ -51,6 +51,7 @@ module "dns_records" {
   ptr_records         = var.ptr_records
   srv_records         = var.srv_records
   txt_records         = var.txt_records
+  timeouts            = var.timeouts
 }
 
 resource "azapi_resource" "private_dns_zone_network_link" {

@@ -3,7 +3,7 @@ resource "azapi_resource" "private_dns_zone_record" {
   for_each  = local.dns_records_by_type
   type      = "Microsoft.Network/privateDnsZones/${element(split(each.key, "/"), 0)}@2024-06-01"
   name      = element(split(each.key, "/"), 1)
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = "${local.parent_resource_id}/${var.zone_name}"
 
   body = jsonencode({
     properties = {
