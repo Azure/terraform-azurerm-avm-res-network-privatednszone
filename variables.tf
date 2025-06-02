@@ -9,6 +9,16 @@ variable "resource_group_name" {
   description = "The resource group where the resources will be deployed."
 }
 
+variable "subscription_id" {
+  type        = string
+  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+
+  validation {
+    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
+    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  }
+}
+
 variable "a_records" {
   type = map(object({
     name                = string
@@ -146,16 +156,6 @@ variable "srv_records" {
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a SRV record."
-}
-
-variable "subscription_id" {
-  type        = string
-  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
-
-  validation {
-    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
-    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
-  }
 }
 
 variable "tags" {

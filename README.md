@@ -76,6 +76,12 @@ Description: The resource group where the resources will be deployed.
 
 Type: `string`
 
+### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
+
+Description: An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase.
+
+Type: `string`
+
 ## Optional Inputs
 
 The following input variables are optional (have default values):
@@ -263,14 +269,6 @@ map(object({
 ```
 
 Default: `{}`
-
-### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
-
-Description: An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase.
-
-Type: `string`
-
-Default: `""`
 
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
