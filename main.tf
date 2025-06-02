@@ -63,7 +63,7 @@ resource "azapi_resource" "private_dns_zone_network_link" {
   body = jsonencode({
     properties = {
       registrationEnabled = lookup(each.value, "autoregistration", false)
-      resolutionPolicy    = lookup(each.value, "resolutionPolicy", "Default")
+      resolutionPolicy    = lookup(each.value, "resolutionpolicy", "Default")
       virtualNetwork = {
         id = each.value.vnetid
       }

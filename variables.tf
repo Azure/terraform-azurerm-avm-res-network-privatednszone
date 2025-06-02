@@ -219,9 +219,9 @@ variable "virtual_network_links" {
     vnetlinkname     = string
     vnetid           = string
     autoregistration = optional(bool, false)
-    resolutionPolicy = optional(string, "Default")
+    resolutionpolicy = optional(string, "Default")
     tags             = optional(map(string), null)
   }))
   default     = {}
-  description = "A map of objects where each object contains information to create a virtual network link."
+  description = "A map of objects where each object contains information to create a virtual network link. If you are supplying the resolutionpolicy, it must be one of the following values: `Default` or `NxDomainRedirect`."
 }
