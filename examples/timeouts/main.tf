@@ -59,6 +59,7 @@ module "private_dns_zones" {
 
   domain_name         = local.domain_name
   resource_group_name = azurerm_resource_group.this.name
+  subscription_id     = var.subscription_id
   a_records           = local.a_records
   aaaa_records        = local.aaaa_records
   cname_records       = local.cname_records
