@@ -150,9 +150,7 @@ variable "srv_records" {
 
 variable "subscription_id" {
   type        = string
-  default     = ""
   description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
-  nullable    = false
 
   validation {
     condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
