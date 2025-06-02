@@ -340,7 +340,7 @@ Default: `{}`
 
 ### <a name="input_virtual_network_links"></a> [virtual\_network\_links](#input\_virtual\_network\_links)
 
-Description: A map of objects where each object contains information to create a virtual network link.
+Description: A map of objects where each object contains information to create a virtual network link. If you are supplying the resolutionpolicy, it must be one of the following values: `Default` or `NxDomainRedirect`.
 
 Type:
 
@@ -349,7 +349,7 @@ map(object({
     vnetlinkname     = string
     vnetid           = string
     autoregistration = optional(bool, false)
-    resolutionPolicy = optional(string, "Default")
+    resolutionpolicy = optional(string, "Default")
     tags             = optional(map(string), null)
   }))
 ```

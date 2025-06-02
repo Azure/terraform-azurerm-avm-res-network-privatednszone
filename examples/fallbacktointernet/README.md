@@ -1,7 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# Default example
+# Fallback to Internet Resolution Policy example
 
-This deploys the module in its simplest form.
+This deploys the Azure private DNS zone with a resolution policy of 'NxDomainRedirect'. This will enable the fallback to internet option available within the portal.
 
 ```hcl
 # create the resource group
