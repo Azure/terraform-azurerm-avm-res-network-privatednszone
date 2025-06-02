@@ -1,10 +1,9 @@
 resource "azapi_resource" "private_dns_zone" {
-  # This resource creates a Private DNS Zone using the Azure API
-  type      = "Microsoft.Network/privateDnsZones@2024-06-01"
-  name      = var.domain_name
   location  = "global"
+  name      = var.domain_name
   parent_id = local.parent_resource_id
-
+  # This resource creates a Private DNS Zone using the Azure API
+  type = "Microsoft.Network/privateDnsZones@2024-06-01"
   body = jsonencode({
     tags = var.tags
   })
@@ -18,11 +17,11 @@ resource "azapi_resource" "private_dns_zone" {
 }
 
 resource "azapi_resource" "private_dns_zone_soa_record" {
-  count     = var.soa_record != null ? 1 : 0
-  type      = "Microsoft.Network/privateDnsZones/SOA@2024-06-01"
+  count = var.soa_record != null ? 1 : 0
+
   name      = "soa"
   parent_id = azapi_resource.private_dns_zone.id
-
+  type      = "Microsoft.Network/privateDnsZones/SOA@2024-06-01"
   body = jsonencode({
     properties = {
       soaRecord = var.soa_record
@@ -40,8 +39,7 @@ resource "azapi_resource" "private_dns_zone_soa_record" {
 
 module "dns_records" {
   source = "./modules/addrecords"
-  # This module creates various DNS records in the Private DNS Zone
-  subscription_id     = var.subscription_id
+
   resource_group_name = var.resource_group_name
   zone_name           = azapi_resource.private_dns_zone.output.name
   a_records           = var.a_records
@@ -50,17 +48,19 @@ module "dns_records" {
   mx_records          = var.mx_records
   ptr_records         = var.ptr_records
   srv_records         = var.srv_records
-  txt_records         = var.txt_records
-  timeouts            = var.timeouts
+  # This module creates various DNS records in the Private DNS Zone
+  subscription_id = var.subscription_id
+  timeouts        = var.timeouts
+  txt_records     = var.txt_records
 }
 
 resource "azapi_resource" "private_dns_zone_network_link" {
   # This resource creates Virtual Network Links for the Private DNS Zone using the Azure API
-  for_each  = var.virtual_network_links
-  type      = "Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01"
+  for_each = var.virtual_network_links
+
   name      = each.value.vnetlinkname
   parent_id = azapi_resource.private_dns_zone.id
-
+  type      = "Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01"
   body = jsonencode({
     properties = {
       registrationEnabled = lookup(each.value, "autoregistration", false)

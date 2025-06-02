@@ -1,14 +1,3 @@
-variable "subscription_id" {
-  type        = string
-  nullable    = false
-  default     = ""
-  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
-  validation {
-    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
-    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
-  }
-}
-
 variable "resource_group_name" {
   type        = string
   description = "The resource group of the private DNS zone."
@@ -93,17 +82,16 @@ variable "srv_records" {
   description = "A map of objects where each object contains information to create a SRV record."
 }
 
-variable "txt_records" {
-  type = map(object({
-    name = string
-    ttl  = number
-    records = map(object({
-      value = string
-    }))
-    tags = optional(map(string), null)
-  }))
-  default     = {}
-  description = "A map of objects where each object contains information to create a TXT record."
+variable "subscription_id" {
+  type        = string
+  default     = ""
+  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  nullable    = false
+
+  validation {
+    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
+    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  }
 }
 
 variable "timeouts" {
@@ -130,4 +118,17 @@ Each timeout object has the following optional attributes:
 - `read` - (Optional) The timeout for reading the resource. Defaults to `5m`.
 
 DESCRIPTION
+}
+
+variable "txt_records" {
+  type = map(object({
+    name = string
+    ttl  = number
+    records = map(object({
+      value = string
+    }))
+    tags = optional(map(string), null)
+  }))
+  default     = {}
+  description = "A map of objects where each object contains information to create a TXT record."
 }

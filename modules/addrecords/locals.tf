@@ -4,26 +4,6 @@ locals {
 
 # Block for DNS record variables
 locals {
-  dns_record_property_names = {
-    SOA   = "soaRecord"
-    A     = "aRecords"
-    AAAA  = "aaaaRecords"
-    CNAME = "cnameRecord"
-    MX    = "mxRecords"
-    PTR   = "ptrRecords"
-    SRV   = "srvRecords"
-    TXT   = "txtRecords"
-  }
-  dns_records_by_type = merge(
-    local.a_records,
-    local.aaaa_records,
-    local.cname_records,
-    local.mx_records,
-    local.ptr_records,
-    local.srv_records,
-    local.txt_records
-  )
-
   a_records = {
     for record in var.a_records : "A/${record.name}" => {
       ttl     = record.ttl
@@ -45,6 +25,25 @@ locals {
       tags   = lookup(record, "tags", null)
     }
   }
+  dns_record_property_names = {
+    SOA   = "soaRecord"
+    A     = "aRecords"
+    AAAA  = "aaaaRecords"
+    CNAME = "cnameRecord"
+    MX    = "mxRecords"
+    PTR   = "ptrRecords"
+    SRV   = "srvRecords"
+    TXT   = "txtRecords"
+  }
+  dns_records_by_type = merge(
+    local.a_records,
+    local.aaaa_records,
+    local.cname_records,
+    local.mx_records,
+    local.ptr_records,
+    local.srv_records,
+    local.txt_records
+  )
   mx_records = {
     for record in var.mx_records : "MX/${record.name}" => {
       ttl  = record.ttl
