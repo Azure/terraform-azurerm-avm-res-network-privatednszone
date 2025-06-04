@@ -19,7 +19,7 @@ module "a_record" {
   for_each = local.a_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = each.value.records
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -30,7 +30,7 @@ module "aaaa_record" {
   for_each = local.aaaa_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = each.value.records
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -41,7 +41,7 @@ module "cname_record" {
   for_each = local.cname_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   record    = each.value.record
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -52,7 +52,7 @@ module "mx_record" {
   for_each = local.mx_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -63,7 +63,7 @@ module "ptr_record" {
   for_each = local.ptr_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = each.value.records
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -74,7 +74,7 @@ module "srv_record" {
   for_each = local.srv_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -85,7 +85,7 @@ module "txt_record" {
   for_each = local.txt_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
   tags      = each.value.tags

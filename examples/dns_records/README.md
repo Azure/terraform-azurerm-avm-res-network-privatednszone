@@ -1,22 +1,85 @@
 <!-- BEGIN_TF_DOCS -->
 # Add DNS entries to existing private DNS zone
 
-This is an example that adds DNS records to an existing private DNS zone using sub-module **addrecords**
+This is an example that adds DNS records to an existing private DNS zone using record type sub-modules.
 
 ```hcl
-module "addrecords" {
-  source = "../../modules/addrecords"
 
-  resource_group_name = local.resource_group_name
-  # source = "Azure/terraform-azurerm-avm-res-network-privatednszone/azurerm//modules/addrecords"
-  zone_name     = local.zone_name
-  a_records     = local.a_records
-  aaaa_records  = local.aaaa_records
-  cname_records = local.cname_records
-  mx_records    = local.mx_records
-  ptr_records   = local.ptr_records
-  srv_records   = local.srv_records
-  txt_records   = local.txt_records
+module "a_record" {
+  source   = "../../modules/private_dns_a_record"
+  for_each = local.a_records
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = each.value.records
+  ttl       = each.value.ttl
+  tags      = each.value.tags
+}
+
+module "aaaa_record" {
+  source   = "../../modules/private_dns_aaaa_record"
+  for_each = local.aaaa_records
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = each.value.records
+  ttl       = each.value.ttl
+  tags      = each.value.tags
+}
+
+module "cname_record" {
+  source   = "../../modules/private_dns_cname_record"
+  for_each = local.cname_records
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  record    = each.value.record
+  ttl       = each.value.ttl
+  tags      = each.value.tags
+}
+
+module "mx_record" {
+  source   = "../../modules/private_dns_mx_record"
+  for_each = local.mx_records
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = values(each.value.records)
+  ttl       = each.value.ttl
+  tags      = each.value.tags
+}
+
+module "ptr_record" {
+  source   = "../../modules/private_dns_ptr_record"
+  for_each = local.ptr_records
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = each.value.records
+  ttl       = each.value.ttl
+  tags      = each.value.tags
+}
+
+module "srv_record" {
+  source   = "../../modules/private_dns_srv_record"
+  for_each = local.srv_records
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = values(each.value.records)
+  ttl       = each.value.ttl
+  tags      = each.value.tags
+}
+
+module "txt_record" {
+  source   = "../../modules/private_dns_txt_record"
+  for_each = local.txt_records
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = values(each.value.records)
+  ttl       = each.value.ttl
+  tags      = each.value.tags
 }
 ```
 
@@ -78,9 +141,33 @@ Description: The txt record output
 
 The following Modules are called:
 
-### <a name="module_addrecords"></a> [addrecords](#module\_addrecords)
+### <a name="module_a_record"></a> [a_record](#module\_private_dns_a_record)
 
-Source: ../../modules/addrecords
+Source: ../../modules/private_dns_a_record
+
+### <a name="module_aaaa_record"></a> [aaaa_record](#module\_private_dns_aaaa_record)
+
+Source: ../../modules/private_dns_aaaa_record
+
+### <a name="module_cname_record"></a> [cname_record](#module\_private_dns_cname_record)
+
+Source: ../../modules/private_dns_cname_record
+
+### <a name="module_mx_record"></a> [mx_record](#module\_private_dns_mx_record)
+
+Source: ../../modules/private_dns_mx_record
+
+### <a name="module_ptr_record"></a> [ptr_record](#module\_private_dns_ptr_record)
+
+Source: ../../modules/private_dns_ptr_record
+
+### <a name="module_srv_record"></a> [srv_record](#module\_private_dns_srv_record)
+
+Source: ../../modules/private_dns_srv_record
+
+### <a name="module_txt_record"></a> [txt_record](#module\_private_dns_txt_record)
+
+Source: ../../modules/private_dns_txt_record
 
 Version:
 

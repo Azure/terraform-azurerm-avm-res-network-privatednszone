@@ -48,8 +48,8 @@ resource "azuread_service_principal" "this" {
 
 
 # reference the module and pass in variables as needed
-module "private_dns_zones" {
-  # replace source with the correct link to the private_dns_zones module
+module "private_dns_zone" {
+  # replace source with the correct link to the private_dns_zone module
   # source                = "Azure/avm-res-network-privatednszone/azurerm"  
   source = "../../"
 
