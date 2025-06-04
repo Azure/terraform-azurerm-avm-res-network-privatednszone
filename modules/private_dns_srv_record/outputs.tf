@@ -1,6 +1,6 @@
 output "resource" {
   description = "The outputs of the DNS record resource."
-  value       = azapi_resource.srv_record.outputs
+  value       = azapi_resource.srv_record.output
 }
 
 output "resource_id" {

@@ -68,10 +68,12 @@ variable "timeouts" {
   type = object({
     create = optional(string, "10m")
     update = optional(string, "10m")
+    read   = optional(string, "10m")
     delete = optional(string, "10m")
   })
   default = {
     create = "10m"
+    read   = "10m"
     update = "10m"
     delete = "10m"
   }

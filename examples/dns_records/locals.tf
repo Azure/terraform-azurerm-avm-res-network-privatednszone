@@ -1,5 +1,4 @@
 locals {
-  domain_name = "testlab.io"
   a_records = {
     "a_record1" = {
       name    = "my_arecord1"
@@ -57,6 +56,7 @@ locals {
       }
     }
   }
+  domain_name = "testlab.io"
   mx_records = {
     "mx_record1" = {
       ttl = 300

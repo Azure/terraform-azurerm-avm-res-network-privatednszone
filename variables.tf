@@ -170,7 +170,20 @@ variable "timeouts" {
       }), {}
     )
   })
-  default     = {}
+  default = {
+    dns_zones = {
+      create = "30m"
+      delete = "30m"
+      update = "30m"
+      read   = "5m"
+    }
+    vnet_links = {
+      create = "30m"
+      delete = "30m"
+      update = "30m"
+      read   = "5m"
+    }
+  }
   description = <<DESCRIPTION
 A map of timeouts objects, per resource type, to apply to the creation and destruction of resources the following resources:
 

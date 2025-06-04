@@ -13,9 +13,9 @@ resource "azapi_resource" "soa_record" {
   tags = var.tags
 
   timeouts {
-    create = var.timeouts.dns_zones.create
-    delete = var.timeouts.dns_zones.delete
-    read   = var.timeouts.dns_zones.read
-    update = var.timeouts.dns_zones.update
+    create = var.timeouts.create
+    delete = var.timeouts.delete
+    read   = var.timeouts.read
+    update = var.timeouts.update
   }
 }

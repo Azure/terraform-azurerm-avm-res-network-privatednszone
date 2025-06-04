@@ -2,7 +2,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "this" {
   for_each = local.virtual_network_links_deprecated
 
   name                  = each.value.vnetlinkname
-  private_dns_zone_name = azapi_resource.private_dns_zone.outputs.name
+  private_dns_zone_name = azapi_resource.private_dns_zone.output.name
   resource_group_name   = var.resource_group_name
   virtual_network_id    = each.value.vnetid
   registration_enabled  = lookup(each.value, "autoregistration", false)

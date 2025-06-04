@@ -301,7 +301,24 @@ object({
   })
 ```
 
-Default: `{}`
+Default:
+
+```json
+{
+  "dns_zones": {
+    "create": "30m",
+    "delete": "30m",
+    "read": "5m",
+    "update": "30m"
+  },
+  "vnet_links": {
+    "create": "30m",
+    "delete": "30m",
+    "read": "5m",
+    "update": "30m"
+  }
+}
+```
 
 ### <a name="input_txt_records"></a> [txt\_records](#input\_txt\_records)
 
@@ -453,7 +470,7 @@ Version:
 
 ### <a name="module_virtual_network_links"></a> [virtual\_network\_links](#module\_virtual\_network\_links)
 
-Source: ./modules/virtual_network_link
+Source: ./modules/private_dns_virtual_network_link
 
 Version:
 
