@@ -1,5 +1,5 @@
 locals {
-  domain_name      = "testlab.io"
+  domain_name = "testlab.io"
   a_records = {
     "a_record1" = {
       name    = "my_arecord1"

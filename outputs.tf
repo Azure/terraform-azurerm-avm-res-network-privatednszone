@@ -90,22 +90,22 @@ output "txt_record_outputs" {
   }
 }
 
-output "virtual_network_link_outputs_deprecated" {
-  description = "The virtual network link output"
-  value = {
-    for link_name, link in azurerm_private_dns_zone_virtual_network_link.this :
-    link_name => {
-      id = link.id
-    }
-  }
-}
-
 output "virtual_network_link_outputs" {
   description = "The virtual network link output"
   value = {
     for link_name, link in module.module.virtual_network_links :
     link_name => {
       id = link.resource_id
+    }
+  }
+}
+
+output "virtual_network_link_outputs_deprecated" {
+  description = "The virtual network link output"
+  value = {
+    for link_name, link in azurerm_private_dns_zone_virtual_network_link.this :
+    link_name => {
+      id = link.id
     }
   }
 }

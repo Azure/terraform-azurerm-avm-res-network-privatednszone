@@ -9,27 +9,13 @@ module "private_dns_zone" {
   # source                = "Azure/avm-res-network-privatednszone/azurerm"  
   source = "../../"
 
-  domain_name           = local.domain_name
-  resource_group_name   = azurerm_resource_group.avmrg.name
-  subscription_id = var.subscription_id
-}
-
-module "soa_record" {
-  source = "./modules/private_dns_soa_record"
-
-  parent_id    = azapi_resource.private_dns_zone.id
-  email        = var.soa_record.email
-  name         = var.soa_record.name
-  expire_time  = var.soa_record.expire_time
-  minimum_ttl  = var.soa_record.minimum_ttl
-  refresh_time = var.soa_record.refresh_time
-  retry_time   = var.soa_record.retry_time
-  ttl          = var.soa_record.ttl
-  tags         = var.soa_record
+  domain_name         = local.domain_name
+  resource_group_name = azurerm_resource_group.avmrg.name
+  subscription_id     = var.subscription_id
 }
 
 module "a_record" {
-  source   = "./modules/private_dns_a_record"
+  source   = "../../modules/private_dns_a_record"
   for_each = local.a_records
 
   parent_id = azapi_resource.private_dns_zone.id
@@ -40,7 +26,7 @@ module "a_record" {
 }
 
 module "aaaa_record" {
-  source   = "./modules/private_dns_aaaa_record"
+  source   = "../../modules/private_dns_aaaa_record"
   for_each = local.aaaa_records
 
   parent_id = azapi_resource.private_dns_zone.id
@@ -51,7 +37,7 @@ module "aaaa_record" {
 }
 
 module "cname_record" {
-  source   = "./modules/private_dns_cname_record"
+  source   = "../../modules/private_dns_cname_record"
   for_each = local.cname_records
 
   parent_id = azapi_resource.private_dns_zone.id
@@ -62,7 +48,7 @@ module "cname_record" {
 }
 
 module "mx_record" {
-  source   = "./modules/private_dns_mx_record"
+  source   = "../../modules/private_dns_mx_record"
   for_each = local.mx_records
 
   parent_id = azapi_resource.private_dns_zone.id
@@ -73,7 +59,7 @@ module "mx_record" {
 }
 
 module "ptr_record" {
-  source   = "./modules/private_dns_ptr_record"
+  source   = "../../modules/private_dns_ptr_record"
   for_each = local.ptr_records
 
   parent_id = azapi_resource.private_dns_zone.id
@@ -84,7 +70,7 @@ module "ptr_record" {
 }
 
 module "srv_record" {
-  source   = "./modules/private_dns_srv_record"
+  source   = "../../modules/private_dns_srv_record"
   for_each = local.srv_records
 
   parent_id = azapi_resource.private_dns_zone.id
@@ -95,7 +81,7 @@ module "srv_record" {
 }
 
 module "txt_record" {
-  source   = "./modules/private_dns_txt_record"
+  source   = "../../modules/private_dns_txt_record"
   for_each = local.txt_records
 
   parent_id = azapi_resource.private_dns_zone.id
