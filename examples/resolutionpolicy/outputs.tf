@@ -38,6 +38,7 @@ output "txt_record_outputs" {
   value       = module.private_dns_zone.txt_record_outputs
 }
 
+
 output "virtual_network_link_outputs" {
   description = "The virtual network link output"
   value       = module.private_dns_zone.virtual_network_link_outputs
