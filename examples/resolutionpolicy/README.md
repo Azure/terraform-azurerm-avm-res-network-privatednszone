@@ -1,7 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# Fallback to Internet Resolution Policy example
+# Add DNS entries to existing private DNS zone
 
-This deploys the Azure private DNS zone with a resolution policy of 'NxDomainRedirect'. This will enable the fallback to internet option available within the portal.
+This is an example that creates a virttual network link with a non-default resolution policy to an existing private DNS zone using the **private\_dns\_virtual\_network\_link** sub-module.
 
 ```hcl
 # create the resource group
@@ -78,9 +78,9 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
-- <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (>= 2.40)
-
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.0, < 5.0)
+
+- <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
 ## Resources
 
@@ -111,9 +111,37 @@ No optional inputs.
 
 The following outputs are exported:
 
-### <a name="output_dns_record_outputs"></a> [dns\_record\_outputs](#output\_dns\_record\_outputs)
+### <a name="output_a_record_outputs"></a> [a\_record\_outputs](#output\_a\_record\_outputs)
 
-Description: The DNS records output
+Description: The a record output
+
+### <a name="output_aaaa_record_outputs"></a> [aaaa\_record\_outputs](#output\_aaaa\_record\_outputs)
+
+Description: The aaaa record output
+
+### <a name="output_cname_record_outputs"></a> [cname\_record\_outputs](#output\_cname\_record\_outputs)
+
+Description: The cname record output
+
+### <a name="output_mx_record_outputs"></a> [mx\_record\_outputs](#output\_mx\_record\_outputs)
+
+Description: The mx record output
+
+### <a name="output_private_dns_zone_output"></a> [private\_dns\_zone\_output](#output\_private\_dns\_zone\_output)
+
+Description: The private dns zone output
+
+### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
+
+Description: The ptr record output
+
+### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
+
+Description: The srv record output
+
+### <a name="output_txt_record_outputs"></a> [txt\_record\_outputs](#output\_txt\_record\_outputs)
+
+Description: The txt record output
 
 ### <a name="output_virtual_network_link_outputs"></a> [virtual\_network\_link\_outputs](#output\_virtual\_network\_link\_outputs)
 
@@ -123,7 +151,7 @@ Description: The virtual network link output
 
 The following Modules are called:
 
-### <a name="module_private_dns_zones"></a> [private\_dns\_zones](#module\_private\_dns\_zones)
+### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
 Source: ../../
 
