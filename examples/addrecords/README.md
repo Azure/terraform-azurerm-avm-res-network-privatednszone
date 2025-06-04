@@ -1,7 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
 # Add DNS entries to existing private DNS zone
 
-This is an example that adds DNS records to an existing private DNS zone using sub-module **addrecords**
+This is a **DEPRECATED** example that adds DNS records to an existing private DNS zone using sub-module **addrecords**
 
 ```hcl
 module "addrecords" {

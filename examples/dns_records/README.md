@@ -4,13 +4,28 @@
 This is an example that adds DNS records to an existing private DNS zone using record type sub-modules.
 
 ```hcl
+# create the resource group
+resource "azurerm_resource_group" "avmrg" {
+  location = "EastUS"
+  name     = "avmrg"
+}
+
+module "private_dns_zone" {
+  # replace source with the correct link to the private_dns_zones module
+  # source                = "Azure/avm-res-network-privatednszone/azurerm"  
+  source = "../../"
+
+  domain_name         = local.domain_name
+  resource_group_name = azurerm_resource_group.avmrg.name
+  subscription_id     = var.subscription_id
+}
 
 module "a_record" {
   source   = "../../modules/private_dns_a_record"
   for_each = local.a_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = each.value.records
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -21,7 +36,7 @@ module "aaaa_record" {
   for_each = local.aaaa_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = each.value.records
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -32,7 +47,7 @@ module "cname_record" {
   for_each = local.cname_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   record    = each.value.record
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -43,7 +58,7 @@ module "mx_record" {
   for_each = local.mx_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -54,7 +69,7 @@ module "ptr_record" {
   for_each = local.ptr_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = each.value.records
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -65,7 +80,7 @@ module "srv_record" {
   for_each = local.srv_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -76,7 +91,7 @@ module "txt_record" {
   for_each = local.txt_records
 
   name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
+  parent_id = module.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
   tags      = each.value.tags
@@ -94,12 +109,20 @@ The following requirements are needed by this module:
 
 ## Resources
 
-No resources.
+The following resources are used by this module:
+
+- [azurerm_resource_group.avmrg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
+
+Description: The ID of the Azure subscription where the resources will be created.
+
+Type: `string`
 
 ## Optional Inputs
 
@@ -125,6 +148,10 @@ Description: The cname record output
 
 Description: The mx record output
 
+### <a name="output_private_dns_zone_output"></a> [private\_dns\_zone\_output](#output\_private\_dns\_zone\_output)
+
+Description: The private dns zone output
+
 ### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
 
 Description: The ptr record output
@@ -141,31 +168,49 @@ Description: The txt record output
 
 The following Modules are called:
 
-### <a name="module_a_record"></a> [a_record](#module\_private_dns_a_record)
+### <a name="module_a_record"></a> [a\_record](#module\_a\_record)
 
 Source: ../../modules/private_dns_a_record
 
-### <a name="module_aaaa_record"></a> [aaaa_record](#module\_private_dns_aaaa_record)
+Version:
+
+### <a name="module_aaaa_record"></a> [aaaa\_record](#module\_aaaa\_record)
 
 Source: ../../modules/private_dns_aaaa_record
 
-### <a name="module_cname_record"></a> [cname_record](#module\_private_dns_cname_record)
+Version:
+
+### <a name="module_cname_record"></a> [cname\_record](#module\_cname\_record)
 
 Source: ../../modules/private_dns_cname_record
 
-### <a name="module_mx_record"></a> [mx_record](#module\_private_dns_mx_record)
+Version:
+
+### <a name="module_mx_record"></a> [mx\_record](#module\_mx\_record)
 
 Source: ../../modules/private_dns_mx_record
 
-### <a name="module_ptr_record"></a> [ptr_record](#module\_private_dns_ptr_record)
+Version:
+
+### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
+
+Source: ../../
+
+Version:
+
+### <a name="module_ptr_record"></a> [ptr\_record](#module\_ptr\_record)
 
 Source: ../../modules/private_dns_ptr_record
 
-### <a name="module_srv_record"></a> [srv_record](#module\_private_dns_srv_record)
+Version:
+
+### <a name="module_srv_record"></a> [srv\_record](#module\_srv\_record)
 
 Source: ../../modules/private_dns_srv_record
 
-### <a name="module_txt_record"></a> [txt_record](#module\_private_dns_txt_record)
+Version:
+
+### <a name="module_txt_record"></a> [txt\_record](#module\_txt\_record)
 
 Source: ../../modules/private_dns_txt_record
 
