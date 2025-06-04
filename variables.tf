@@ -9,14 +9,22 @@ variable "resource_group_name" {
   description = "The resource group where the resources will be deployed."
 }
 
+variable "subscription_id" {
+  type        = string
+  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+
+  validation {
+    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
+    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  }
+}
+
 variable "a_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name    = string
+    ttl     = number
+    records = list(string)
+    tags    = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a A record."
@@ -24,12 +32,10 @@ variable "a_records" {
 
 variable "aaaa_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name    = string
+    ttl     = number
+    records = list(string)
+    tags    = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a AAAA record."
@@ -37,12 +43,10 @@ variable "aaaa_records" {
 
 variable "cname_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    record              = string
-    tags                = optional(map(string), null)
+    name   = string
+    ttl    = number
+    record = string
+    tags   = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
@@ -60,10 +64,8 @@ DESCRIPTION
 
 variable "mx_records" {
   type = map(object({
-    name                = optional(string, "@")
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = optional(string, "@")
+    ttl  = number
     records = map(object({
       preference = number
       exchange   = string
@@ -76,12 +78,10 @@ variable "mx_records" {
 
 variable "ptr_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name    = string
+    ttl     = number
+    records = list(string)
+    tags    = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a PTR record."
@@ -119,6 +119,7 @@ variable "role_assignments" {
 variable "soa_record" {
   type = object({
     email        = string
+    name         = optional(string, "@")
     expire_time  = optional(number, 2419200)
     minimum_ttl  = optional(number, 10)
     refresh_time = optional(number, 3600)
@@ -132,10 +133,8 @@ variable "soa_record" {
 
 variable "srv_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
       priority = number
       weight   = number
@@ -190,10 +189,8 @@ DESCRIPTION
 
 variable "txt_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
       value = string
     }))
