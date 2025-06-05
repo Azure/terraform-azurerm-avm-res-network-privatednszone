@@ -11,6 +11,13 @@ resource "azapi_resource" "private_dns_zone_network_link" {
       }
     }
   })
+  response_export_values = {
+    "id"                   = "id"
+    "name"                 = "name"
+    "type"                 = "type"
+    "virtual_network"      = "properties.virtualNetwork"
+    "registration_enabled" = "properties.registrationEnabled"
+  }
   tags = var.tags
 
   timeouts {

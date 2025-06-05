@@ -4,6 +4,16 @@ resource "azapi_resource" "private_dns_zone" {
   parent_id = local.parent_resource_id
   # This resource creates a Private DNS Zone using the Azure API
   type = "Microsoft.Network/privateDnsZones@2024-06-01"
+  response_export_values = {
+    "id"                                          = "id"
+    "name"                                        = "name"
+    "type"                                        = "type"
+    "location"                                    = "location"
+    "tags"                                        = "tags"
+    "numberOfRecordSets"                          = "properties.numberOfRecordSets"
+    "numberOfVirtualNetworkLinks"                 = "properties.numberOfVirtualNetworkLinks"
+    "numberOfVirtualNetworkLinksWithRegistration" = "properties.numberOfVirtualNetworkLinksWithRegistration"
+  }
   tags = var.tags
 
   timeouts {
@@ -143,4 +153,13 @@ resource "azapi_resource" "role_assignments" {
   parent_id = azapi_resource.private_dns_zone.id
   type      = each.value.type
   body      = each.value.body
+  response_export_values = {
+    "id"               = "id"
+    "name"             = "name"
+    "type"             = "type"
+    "roleDefinitionId" = "properties.roleDefinitionId"
+    "principalId"      = "properties.principalId"
+    "principalType"    = "properties.principalType"
+    "scope"            = "properties.scope"
+  }
 }

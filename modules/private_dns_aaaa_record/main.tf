@@ -9,6 +9,13 @@ resource "azapi_resource" "aaaa_record" {
       ttl         = var.ttl
     }
   })
+  response_export_values = {
+    "id"   = "id"
+    "name" = "name"
+    "type" = "type"
+    "fqdn" = "properties.fqdn"
+    "ttl"  = "properties.ttl"
+  }
   tags = var.tags
 
   timeouts {
