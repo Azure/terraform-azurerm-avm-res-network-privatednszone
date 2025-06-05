@@ -3,7 +3,7 @@ locals {
   role_definition_resource_substring = "providers/Microsoft.Authorization/roleDefinitions"
   virtual_network_links = {
     for vnet_key, vnet_link in var.virtual_network_links :
-    "${vnet_key}" => {
+    vnet_key => {
       name                 = vnet_link.vnetlinkname
       virtual_network_id   = vnet_link.vnetid
       registration_enabled = lookup(vnet_link, "autoregistration", false)
@@ -13,7 +13,7 @@ locals {
   }
   virtual_network_links_deprecated = {
     for vnet_key, vnet_link in var.virtual_network_links :
-    "${vnet_key}" => {
+    vnet_key => {
       vnetlinkname     = vnet_link.vnetlinkname
       vnetid           = vnet_link.vnetid
       autoregistration = lookup(vnet_link, "autoregistration", false)

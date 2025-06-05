@@ -7,7 +7,7 @@ This is an example that adds DNS records to an existing private DNS zone using r
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = "avmrg"
+  name     = local.resource_group_name
 }
 
 module "private_dns_zone" {
