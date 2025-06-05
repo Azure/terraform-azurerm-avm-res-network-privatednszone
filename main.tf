@@ -4,9 +4,7 @@ resource "azapi_resource" "private_dns_zone" {
   parent_id = local.parent_resource_id
   # This resource creates a Private DNS Zone using the Azure API
   type = "Microsoft.Network/privateDnsZones@2024-06-01"
-  body = jsonencode({
-    tags = var.tags
-  })
+  tags = var.tags
 
   timeouts {
     create = var.timeouts.dns_zones.create
@@ -31,17 +29,17 @@ module "virtual_network_links" {
 
 module "soa_record" {
   source   = "./modules/private_dns_soa_record"
-  for_each = var.soa_record != null ? { "default" = var.soa_record } : {}
+  count = var.soa_record != null ? 1 : 0
 
-  email        = each.value.email
-  expire_time  = each.value.expire_time
-  minimum_ttl  = each.value.minimum_ttl
-  name         = each.value.name
+  email        = var.soa_record.email
+  expire_time  = var.soa_record.expire_time
+  minimum_ttl  = var.soa_record.minimum_ttl
+  name         = var.soa_record.name
   parent_id    = azapi_resource.private_dns_zone.id
-  refresh_time = each.value.refresh_time
-  retry_time   = each.value.retry_time
-  ttl          = each.value.ttl
-  tags         = each.value.tags
+  refresh_time = var.soa_record.refresh_time
+  retry_time   = var.soa_record.retry_time
+  ttl          = var.soa_record.ttl
+  tags         = var.soa_record.tags
   timeouts     = var.timeouts.dns_zones
 }
 
@@ -51,7 +49,7 @@ module "a_record" {
 
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
-  records   = each.value.records
+  ip_addresses   = coalesce(each.value.ip_addresses, toset(each.value.records))
   ttl       = each.value.ttl
   tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
@@ -63,7 +61,7 @@ module "aaaa_record" {
 
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
-  records   = each.value.records
+  ip_addresses   = coalesce(each.value.ip_addresses, toset(each.value.records))
   ttl       = each.value.ttl
   tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
@@ -75,7 +73,7 @@ module "cname_record" {
 
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
-  record    = each.value.record
+  cname    = coalesce(each.value.cname, each.value.record)
   ttl       = each.value.ttl
   tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
@@ -99,7 +97,7 @@ module "ptr_record" {
 
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
-  records   = each.value.records
+  domain_names   = coalesce(each.value.domain_names, toset(each.value.records))
   ttl       = each.value.ttl
   tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
@@ -141,4 +139,21 @@ resource "azurerm_role_assignment" "this" {
   role_definition_id                     = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? each.value.role_definition_id_or_name : null
   role_definition_name                   = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? null : each.value.role_definition_id_or_name
   skip_service_principal_aad_check       = each.value.skip_service_principal_aad_check
+}
+
+module "avm_interfaces" {
+  source  = "Azure/avm-utl-interfaces/azure"
+  version = "0.2.0"
+  role_assignments = var.role_assignments
+  role_assignment_definition_lookup_enabled = true
+  role_assignment_definition_scope = local.parent_resource_id
+}
+
+resource "azapi_resource" "role_assignments" {
+  for_each = module.avm_interfaces.role_assignments_azapi
+
+  type      = each.value.type
+  body      = each.value.body
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
 }

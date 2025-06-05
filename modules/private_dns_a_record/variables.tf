@@ -22,12 +22,12 @@ variable "parent_id" {
   }
 }
 
-variable "records" {
-  type        = list(string)
-  description = "A list of IP addresses or hostnames for the A record."
+variable "ip_addresses" {
+  type        = set(string)
+  description = "A set of IP addresses or hostnames for the A record."
 
   validation {
-    condition     = length(var.records) > 0 && alltrue([for record in var.records : can(regex("^(\\d{1,3}\\.){3}\\d{1,3}$", record)) || can(regex("^[a-zA-Z0-9-_.]+$", record))])
+    condition     = length(var.ip_addresses) > 0 && alltrue([for ip in var.ip_addresses : can(regex("^(\\d{1,3}\\.){3}\\d{1,3}$", ip)) || can(regex("^[a-zA-Z0-9-_.]+$", ip))])
     error_message = "The records must contain at least one valid IP address or hostname."
   }
 }

@@ -22,9 +22,9 @@ variable "parent_id" {
   }
 }
 
-variable "records" {
-  type        = list(string)
-  description = "A list of hostnames for the PTR record."
+variable "domain_names" {
+  type        = set(string)
+  description = "A set of hostnames for the PTR record."
 
   validation {
     condition     = alltrue([for h in var.records : can(regex("^([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$", h))])

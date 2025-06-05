@@ -5,7 +5,7 @@ resource "azapi_resource" "a_record" {
   type      = "Microsoft.Network/privateDnsZones/A@2024-06-01"
   body = jsonencode({
     properties = {
-      aRecords = var.records
+      aRecords = var.ip_addresses
       ttl      = var.ttl
     }
   })

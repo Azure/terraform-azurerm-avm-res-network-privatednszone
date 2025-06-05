@@ -4,20 +4,11 @@ locals {
   virtual_network_links = {
     for vnet_key, vnet_link in var.virtual_network_links :
     vnet_key => {
-      name                 = vnet_link.vnetlinkname
-      virtual_network_id   = vnet_link.vnetid
-      registration_enabled = lookup(vnet_link, "autoregistration", false)
-      resolution_policy    = lookup(vnet_link, "resolutionpolicy", "Default")
+      name                 = coalesce(vnet_link.name, vnet_link.vnetlinkname)
+      virtual_network_id   = coalesce(vnet_link.virtual_network_id, vnet_link.vnetid)
+      registration_enabled = coalesce(vnet_link.registration_enabled, vnet_link.autoregistration, false)
+      resolution_policy    = coalesce(vnet_link.resolution_policy, "Default")
       tags                 = vnet_link.tags
-    } if !var.use_depreacted_virtual_network_link_in_root_module
-  }
-  virtual_network_links_deprecated = {
-    for vnet_key, vnet_link in var.virtual_network_links :
-    vnet_key => {
-      vnetlinkname     = vnet_link.vnetlinkname
-      vnetid           = vnet_link.vnetid
-      autoregistration = lookup(vnet_link, "autoregistration", false)
-      tags             = vnet_link.tags
-    } if var.use_depreacted_virtual_network_link_in_root_module
+    }
   }
 }

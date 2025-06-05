@@ -22,7 +22,7 @@ variable "parent_id" {
   }
 }
 
-variable "record" {
+variable "cname" {
   type        = string
   description = "The CNAME record value."
 

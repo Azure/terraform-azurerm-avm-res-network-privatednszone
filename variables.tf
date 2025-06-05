@@ -24,6 +24,7 @@ variable "a_records" {
     name    = string
     ttl     = number
     records = list(string)
+    ip_addresses = optional(set(string), null)
     tags    = optional(map(string), null)
   }))
   default     = {}
@@ -35,6 +36,7 @@ variable "aaaa_records" {
     name    = string
     ttl     = number
     records = list(string)
+    ip_addresses = optional(set(string), null)
     tags    = optional(map(string), null)
   }))
   default     = {}
@@ -46,6 +48,7 @@ variable "cname_records" {
     name   = string
     ttl    = number
     record = string
+    cname = optional(string, null)
     tags   = optional(map(string), null)
   }))
   default     = {}
@@ -81,6 +84,7 @@ variable "ptr_records" {
     name    = string
     ttl     = number
     records = list(string)
+    domain_names = optional(string, null)
     tags    = optional(map(string), null)
   }))
   default     = {}
@@ -216,9 +220,12 @@ variable "txt_records" {
 variable "virtual_network_links" {
   type = map(object({
     vnetlinkname     = string
+    name             = optional(string, null)
     vnetid           = string
+    virtual_network_id = optional(string, null)
     autoregistration = optional(bool, false)
-    resolutionpolicy = optional(string, "Default")
+    registration_enabled = optional(bool, null)
+    resolution_policy = optional(string, "Default")
     tags             = optional(map(string), null)
   }))
   default     = {}

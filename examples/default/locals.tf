@@ -2,8 +2,6 @@ locals {
   a_records = {
     "a_record1" = {
       name                = "my_arecord1"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["10.1.1.1", "10.1.1.2"]
       tags = {
@@ -13,8 +11,6 @@ locals {
 
     "a_record2" = {
       name                = "my_arecord2"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["10.2.1.1", "10.2.1.2"]
       tags = {
@@ -25,8 +21,6 @@ locals {
   aaaa_records = {
     "aaaa_record1" = {
       name                = "my_aaaarecord1"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["fd5d:70bc:930e:d008:0000:0000:0000:7334", "fd5d:70bc:930e:d008::7335"]
       tags = {
@@ -36,8 +30,6 @@ locals {
 
     "aaaa_record2" = {
       name                = "my_aaaarecord2"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 600
       records             = ["fd4d:70bc:930e:d008:0000:0000:0000:7334", "fd4d:70bc:930e:d008::7335"]
       tags = {
@@ -48,8 +40,6 @@ locals {
   cname_records = {
     "cname_record1" = {
       name                = "my_cname1"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       record              = "prod.testlab.io"
       tags = {
@@ -59,8 +49,6 @@ locals {
 
     "cname_record2" = {
       name                = "my_cname2"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       record              = "dev.testlab.io"
       tags = {
@@ -72,8 +60,7 @@ locals {
   enable_telemetry = false
   mx_records = {
     "mx_record1" = {
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
+      name = "primary"
       ttl                 = 300
       records = {
         "record1" = {
@@ -92,8 +79,6 @@ locals {
 
     "msx_record2" = {
       name                = "backupmail"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records = {
         "record3" = {
@@ -113,8 +98,6 @@ locals {
   ptr_records = {
     "ptr_record1" = {
       name                = "ptr1"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["web1.testlab.io", "web2.testlab.io"]
       tags = {
@@ -124,8 +107,6 @@ locals {
 
     "ptr_record2" = {
       name                = "ptr2"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records             = ["web1.testlab.io", "web2.testlab.io"]
       tags = {
@@ -147,8 +128,6 @@ locals {
   srv_records = {
     "srv_record1" = {
       name                = "srv1"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records = {
         "srvrecordA" = {
@@ -171,8 +150,6 @@ locals {
 
     "srv_record2" = {
       name                = "srv2"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records = {
         "srvrecordC" = {
@@ -199,8 +176,6 @@ locals {
   txt_records = {
     "txt_record1" = {
       name                = "txt1"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records = {
         "txtrecordA" = {
@@ -217,8 +192,6 @@ locals {
 
     "txt_record2" = {
       name                = "txt2"
-      resource_group_name = "avmrg"
-      zone_name           = "testlab.io"
       ttl                 = 300
       records = {
         "txtrecordC" = {
@@ -236,16 +209,16 @@ locals {
   }
   virtual_network_links = {
     vnetlink1 = {
-      vnetlinkname     = "vnetlink1"
-      vnetid           = azurerm_virtual_network.vnet1.id
+      name     = "vnetlink1"
+      virtual_network_id           = azurerm_virtual_network.vnet1.id
       autoregistration = true
       tags = {
         "env" = "prod"
       }
     }
     vnetlink2 = {
-      vnetlinkname     = "vnetlink2"
-      vnetid           = azurerm_virtual_network.vnet2.id
+      name     = "vnetlink2"
+      virtual_network_id           = azurerm_virtual_network.vnet2.id
       autoregistration = false
       tags = {
         "env" = "dev"
