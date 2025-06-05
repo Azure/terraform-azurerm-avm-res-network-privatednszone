@@ -33,7 +33,7 @@ variable "a_records" {
   validation {
     condition = alltrue([
       for k, v in var.a_records :
-      (!isnull(v.records) && length(v.records) > 0) || (!isnull(v.ip_addresses) && length(v.ip_addresses) > 0)
+      ((v.records != null) && length(v.records) > 0) || ((v.ip_addresses != null) && length(v.ip_addresses) > 0)
     ])
     error_message = "Each A record must have either a non-empty records list or a non-empty ip_addresses set."
   }
@@ -53,7 +53,7 @@ variable "aaaa_records" {
   validation {
     condition = alltrue([
       for k, v in var.aaaa_records :
-      (!isnull(v.records) && length(v.records) > 0) || (!isnull(v.ip_addresses) && length(v.ip_addresses) > 0)
+      ((v.records != null) && length(v.records) > 0) || ((v.ip_addresses != null) && length(v.ip_addresses) > 0)
     ])
     error_message = "Each AAAA record must have either a non-empty records list or a non-empty ip_addresses set."
   }
@@ -73,7 +73,7 @@ variable "cname_records" {
   validation {
     condition = alltrue([
       for k, v in var.cname_records :
-      (!isnull(v.record) && length(v.record) > 0) || (!isnull(v.cname) && length(v.cname) > 0)
+      ((v.record != null) && length(v.record) > 0) || ((v.cname != null) && length(v.cname) > 0)
     ])
     error_message = "Each CNAME record must have either a non-empty record or a non-empty cname value."
   }
@@ -117,7 +117,7 @@ variable "ptr_records" {
   validation {
     condition = alltrue([
       for k, v in var.ptr_records :
-      (!isnull(v.records) && length(v.records) > 0) || (!isnull(v.domain_names) && length(v.domain_names) > 0)
+      ((v.records != null) && length(v.records) > 0) || ((v.domain_names != null) && length(v.domain_names) > 0)
     ])
     error_message = "Each PTR record must have either a non-empty records list or a non-empty domain_names value."
   }
@@ -266,16 +266,16 @@ variable "virtual_network_links" {
   validation {
     condition = alltrue([
       for k, v in var.virtual_network_links :
-      (!isnull(v.vnetlinkname) && length(v.vnetlinkname) > 0) ||
-      (!isnull(v.name) && length(v.name) > 0)
+      ((v.vnetlinkname != null) && length(v.vnetlinkname) > 0) ||
+      ((v.name != null) && length(v.name) > 0)
     ])
     error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
   }
   validation {
     condition = alltrue([
       for k, v in var.virtual_network_links :
-      (!isnull(v.vnetid) && length(v.vnetid) > 0) ||
-      (!isnull(v.virtual_network_id) && length(v.virtual_network_id) > 0)
+      ((v.vnetid != null) && length(v.vnetid) > 0) ||
+      ((v.virtual_network_id != null) && length(v.virtual_network_id) > 0)
     ])
     error_message = "Each virtual_network_link must have either vnetid or virtual_network_id provided."
   }
