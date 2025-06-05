@@ -22,25 +22,26 @@ module "virtual_network_links" {
 
   name                 = each.value.name
   parent_id            = azapi_resource.private_dns_zone.id
-  virtual_network_id   = each.value.vnetid
-  registration_enabled = lookup(each.value, "autoregistration", false)
+  virtual_network_id   = each.value.virtual_network_id
+  registration_enabled = lookup(each.value, "registration_enabled", false)
   resolution_policy    = lookup(each.value, "resolution_policy", "Default")
   tags                 = lookup(each.value, "tags", null)
   timeouts             = var.timeouts.vnet_links
 }
 
 module "soa_record" {
-  source = "./modules/private_dns_soa_record"
+  source   = "./modules/private_dns_soa_record"
+  for_each = var.soa_record != null ? { "default" = var.soa_record } : {}
 
-  email        = var.soa_record.email
-  expire_time  = var.soa_record.expire_time
-  minimum_ttl  = var.soa_record.minimum_ttl
-  name         = var.soa_record.name
+  email        = each.value.email
+  expire_time  = each.value.expire_time
+  minimum_ttl  = each.value.minimum_ttl
+  name         = each.value.name
   parent_id    = azapi_resource.private_dns_zone.id
-  refresh_time = var.soa_record.refresh_time
-  retry_time   = var.soa_record.retry_time
-  ttl          = var.soa_record.ttl
-  tags         = var.soa_record.tags
+  refresh_time = each.value.refresh_time
+  retry_time   = each.value.retry_time
+  ttl          = each.value.ttl
+  tags         = each.value.tags
   timeouts     = var.timeouts.dns_zones
 }
 

@@ -12,6 +12,7 @@ resource "azapi_resource" "soa_record" {
         refreshTime = var.refresh_time
         retryTime   = var.retry_time
       }
+      ttl = var.ttl
     }
   })
   tags = var.tags
