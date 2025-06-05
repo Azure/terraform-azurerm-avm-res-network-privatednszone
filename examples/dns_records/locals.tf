@@ -59,7 +59,8 @@ locals {
   domain_name = "testlab.io"
   mx_records = {
     "mx_record1" = {
-      ttl = 300
+      name = "primary"
+      ttl  = 300
       records = {
         "record1" = {
           preference = 10

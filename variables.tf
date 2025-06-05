@@ -218,6 +218,7 @@ variable "virtual_network_links" {
     vnetlinkname     = string
     vnetid           = string
     autoregistration = optional(bool, false)
+    resolutionpolicy = optional(string, "Default")
     tags             = optional(map(string), null)
   }))
   default     = {}
