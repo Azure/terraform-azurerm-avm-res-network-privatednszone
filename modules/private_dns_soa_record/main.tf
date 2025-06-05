@@ -6,7 +6,11 @@ resource "azapi_resource" "soa_record" {
   body = jsonencode({
     properties = {
       soaRecord = {
-        email = var.email
+        email       = var.email
+        expireTime  = var.expire_time
+        minimumTtl  = var.minimum_ttl
+        refreshTime = var.refresh_time
+        retryTime   = var.retry_time
       }
     }
   })

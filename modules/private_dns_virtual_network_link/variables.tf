@@ -55,13 +55,8 @@ variable "resolution_policy" {
 
 variable "tags" {
   type        = map(string)
-  default     = {}
-  description = "A map of tags to assign to the virtual network link."
-
-  validation {
-    condition     = alltrue([for v in values(var.tags) : length(v) > 0])
-    error_message = "All tag values must not be empty."
-  }
+  default     = null
+  description = "(Optional) Tags of the resource."
 }
 
 variable "timeouts" {
