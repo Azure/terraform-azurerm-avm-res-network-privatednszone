@@ -93,7 +93,7 @@ Type:
 map(object({
     name         = string
     ttl          = number
-    records      = list(string)
+    records      = optional(list(string))
     ip_addresses = optional(set(string), null)
     tags         = optional(map(string), null)
   }))
@@ -111,7 +111,7 @@ Type:
 map(object({
     name         = string
     ttl          = number
-    records      = list(string)
+    records      = optional(list(string))
     ip_addresses = optional(set(string), null)
     tags         = optional(map(string), null)
   }))
@@ -129,7 +129,7 @@ Type:
 map(object({
     name   = string
     ttl    = number
-    record = string
+    record = optional(string, null)
     cname  = optional(string, null)
     tags   = optional(map(string), null)
   }))
@@ -177,7 +177,7 @@ Type:
 map(object({
     name         = string
     ttl          = number
-    records      = list(string)
+    records      = optional(list(string), null)
     domain_names = optional(string, null)
     tags         = optional(map(string), null)
   }))
@@ -343,15 +343,15 @@ Default: `{}`
 
 ### <a name="input_virtual_network_links"></a> [virtual\_network\_links](#input\_virtual\_network\_links)
 
-Description: A map of objects where each object contains information to create a virtual network link.
+Description: A map of objects where each object contains information to create a virtual network link. Either vnetlinkname or name must be provided, and either vnetid or virtual\_network\_id must be provided.
 
 Type:
 
 ```hcl
 map(object({
-    vnetlinkname         = string
+    vnetlinkname         = optional(string, null)
     name                 = optional(string, null)
-    vnetid               = string
+    vnetid               = optional(string, null)
     virtual_network_id   = optional(string, null)
     autoregistration     = optional(bool, false)
     registration_enabled = optional(bool, null)

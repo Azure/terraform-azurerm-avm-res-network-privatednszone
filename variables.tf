@@ -23,36 +23,60 @@ variable "a_records" {
   type = map(object({
     name         = string
     ttl          = number
-    records      = list(string)
+    records      = optional(list(string))
     ip_addresses = optional(set(string), null)
     tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a A record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.a_records :
+      (!isnull(v.records) && length(v.records) > 0) || (!isnull(v.ip_addresses) && length(v.ip_addresses) > 0)
+    ])
+    error_message = "Each A record must have either a non-empty records list or a non-empty ip_addresses set."
+  }
 }
 
 variable "aaaa_records" {
   type = map(object({
     name         = string
     ttl          = number
-    records      = list(string)
+    records      = optional(list(string))
     ip_addresses = optional(set(string), null)
     tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a AAAA record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.aaaa_records :
+      (!isnull(v.records) && length(v.records) > 0) || (!isnull(v.ip_addresses) && length(v.ip_addresses) > 0)
+    ])
+    error_message = "Each AAAA record must have either a non-empty records list or a non-empty ip_addresses set."
+  }
 }
 
 variable "cname_records" {
   type = map(object({
     name   = string
     ttl    = number
-    record = string
+    record = optional(string, null)
     cname  = optional(string, null)
     tags   = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.cname_records :
+      (!isnull(v.record) && length(v.record) > 0) || (!isnull(v.cname) && length(v.cname) > 0)
+    ])
+    error_message = "Each CNAME record must have either a non-empty record or a non-empty cname value."
+  }
 }
 
 variable "enable_telemetry" {
@@ -83,12 +107,20 @@ variable "ptr_records" {
   type = map(object({
     name         = string
     ttl          = number
-    records      = list(string)
+    records      = optional(list(string), null)
     domain_names = optional(string, null)
     tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a PTR record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.ptr_records :
+      (!isnull(v.records) && length(v.records) > 0) || (!isnull(v.domain_names) && length(v.domain_names) > 0)
+    ])
+    error_message = "Each PTR record must have either a non-empty records list or a non-empty domain_names value."
+  }
 }
 
 variable "role_assignments" {
@@ -219,9 +251,9 @@ variable "txt_records" {
 
 variable "virtual_network_links" {
   type = map(object({
-    vnetlinkname         = string
+    vnetlinkname         = optional(string, null)
     name                 = optional(string, null)
-    vnetid               = string
+    vnetid               = optional(string, null)
     virtual_network_id   = optional(string, null)
     autoregistration     = optional(bool, false)
     registration_enabled = optional(bool, null)
@@ -229,5 +261,22 @@ variable "virtual_network_links" {
     tags                 = optional(map(string), null)
   }))
   default     = {}
-  description = "A map of objects where each object contains information to create a virtual network link."
+  description = "A map of objects where each object contains information to create a virtual network link. Either vnetlinkname or name must be provided, and either vnetid or virtual_network_id must be provided."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.virtual_network_links :
+      (!isnull(v.vnetlinkname) && length(v.vnetlinkname) > 0) ||
+      (!isnull(v.name) && length(v.name) > 0)
+    ])
+    error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.virtual_network_links :
+      (!isnull(v.vnetid) && length(v.vnetid) > 0) ||
+      (!isnull(v.virtual_network_id) && length(v.virtual_network_id) > 0)
+    ])
+    error_message = "Each virtual_network_link must have either vnetid or virtual_network_id provided."
+  }
 }
