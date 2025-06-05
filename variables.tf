@@ -108,7 +108,7 @@ variable "ptr_records" {
     name         = string
     ttl          = number
     records      = optional(list(string), null)
-    domain_names = optional(string, null)
+    domain_names = optional(set(string), null)
     tags         = optional(map(string), null)
   }))
   default     = {}
