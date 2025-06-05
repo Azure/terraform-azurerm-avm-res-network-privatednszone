@@ -21,11 +21,11 @@ variable "subscription_id" {
 
 variable "a_records" {
   type = map(object({
-    name    = string
-    ttl     = number
-    records = list(string)
+    name         = string
+    ttl          = number
+    records      = list(string)
     ip_addresses = optional(set(string), null)
-    tags    = optional(map(string), null)
+    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a A record."
@@ -33,11 +33,11 @@ variable "a_records" {
 
 variable "aaaa_records" {
   type = map(object({
-    name    = string
-    ttl     = number
-    records = list(string)
+    name         = string
+    ttl          = number
+    records      = list(string)
     ip_addresses = optional(set(string), null)
-    tags    = optional(map(string), null)
+    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a AAAA record."
@@ -48,7 +48,7 @@ variable "cname_records" {
     name   = string
     ttl    = number
     record = string
-    cname = optional(string, null)
+    cname  = optional(string, null)
     tags   = optional(map(string), null)
   }))
   default     = {}
@@ -81,11 +81,11 @@ variable "mx_records" {
 
 variable "ptr_records" {
   type = map(object({
-    name    = string
-    ttl     = number
-    records = list(string)
+    name         = string
+    ttl          = number
+    records      = list(string)
     domain_names = optional(string, null)
-    tags    = optional(map(string), null)
+    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a PTR record."
@@ -219,14 +219,14 @@ variable "txt_records" {
 
 variable "virtual_network_links" {
   type = map(object({
-    vnetlinkname     = string
-    name             = optional(string, null)
-    vnetid           = string
-    virtual_network_id = optional(string, null)
-    autoregistration = optional(bool, false)
+    vnetlinkname         = string
+    name                 = optional(string, null)
+    vnetid               = string
+    virtual_network_id   = optional(string, null)
+    autoregistration     = optional(bool, false)
     registration_enabled = optional(bool, null)
-    resolution_policy = optional(string, "Default")
-    tags             = optional(map(string), null)
+    resolution_policy    = optional(string, "Default")
+    tags                 = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a virtual network link."

@@ -72,6 +72,12 @@ The following resources are used by this module:
 
 The following input variables are required:
 
+### <a name="input_domain_names"></a> [domain\_names](#input\_domain\_names)
+
+Description: A set of hostnames for the PTR record.
+
+Type: `set(string)`
+
 ### <a name="input_name"></a> [name](#input\_name)
 
 Description: The name of the dns record.
@@ -83,12 +89,6 @@ Type: `string`
 Description: The ID of the parent resource to which this virtual network link belongs.
 
 Type: `string`
-
-### <a name="input_records"></a> [records](#input\_records)
-
-Description: A list of hostnames for the PTR record.
-
-Type: `list(string)`
 
 ### <a name="input_ttl"></a> [ttl](#input\_ttl)
 

@@ -1,3 +1,13 @@
+variable "ip_addresses" {
+  type        = set(string)
+  description = "The set of IPv6 addresses for the AAAA record."
+
+  validation {
+    condition     = alltrue([for addr in var.ip_addresses : can(regex("^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$", addr))])
+    error_message = "All records must be valid IPv6 addresses."
+  }
+}
+
 variable "name" {
   type        = string
   description = "The name of the dns record."
@@ -19,16 +29,6 @@ variable "parent_id" {
   validation {
     condition     = can(regex("^/subscriptions/[a-fA-F0-9-]+/resourceGroups/[a-zA-Z0-9-_.()]+/providers/Microsoft.Network/privateDnsZones/[a-zA-Z0-9-_.]+$", var.parent_id))
     error_message = "The parent_id must be a valid Azure Private DNS Zone resource ID."
-  }
-}
-
-variable "ip_addresses" {
-  type        = set(string)
-  description = "The set of IPv6 addresses for the AAAA record."
-
-  validation {
-    condition     = alltrue([for addr in var.ip_addresses : can(regex("^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$", addr))])
-    error_message = "All records must be valid IPv6 addresses."
   }
 }
 

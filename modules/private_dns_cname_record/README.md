@@ -71,6 +71,12 @@ The following resources are used by this module:
 
 The following input variables are required:
 
+### <a name="input_cname"></a> [cname](#input\_cname)
+
+Description: The CNAME record value.
+
+Type: `string`
+
 ### <a name="input_name"></a> [name](#input\_name)
 
 Description: The name of the dns record.
@@ -80,12 +86,6 @@ Type: `string`
 ### <a name="input_parent_id"></a> [parent\_id](#input\_parent\_id)
 
 Description: The ID of the parent resource to which this virtual network link belongs.
-
-Type: `string`
-
-### <a name="input_record"></a> [record](#input\_record)
-
-Description: The CNAME record value.
 
 Type: `string`
 

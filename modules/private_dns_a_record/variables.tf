@@ -1,3 +1,13 @@
+variable "ip_addresses" {
+  type        = set(string)
+  description = "A set of IP addresses or hostnames for the A record."
+
+  validation {
+    condition     = length(var.ip_addresses) > 0 && alltrue([for ip in var.ip_addresses : can(regex("^(\\d{1,3}\\.){3}\\d{1,3}$", ip)) || can(regex("^[a-zA-Z0-9-_.]+$", ip))])
+    error_message = "The records must contain at least one valid IP address or hostname."
+  }
+}
+
 variable "name" {
   type        = string
   description = "The name of the dns record."
@@ -19,16 +29,6 @@ variable "parent_id" {
   validation {
     condition     = can(regex("^/subscriptions/[a-fA-F0-9-]+/resourceGroups/[a-zA-Z0-9-_.()]+/providers/Microsoft.Network/privateDnsZones/[a-zA-Z0-9-_.]+$", var.parent_id))
     error_message = "The parent_id must be a valid Azure Private DNS Zone resource ID."
-  }
-}
-
-variable "ip_addresses" {
-  type        = set(string)
-  description = "A set of IP addresses or hostnames for the A record."
-
-  validation {
-    condition     = length(var.ip_addresses) > 0 && alltrue([for ip in var.ip_addresses : can(regex("^(\\d{1,3}\\.){3}\\d{1,3}$", ip)) || can(regex("^[a-zA-Z0-9-_.]+$", ip))])
-    error_message = "The records must contain at least one valid IP address or hostname."
   }
 }
 

@@ -18,31 +18,31 @@ module "a_record" {
   source   = "../../modules/private_dns_a_record"
   for_each = local.a_records
 
-  name      = each.value.name
-  parent_id = module.private_dns_zone.resource_id
-  ip_addresses   = each.value.ip_addresses
-  ttl       = each.value.ttl
-  tags      = each.value.tags
+  ip_addresses = each.value.ip_addresses
+  name         = each.value.name
+  parent_id    = module.private_dns_zone.resource_id
+  ttl          = each.value.ttl
+  tags         = each.value.tags
 }
 
 module "aaaa_record" {
   source   = "../../modules/private_dns_aaaa_record"
   for_each = local.aaaa_records
 
-  name      = each.value.name
-  parent_id = module.private_dns_zone.resource_id
-  ip_addresses   = each.value.ip_addresses
-  ttl       = each.value.ttl
-  tags      = each.value.tags
+  ip_addresses = each.value.ip_addresses
+  name         = each.value.name
+  parent_id    = module.private_dns_zone.resource_id
+  ttl          = each.value.ttl
+  tags         = each.value.tags
 }
 
 module "cname_record" {
   source   = "../../modules/private_dns_cname_record"
   for_each = local.cname_records
 
+  cname     = each.value.cname
   name      = each.value.name
   parent_id = module.private_dns_zone.resource_id
-  cname    = each.value.cname
   ttl       = each.value.ttl
   tags      = each.value.tags
 }
@@ -62,11 +62,11 @@ module "ptr_record" {
   source   = "../../modules/private_dns_ptr_record"
   for_each = local.ptr_records
 
-  name      = each.value.name
-  parent_id = module.private_dns_zone.resource_id
-  domain_names   = each.value.domain_names
-  ttl       = each.value.ttl
-  tags      = each.value.tags
+  domain_names = each.value.domain_names
+  name         = each.value.name
+  parent_id    = module.private_dns_zone.resource_id
+  ttl          = each.value.ttl
+  tags         = each.value.tags
 }
 
 module "srv_record" {

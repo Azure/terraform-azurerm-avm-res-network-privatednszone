@@ -1,3 +1,13 @@
+variable "domain_names" {
+  type        = set(string)
+  description = "A set of hostnames for the PTR record."
+
+  validation {
+    condition     = alltrue([for h in var.records : can(regex("^([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$", h))])
+    error_message = "All records must be valid hostnames."
+  }
+}
+
 variable "name" {
   type        = string
   description = "The name of the dns record."
@@ -19,16 +29,6 @@ variable "parent_id" {
   validation {
     condition     = can(regex("^/subscriptions/[a-fA-F0-9-]+/resourceGroups/[a-zA-Z0-9-_.()]+/providers/Microsoft.Network/privateDnsZones/[a-zA-Z0-9-_.]+$", var.parent_id))
     error_message = "The parent_id must be a valid Azure Private DNS Zone resource ID."
-  }
-}
-
-variable "domain_names" {
-  type        = set(string)
-  description = "A set of hostnames for the PTR record."
-
-  validation {
-    condition     = alltrue([for h in var.records : can(regex("^([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$", h))])
-    error_message = "All records must be valid hostnames."
   }
 }
 

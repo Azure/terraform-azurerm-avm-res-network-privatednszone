@@ -1,3 +1,13 @@
+variable "cname" {
+  type        = string
+  description = "The CNAME record value."
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-_.]*[a-zA-Z0-9]$", var.record)) && length(var.record) <= 253
+    error_message = "The record must be a valid CNAME and not exceed 253 characters."
+  }
+}
+
 variable "name" {
   type        = string
   description = "The name of the dns record."
@@ -19,16 +29,6 @@ variable "parent_id" {
   validation {
     condition     = can(regex("^/subscriptions/[a-fA-F0-9-]+/resourceGroups/[a-zA-Z0-9-_.()]+/providers/Microsoft.Network/privateDnsZones/[a-zA-Z0-9-_.]+$", var.parent_id))
     error_message = "The parent_id must be a valid Azure Private DNS Zone resource ID."
-  }
-}
-
-variable "cname" {
-  type        = string
-  description = "The CNAME record value."
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-_.]*[a-zA-Z0-9]$", var.record)) && length(var.record) <= 253
-    error_message = "The record must be a valid CNAME and not exceed 253 characters."
   }
 }
 

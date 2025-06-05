@@ -40,8 +40,6 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.0, < 5.0)
-
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.5.1, < 5.0)
@@ -51,7 +49,7 @@ The following requirements are needed by this module:
 The following resources are used by this module:
 
 - [azapi_resource.private_dns_zone](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
-- [azurerm_private_dns_zone_virtual_network_link.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) (resource)
+- [azapi_resource.role_assignments](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
@@ -93,10 +91,11 @@ Type:
 
 ```hcl
 map(object({
-    name    = string
-    ttl     = number
-    records = list(string)
-    tags    = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = list(string)
+    ip_addresses = optional(set(string), null)
+    tags         = optional(map(string), null)
   }))
 ```
 
@@ -110,10 +109,11 @@ Type:
 
 ```hcl
 map(object({
-    name    = string
-    ttl     = number
-    records = list(string)
-    tags    = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = list(string)
+    ip_addresses = optional(set(string), null)
+    tags         = optional(map(string), null)
   }))
 ```
 
@@ -130,6 +130,7 @@ map(object({
     name   = string
     ttl    = number
     record = string
+    cname  = optional(string, null)
     tags   = optional(map(string), null)
   }))
 ```
@@ -174,10 +175,11 @@ Type:
 
 ```hcl
 map(object({
-    name    = string
-    ttl     = number
-    records = list(string)
-    tags    = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = list(string)
+    domain_names = optional(string, null)
+    tags         = optional(map(string), null)
   }))
 ```
 
@@ -339,14 +341,6 @@ map(object({
 
 Default: `{}`
 
-### <a name="input_use_depreacted_virtual_network_link_in_root_module"></a> [use\_depreacted\_virtual\_network\_link\_in\_root\_module](#input\_use\_depreacted\_virtual\_network\_link\_in\_root\_module)
-
-Description: Indicates whether the virtual network link is used in the root module. This is to enable backwards compatibility with existing configurations. The recommended approach is to specify moved blocks within your terraform configuration and migrate to the submodule.
-
-Type: `bool`
-
-Default: `false`
-
 ### <a name="input_virtual_network_links"></a> [virtual\_network\_links](#input\_virtual\_network\_links)
 
 Description: A map of objects where each object contains information to create a virtual network link.
@@ -355,11 +349,14 @@ Type:
 
 ```hcl
 map(object({
-    vnetlinkname     = string
-    vnetid           = string
-    autoregistration = optional(bool, false)
-    resolutionpolicy = optional(string, "Default")
-    tags             = optional(map(string), null)
+    vnetlinkname         = string
+    name                 = optional(string, null)
+    vnetid               = string
+    virtual_network_id   = optional(string, null)
+    autoregistration     = optional(bool, false)
+    registration_enabled = optional(bool, null)
+    resolution_policy    = optional(string, "Default")
+    tags                 = optional(map(string), null)
   }))
 ```
 
@@ -401,6 +398,10 @@ Description: The private dns zone output
 
 Description: The resource id of private DNS zone
 
+### <a name="output_soa_record_outputs"></a> [soa\_record\_outputs](#output\_soa\_record\_outputs)
+
+Description: The srv record output
+
 ### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
 
 Description: The srv record output
@@ -432,6 +433,12 @@ Version:
 Source: ./modules/private_dns_aaaa_record
 
 Version:
+
+### <a name="module_avm_interfaces"></a> [avm\_interfaces](#module\_avm\_interfaces)
+
+Source: Azure/avm-utl-interfaces/azure
+
+Version: 0.2.0
 
 ### <a name="module_cname_record"></a> [cname\_record](#module\_cname\_record)
 

@@ -28,8 +28,8 @@ module "virtual_network_links" {
 }
 
 module "soa_record" {
-  source   = "./modules/private_dns_soa_record"
-  count = var.soa_record != null ? 1 : 0
+  source = "./modules/private_dns_soa_record"
+  count  = var.soa_record != null ? 1 : 0
 
   email        = var.soa_record.email
   expire_time  = var.soa_record.expire_time
@@ -47,24 +47,24 @@ module "a_record" {
   source   = "./modules/private_dns_a_record"
   for_each = var.a_records
 
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  ip_addresses   = coalesce(each.value.ip_addresses, toset(each.value.records))
-  ttl       = each.value.ttl
-  tags      = each.value.tags
-  timeouts  = var.timeouts.dns_zones
+  name         = each.value.name
+  parent_id    = azapi_resource.private_dns_zone.id
+  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
+  ttl          = each.value.ttl
+  tags         = each.value.tags
+  timeouts     = var.timeouts.dns_zones
 }
 
 module "aaaa_record" {
   source   = "./modules/private_dns_aaaa_record"
   for_each = var.aaaa_records
 
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  ip_addresses   = coalesce(each.value.ip_addresses, toset(each.value.records))
-  ttl       = each.value.ttl
-  tags      = each.value.tags
-  timeouts  = var.timeouts.dns_zones
+  name         = each.value.name
+  parent_id    = azapi_resource.private_dns_zone.id
+  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
+  ttl          = each.value.ttl
+  tags         = each.value.tags
+  timeouts     = var.timeouts.dns_zones
 }
 
 module "cname_record" {
@@ -73,7 +73,7 @@ module "cname_record" {
 
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
-  cname    = coalesce(each.value.cname, each.value.record)
+  cname     = coalesce(each.value.cname, each.value.record)
   ttl       = each.value.ttl
   tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
@@ -95,12 +95,12 @@ module "ptr_record" {
   source   = "./modules/private_dns_ptr_record"
   for_each = var.ptr_records
 
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  domain_names   = coalesce(each.value.domain_names, toset(each.value.records))
-  ttl       = each.value.ttl
-  tags      = each.value.tags
-  timeouts  = var.timeouts.dns_zones
+  name         = each.value.name
+  parent_id    = azapi_resource.private_dns_zone.id
+  domain_names = coalesce(each.value.domain_names, toset(each.value.records))
+  ttl          = each.value.ttl
+  tags         = each.value.tags
+  timeouts     = var.timeouts.dns_zones
 }
 
 module "srv_record" {
@@ -142,11 +142,11 @@ resource "azurerm_role_assignment" "this" {
 }
 
 module "avm_interfaces" {
-  source  = "Azure/avm-utl-interfaces/azure"
-  version = "0.2.0"
-  role_assignments = var.role_assignments
+  source                                    = "Azure/avm-utl-interfaces/azure"
+  version                                   = "0.2.0"
+  role_assignments                          = var.role_assignments
   role_assignment_definition_lookup_enabled = true
-  role_assignment_definition_scope = local.parent_resource_id
+  role_assignment_definition_scope          = local.parent_resource_id
 }
 
 resource "azapi_resource" "role_assignments" {
