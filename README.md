@@ -414,10 +414,6 @@ Description: The txt record output
 
 Description: The virtual network link output
 
-### <a name="output_virtual_network_link_outputs_deprecated"></a> [virtual\_network\_link\_outputs\_deprecated](#output\_virtual\_network\_link\_outputs\_deprecated)
-
-Description: The virtual network link output
-
 ## Modules
 
 The following Modules are called:

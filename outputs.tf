@@ -71,10 +71,9 @@ output "resource_id" {
 output "soa_record_outputs" {
   description = "The srv record output"
   value = {
-    for record in module.srv_record :
-    default => {
-      id   = record.resource_id
-      fqdn = record.resource.fqdn
+    default = {
+      id   = module.srv_record[0].resource_id
+      fqdn = module.srv_record[0].resource.fqdn
     }
   }
 }
