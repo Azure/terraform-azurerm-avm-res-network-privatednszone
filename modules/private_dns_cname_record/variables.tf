@@ -3,8 +3,8 @@ variable "cname" {
   description = "The CNAME record value."
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-_.]*[a-zA-Z0-9]$", var.record)) && length(var.record) <= 253
-    error_message = "The record must be a valid CNAME and not exceed 253 characters."
+    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-_.]*[a-zA-Z0-9]$", var.cname)) && length(var.cname) <= 253
+    error_message = "The cname must be a valid CNAME and not exceed 253 characters."
   }
 }
 

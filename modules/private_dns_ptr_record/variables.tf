@@ -3,8 +3,8 @@ variable "domain_names" {
   description = "A set of hostnames for the PTR record."
 
   validation {
-    condition     = alltrue([for h in var.records : can(regex("^([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$", h))])
-    error_message = "All records must be valid hostnames."
+    condition     = alltrue([for h in var.domain_names : can(regex("^([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$", h))])
+    error_message = "All domain_names must be valid hostnames."
   }
 }
 

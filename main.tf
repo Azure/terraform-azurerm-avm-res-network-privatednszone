@@ -47,9 +47,9 @@ module "a_record" {
   source   = "./modules/private_dns_a_record"
   for_each = var.a_records
 
+  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
   name         = each.value.name
   parent_id    = azapi_resource.private_dns_zone.id
-  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
   ttl          = each.value.ttl
   tags         = each.value.tags
   timeouts     = var.timeouts.dns_zones
@@ -59,9 +59,9 @@ module "aaaa_record" {
   source   = "./modules/private_dns_aaaa_record"
   for_each = var.aaaa_records
 
+  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
   name         = each.value.name
   parent_id    = azapi_resource.private_dns_zone.id
-  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
   ttl          = each.value.ttl
   tags         = each.value.tags
   timeouts     = var.timeouts.dns_zones
@@ -71,9 +71,9 @@ module "cname_record" {
   source   = "./modules/private_dns_cname_record"
   for_each = var.cname_records
 
+  cname     = coalesce(each.value.cname, each.value.record)
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
-  cname     = coalesce(each.value.cname, each.value.record)
   ttl       = each.value.ttl
   tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
@@ -95,9 +95,9 @@ module "ptr_record" {
   source   = "./modules/private_dns_ptr_record"
   for_each = var.ptr_records
 
+  domain_names = coalesce(each.value.domain_names, toset(each.value.records))
   name         = each.value.name
   parent_id    = azapi_resource.private_dns_zone.id
-  domain_names = coalesce(each.value.domain_names, toset(each.value.records))
   ttl          = each.value.ttl
   tags         = each.value.tags
   timeouts     = var.timeouts.dns_zones
@@ -142,18 +142,19 @@ resource "azurerm_role_assignment" "this" {
 }
 
 module "avm_interfaces" {
-  source                                    = "Azure/avm-utl-interfaces/azure"
-  version                                   = "0.2.0"
-  role_assignments                          = var.role_assignments
+  source  = "Azure/avm-utl-interfaces/azure"
+  version = "0.2.0"
+
   role_assignment_definition_lookup_enabled = true
   role_assignment_definition_scope          = local.parent_resource_id
+  role_assignments                          = var.role_assignments
 }
 
 resource "azapi_resource" "role_assignments" {
   for_each = module.avm_interfaces.role_assignments_azapi
 
-  type      = each.value.type
-  body      = each.value.body
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
+  type      = each.value.type
+  body      = each.value.body
 }
