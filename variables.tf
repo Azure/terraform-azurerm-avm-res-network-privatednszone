@@ -9,43 +9,74 @@ variable "resource_group_name" {
   description = "The resource group where the resources will be deployed."
 }
 
+variable "subscription_id" {
+  type        = string
+  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+
+  validation {
+    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
+    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  }
+}
+
 variable "a_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string))
+    ip_addresses = optional(set(string), null)
+    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a A record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.a_records :
+      ((v.records != null) && length(v.records) > 0) || ((v.ip_addresses != null) && length(v.ip_addresses) > 0)
+    ])
+    error_message = "Each A record must have either a non-empty records list or a non-empty ip_addresses set."
+  }
 }
 
 variable "aaaa_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string))
+    ip_addresses = optional(set(string), null)
+    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a AAAA record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.aaaa_records :
+      ((v.records != null) && length(v.records) > 0) || ((v.ip_addresses != null) && length(v.ip_addresses) > 0)
+    ])
+    error_message = "Each AAAA record must have either a non-empty records list or a non-empty ip_addresses set."
+  }
 }
 
 variable "cname_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    record              = string
-    tags                = optional(map(string), null)
+    name   = string
+    ttl    = number
+    record = optional(string, null)
+    cname  = optional(string, null)
+    tags   = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.cname_records :
+      ((v.record != null) && length(v.record) > 0) || ((v.cname != null) && length(v.cname) > 0)
+    ])
+    error_message = "Each CNAME record must have either a non-empty record or a non-empty cname value."
+  }
 }
 
 variable "enable_telemetry" {
@@ -60,10 +91,8 @@ DESCRIPTION
 
 variable "mx_records" {
   type = map(object({
-    name                = optional(string, "@")
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = optional(string, "@")
+    ttl  = number
     records = map(object({
       preference = number
       exchange   = string
@@ -76,15 +105,22 @@ variable "mx_records" {
 
 variable "ptr_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string), null)
+    domain_names = optional(set(string), null)
+    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a PTR record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.ptr_records :
+      ((v.records != null) && length(v.records) > 0) || ((v.domain_names != null) && length(v.domain_names) > 0)
+    ])
+    error_message = "Each PTR record must have either a non-empty records list or a non-empty domain_names value."
+  }
 }
 
 variable "role_assignments" {
@@ -119,6 +155,7 @@ variable "role_assignments" {
 variable "soa_record" {
   type = object({
     email        = string
+    name         = optional(string, "@")
     expire_time  = optional(number, 2419200)
     minimum_ttl  = optional(number, 10)
     refresh_time = optional(number, 3600)
@@ -132,10 +169,8 @@ variable "soa_record" {
 
 variable "srv_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
       priority = number
       weight   = number
@@ -171,7 +206,20 @@ variable "timeouts" {
       }), {}
     )
   })
-  default     = {}
+  default = {
+    dns_zones = {
+      create = "30m"
+      delete = "30m"
+      update = "30m"
+      read   = "5m"
+    }
+    vnet_links = {
+      create = "30m"
+      delete = "30m"
+      update = "30m"
+      read   = "5m"
+    }
+  }
   description = <<DESCRIPTION
 A map of timeouts objects, per resource type, to apply to the creation and destruction of resources the following resources:
 
@@ -190,10 +238,8 @@ DESCRIPTION
 
 variable "txt_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
       value = string
     }))
@@ -205,11 +251,32 @@ variable "txt_records" {
 
 variable "virtual_network_links" {
   type = map(object({
-    vnetlinkname     = string
-    vnetid           = string
-    autoregistration = optional(bool, false)
-    tags             = optional(map(string), null)
+    vnetlinkname         = optional(string, null)
+    name                 = optional(string, null)
+    vnetid               = optional(string, null)
+    virtual_network_id   = optional(string, null)
+    autoregistration     = optional(bool, false)
+    registration_enabled = optional(bool, null)
+    resolution_policy    = optional(string, "Default")
+    tags                 = optional(map(string), null)
   }))
   default     = {}
-  description = "A map of objects where each object contains information to create a virtual network link."
+  description = "A map of objects where each object contains information to create a virtual network link. Either vnetlinkname or name must be provided, and either vnetid or virtual_network_id must be provided."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.virtual_network_links :
+      ((v.vnetlinkname != null) && length(v.vnetlinkname) > 0) ||
+      ((v.name != null) && length(v.name) > 0)
+    ])
+    error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.virtual_network_links :
+      ((v.vnetid != null) && length(v.vnetid) > 0) ||
+      ((v.virtual_network_id != null) && length(v.virtual_network_id) > 0)
+    ])
+    error_message = "Each virtual_network_link must have either vnetid or virtual_network_id provided."
+  }
 }
