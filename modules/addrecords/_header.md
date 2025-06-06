@@ -1,6 +1,6 @@
 # Adding DNS records module
 
-This module is used to add DNS records to an existing private DNS zone.
+This module is used to add DNS records to an existing private DNS zone, however it will be **DEPRECATED** in the future. Please use the other **private_dns_<record_type>_record** submodule accordingly.
 
 ## Features
 
