@@ -212,6 +212,7 @@ variable "virtual_network_links" {
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a virtual network link."
+
   validation {
     condition     = alltrue([for link in var.virtual_network_links : length(link.vnetlinkname) < 80])
     error_message = "Each vnetlinkname must have less than 80 characters."
