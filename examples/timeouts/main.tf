@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 1.9, < 2.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -41,10 +42,10 @@ resource "azurerm_resource_group" "this" {
 }
 
 resource "azurerm_virtual_network" "this" {
-  address_space       = ["10.0.1.0/24"]
   location            = azurerm_resource_group.this.location
   name                = "vnet1"
   resource_group_name = azurerm_resource_group.this.name
+  address_space       = ["10.0.1.0/24"]
 }
 
 # reference the module and pass in variables as needed
