@@ -49,7 +49,6 @@ module "soa_record" {
   refresh_time = var.soa_record.refresh_time
   retry_time   = var.soa_record.retry_time
   ttl          = var.soa_record.ttl
-  tags         = var.soa_record.tags
   timeouts     = var.timeouts.dns_zones
 }
 
@@ -61,7 +60,6 @@ module "a_record" {
   name         = each.value.name
   parent_id    = azapi_resource.private_dns_zone.id
   ttl          = each.value.ttl
-  tags         = each.value.tags
   timeouts     = var.timeouts.dns_zones
 }
 
@@ -73,7 +71,6 @@ module "aaaa_record" {
   name         = each.value.name
   parent_id    = azapi_resource.private_dns_zone.id
   ttl          = each.value.ttl
-  tags         = each.value.tags
   timeouts     = var.timeouts.dns_zones
 }
 
@@ -85,7 +82,6 @@ module "cname_record" {
   name      = each.value.name
   parent_id = azapi_resource.private_dns_zone.id
   ttl       = each.value.ttl
-  tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
 }
 
@@ -97,7 +93,6 @@ module "mx_record" {
   parent_id = azapi_resource.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
-  tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
 }
 
@@ -109,7 +104,6 @@ module "ptr_record" {
   name         = each.value.name
   parent_id    = azapi_resource.private_dns_zone.id
   ttl          = each.value.ttl
-  tags         = each.value.tags
   timeouts     = var.timeouts.dns_zones
 }
 
@@ -121,7 +115,6 @@ module "srv_record" {
   parent_id = azapi_resource.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
-  tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
 }
 
@@ -133,7 +126,6 @@ module "txt_record" {
   parent_id = azapi_resource.private_dns_zone.id
   records   = values(each.value.records)
   ttl       = each.value.ttl
-  tags      = each.value.tags
   timeouts  = var.timeouts.dns_zones
 }
 
