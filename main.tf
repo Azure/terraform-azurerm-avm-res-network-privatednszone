@@ -1,7 +1,7 @@
 resource "azapi_resource" "private_dns_zone" {
   location  = "global"
   name      = var.domain_name
-  parent_id = local.parent_resource_id
+  parent_id = var.parent_id
   # This resource creates a Private DNS Zone using the Azure API
   type = "Microsoft.Network/privateDnsZones@2024-06-01"
   response_export_values = {
@@ -142,7 +142,7 @@ module "avm_interfaces" {
   version = "0.2.0"
 
   role_assignment_definition_lookup_enabled = true
-  role_assignment_definition_scope          = local.parent_resource_id
+  role_assignment_definition_scope          = var.parent_id
   role_assignments                          = var.role_assignments
 }
 

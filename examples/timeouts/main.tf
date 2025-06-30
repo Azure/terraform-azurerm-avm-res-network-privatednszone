@@ -28,12 +28,11 @@ resource "azurerm_virtual_network" "this" {
 # reference the module and pass in variables as needed
 module "private_dns_zone" {
   # replace source with the correct link to the private_dns_zone module
-  # source                = "Azure/avm-res-network-privatednszone/azurerm"  
+  # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
 
   domain_name         = local.domain_name
-  resource_group_name = azurerm_resource_group.this.name
-  subscription_id     = var.subscription_id
+  parent_id           = local.parent_id
   a_records           = local.a_records
   aaaa_records        = local.aaaa_records
   cname_records       = local.cname_records

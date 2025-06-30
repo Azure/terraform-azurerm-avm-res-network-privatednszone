@@ -1,10 +1,10 @@
 variable "email" {
-  type        = number
-  description = "The time to live of the record."
+  type        = string
+  description = "The email address of the SOA record."
 
   validation {
-    condition     = can(regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", var.email))
-    error_message = "The email must be a valid email address."
+    condition     = can(regex("^[a-zA-Z0-9._%+-]+(\\.[a-zA-Z0-9-]+)+$", var.email))
+    error_message = "The SOA email must be in DNS format, like 'hostmaster.example.com' (dot instead of @, no trailing dot, and no requirement for numbers)."
   }
 }
 

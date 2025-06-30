@@ -1,4 +1,5 @@
 locals {
+  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   a_records = {
     "a_record1" = {
       name         = "my_arecord1"
@@ -166,10 +167,10 @@ locals {
       ttl  = 300
       records = {
         "txtrecordA" = {
-          value = "apple"
+          value = ["apple"]
         }
         "txtrecordB" = {
-          value = "banana"
+          value = ["banana"]
         }
       }
       tags = {
@@ -182,10 +183,10 @@ locals {
       ttl  = 300
       records = {
         "txtrecordC" = {
-          value = "orange"
+          value = ["orange"]
         }
         "txtrecordD" = {
-          value = "durian"
+          value = ["durian"]
         }
       }
       tags = {

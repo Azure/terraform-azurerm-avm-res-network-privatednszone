@@ -1,11 +1,6 @@
 variable "ip_addresses" {
   type        = set(string)
   description = "The set of IPv6 addresses for the AAAA record."
-
-  validation {
-    condition     = alltrue([for addr in var.ip_addresses : can(regex("^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$", addr))])
-    error_message = "All records must be valid IPv6 addresses."
-  }
 }
 
 variable "name" {

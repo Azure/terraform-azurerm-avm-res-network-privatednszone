@@ -3,19 +3,13 @@ variable "domain_name" {
   description = "The name of the private dns zone."
 }
 
-# This assumes resource group is already created and its name passed to this module
-variable "resource_group_name" {
+variable "parent_id" {
   type        = string
-  description = "The resource group where the resources will be deployed."
-}
-
-variable "subscription_id" {
-  type        = string
-  description = "An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+  description = "The ID of the parent resource. This is typically the ID of the resource group or a virtual network where the DNS zone will be created."
 
   validation {
-    condition     = can(regex("^[a-f\\d]{4}(?:[a-f\\d]{4}-){4}[a-f\\d]{12}$", var.subscription_id))
-    error_message = "Must a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase."
+    condition     = can(regex("^/subscriptions/[a-f0-9-]+/resourceGroups/[a-zA-Z0-9_.()-]+$", var.parent_id))
+    error_message = "Must be a valid Azure resource ID containing '/subscriptions/' and '/resourceGroups/'"
   }
 }
 
@@ -33,7 +27,7 @@ variable "a_records" {
   validation {
     condition = alltrue([
       for k, v in var.a_records :
-      ((v.records != null) && length(v.records) > 0) || ((v.ip_addresses != null) && length(v.ip_addresses) > 0)
+      coalescelist(v.ip_addresses, v.records)
     ])
     error_message = "Each A record must have either a non-empty records list or a non-empty ip_addresses set."
   }
@@ -53,7 +47,7 @@ variable "aaaa_records" {
   validation {
     condition = alltrue([
       for k, v in var.aaaa_records :
-      ((v.records != null) && length(v.records) > 0) || ((v.ip_addresses != null) && length(v.ip_addresses) > 0)
+      coalescelist(v.ip_addresses, v.records)
     ])
     error_message = "Each AAAA record must have either a non-empty records list or a non-empty ip_addresses set."
   }
@@ -73,7 +67,7 @@ variable "cname_records" {
   validation {
     condition = alltrue([
       for k, v in var.cname_records :
-      ((v.record != null) && length(v.record) > 0) || ((v.cname != null) && length(v.cname) > 0)
+      coalesce(v.cname, v.record)
     ])
     error_message = "Each CNAME record must have either a non-empty record or a non-empty cname value."
   }
@@ -117,9 +111,9 @@ variable "ptr_records" {
   validation {
     condition = alltrue([
       for k, v in var.ptr_records :
-      ((v.records != null) && length(v.records) > 0) || ((v.domain_names != null) && length(v.domain_names) > 0)
+      coalescelist(v.domain_names, v.records)
     ])
-    error_message = "Each PTR record must have either a non-empty records list or a non-empty domain_names value."
+    error_message = "Each PTR record must have either a non-empty records list or a non-empty domain_names set."
   }
 }
 
@@ -241,7 +235,7 @@ variable "txt_records" {
     name = string
     ttl  = number
     records = map(object({
-      value = string
+      value = list(string)
     }))
     tags = optional(map(string), null)
   }))
@@ -266,16 +260,14 @@ variable "virtual_network_links" {
   validation {
     condition = alltrue([
       for k, v in var.virtual_network_links :
-      ((v.vnetlinkname != null) && length(v.vnetlinkname) > 0) ||
-      ((v.name != null) && length(v.name) > 0)
+      coalesce(v.name, v.vnetlinkname)
     ])
     error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
   }
   validation {
     condition = alltrue([
       for k, v in var.virtual_network_links :
-      ((v.vnetid != null) && length(v.vnetid) > 0) ||
-      ((v.virtual_network_id != null) && length(v.virtual_network_id) > 0)
+      coalesce(v.virtual_network_id, v.vnetid)
     ])
     error_message = "Each virtual_network_link must have either vnetid or virtual_network_id provided."
   }
