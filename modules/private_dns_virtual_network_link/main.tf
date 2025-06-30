@@ -2,7 +2,7 @@ resource "azapi_resource" "private_dns_zone_network_link" {
   name      = var.name
   parent_id = var.parent_id
   type      = "Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01"
-  body = jsonencode({
+  body = {
     properties = {
       registrationEnabled = var.registration_enabled
       resolutionPolicy    = var.resolution_policy
@@ -10,7 +10,7 @@ resource "azapi_resource" "private_dns_zone_network_link" {
         id = var.virtual_network_id
       }
     }
-  })
+  }
   response_export_values = {
     "id"                   = "id"
     "name"                 = "name"

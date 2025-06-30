@@ -3,12 +3,12 @@ resource "azapi_resource" "ptr_record" {
   name      = var.name
   parent_id = var.parent_id
   type      = "Microsoft.Network/privateDnsZones/PTR@2024-06-01"
-  body = jsonencode({
+  body = {
     properties = {
       ptrRecords = var.domain_names
       ttl        = var.ttl
     }
-  })
+  }
   response_export_values = {
     "id"   = "id"
     "name" = "name"

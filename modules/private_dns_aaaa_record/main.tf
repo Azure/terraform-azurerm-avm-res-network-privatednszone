@@ -3,12 +3,12 @@ resource "azapi_resource" "aaaa_record" {
   name      = var.name
   parent_id = var.parent_id
   type      = "Microsoft.Network/privateDnsZones/AAAA@2024-06-01"
-  body = jsonencode({
+  body = {
     properties = {
       aaaaRecords = var.ip_addresses
       ttl         = var.ttl
     }
-  })
+  }
   response_export_values = {
     "id"   = "id"
     "name" = "name"

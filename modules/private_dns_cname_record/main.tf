@@ -3,12 +3,12 @@ resource "azapi_resource" "cname_record" {
   name      = var.name
   parent_id = var.parent_id
   type      = "Microsoft.Network/privateDnsZones/CNAME@2024-06-01"
-  body = jsonencode({
+  body = {
     properties = {
       cnameRecord = var.cname
       ttl         = var.ttl
     }
-  })
+  }
   response_export_values = {
     "id"   = "id"
     "name" = "name"
