@@ -29,7 +29,6 @@ module "a_record" {
   name         = each.value.name
   parent_id    = module.private_dns_zone.resource_id
   ttl          = each.value.ttl
-  tags         = each.value.tags
 }
 
 module "aaaa_record" {
@@ -40,7 +39,6 @@ module "aaaa_record" {
   name         = each.value.name
   parent_id    = module.private_dns_zone.resource_id
   ttl          = each.value.ttl
-  tags         = each.value.tags
 }
 
 module "cname_record" {
@@ -51,7 +49,6 @@ module "cname_record" {
   name      = each.value.name
   parent_id = module.private_dns_zone.resource_id
   ttl       = each.value.ttl
-  tags      = each.value.tags
 }
 
 module "mx_record" {
@@ -62,7 +59,6 @@ module "mx_record" {
   parent_id = module.private_dns_zone.resource_id
   records   = values(each.value.records)
   ttl       = each.value.ttl
-  tags      = each.value.tags
 }
 
 module "ptr_record" {
@@ -73,7 +69,6 @@ module "ptr_record" {
   name         = each.value.name
   parent_id    = module.private_dns_zone.resource_id
   ttl          = each.value.ttl
-  tags         = each.value.tags
 }
 
 module "srv_record" {
@@ -84,7 +79,6 @@ module "srv_record" {
   parent_id = module.private_dns_zone.resource_id
   records   = values(each.value.records)
   ttl       = each.value.ttl
-  tags      = each.value.tags
 }
 
 module "txt_record" {
@@ -95,7 +89,6 @@ module "txt_record" {
   parent_id = module.private_dns_zone.resource_id
   records   = values(each.value.records)
   ttl       = each.value.ttl
-  tags      = each.value.tags
 }
 ```
 
