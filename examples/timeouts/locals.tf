@@ -95,7 +95,7 @@ locals {
       }
     }
   }
-  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
+  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.this.name}"
   ptr_records = {
     "ptr_record1" = {
       name         = "ptr1"

@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 module "regions" {
   source  = "Azure/regions/azurerm"
   version = "~> 0.3"
