@@ -67,7 +67,7 @@ variable "cname_records" {
   validation {
     condition = alltrue([
       for k, v in var.cname_records :
-      coalesce(v.cname, v.record)
+      coalesce(v.cname, v.record) != null
     ])
     error_message = "Each CNAME record must have either a non-empty record or a non-empty cname value."
   }
