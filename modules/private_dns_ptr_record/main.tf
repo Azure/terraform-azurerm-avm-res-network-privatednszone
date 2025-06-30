@@ -16,7 +16,6 @@ resource "azapi_resource" "ptr_record" {
     "fqdn" = "properties.fqdn"
     "ttl"  = "properties.ttl"
   }
-  tags = var.tags
 
   timeouts {
     create = var.timeouts.create

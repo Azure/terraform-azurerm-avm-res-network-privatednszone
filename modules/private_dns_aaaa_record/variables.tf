@@ -37,12 +37,6 @@ variable "ttl" {
   }
 }
 
-variable "tags" {
-  type        = map(string)
-  default     = null
-  description = "(Optional) Tags of the resource."
-}
-
 variable "timeouts" {
   type = object({
     create = optional(string, "10m")
