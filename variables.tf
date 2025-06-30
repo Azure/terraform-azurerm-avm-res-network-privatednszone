@@ -27,7 +27,7 @@ variable "a_records" {
   validation {
     condition = alltrue([
       for k, v in var.a_records :
-      coalescelist(v.ip_addresses, v.records)
+      can(v.ip_addresses) && can(v.records)
     ])
     error_message = "Each A record must have either a non-empty records list or a non-empty ip_addresses set."
   }
@@ -47,7 +47,7 @@ variable "aaaa_records" {
   validation {
     condition = alltrue([
       for k, v in var.aaaa_records :
-      coalescelist(v.ip_addresses, v.records)
+      can(v.ip_addresses) && can(v.records)
     ])
     error_message = "Each AAAA record must have either a non-empty records list or a non-empty ip_addresses set."
   }
@@ -111,7 +111,7 @@ variable "ptr_records" {
   validation {
     condition = alltrue([
       for k, v in var.ptr_records :
-      coalescelist(v.domain_names, v.records)
+      can(v.records) && can(v.domain_names)
     ])
     error_message = "Each PTR record must have either a non-empty records list or a non-empty domain_names set."
   }
@@ -260,14 +260,14 @@ variable "virtual_network_links" {
   validation {
     condition = alltrue([
       for k, v in var.virtual_network_links :
-      coalesce(v.name, v.vnetlinkname)
+      coalesce(v.name, v.vnetlinkname)  != null
     ])
     error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
   }
   validation {
     condition = alltrue([
       for k, v in var.virtual_network_links :
-      coalesce(v.virtual_network_id, v.vnetid)
+      coalesce(v.virtual_network_id, v.vnetid) != null
     ])
     error_message = "Each virtual_network_link must have either vnetid or virtual_network_id provided."
   }
