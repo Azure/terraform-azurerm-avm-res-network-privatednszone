@@ -260,7 +260,7 @@ variable "virtual_network_links" {
   validation {
     condition = alltrue([
       for k, v in var.virtual_network_links :
-      coalesce(v.name, v.vnetlinkname)  != null
+      coalesce(v.name, v.vnetlinkname) != null
     ])
     error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
   }
