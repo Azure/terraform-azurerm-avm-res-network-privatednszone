@@ -34,21 +34,20 @@ resource "azurerm_virtual_network" "this" {
 # reference the module and pass in variables as needed
 module "private_dns_zone" {
   # replace source with the correct link to the private_dns_zone module
-  # source                = "Azure/avm-res-network-privatednszone/azurerm"  
+  # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
 
-  domain_name         = local.domain_name
-  resource_group_name = azurerm_resource_group.this.name
-  subscription_id     = var.subscription_id
-  a_records           = local.a_records
-  aaaa_records        = local.aaaa_records
-  cname_records       = local.cname_records
-  enable_telemetry    = local.enable_telemetry
-  mx_records          = local.mx_records
-  ptr_records         = local.ptr_records
-  soa_record          = local.soa_record
-  srv_records         = local.srv_records
-  tags                = local.tags
+  domain_name      = local.domain_name
+  parent_id        = local.parent_id
+  a_records        = local.a_records
+  aaaa_records     = local.aaaa_records
+  cname_records    = local.cname_records
+  enable_telemetry = local.enable_telemetry
+  mx_records       = local.mx_records
+  ptr_records      = local.ptr_records
+  soa_record       = local.soa_record
+  srv_records      = local.srv_records
+  tags             = local.tags
   timeouts = {
     dns_zones = {
       create = "50m"
@@ -90,13 +89,7 @@ The following resources are used by this module:
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
 
-The following input variables are required:
-
-### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
-
-Description: The ID of the Azure subscription where the resources will be created.
-
-Type: `string`
+No required inputs.
 
 ## Optional Inputs
 

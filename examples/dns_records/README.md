@@ -4,6 +4,8 @@
 This is an example that adds DNS records to an existing private DNS zone using record type sub-modules.
 
 ```hcl
+data "azurerm_client_config" "current" {}
+
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
@@ -12,12 +14,11 @@ resource "azurerm_resource_group" "avmrg" {
 
 module "private_dns_zone" {
   # replace source with the correct link to the private_dns_zone module
-  # source                = "Azure/avm-res-network-privatednszone/azurerm"  
+  # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
 
-  domain_name         = local.domain_name
-  resource_group_name = azurerm_resource_group.avmrg.name
-  subscription_id     = var.subscription_id
+  domain_name = local.domain_name
+  parent_id   = local.parent_id
 }
 
 module "a_record" {
@@ -112,17 +113,12 @@ The following requirements are needed by this module:
 The following resources are used by this module:
 
 - [azurerm_resource_group.avmrg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
 
-The following input variables are required:
-
-### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
-
-Description: The ID of the Azure subscription where the resources will be created.
-
-Type: `string`
+No required inputs.
 
 ## Optional Inputs
 

@@ -55,9 +55,9 @@ The following input variables are required:
 
 ### <a name="input_email"></a> [email](#input\_email)
 
-Description: The time to live of the record.
+Description: The email address of the SOA record.
 
-Type: `number`
+Type: `string`
 
 ### <a name="input_expire_time"></a> [expire\_time](#input\_expire\_time)
 

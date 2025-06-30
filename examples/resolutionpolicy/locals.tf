@@ -1,9 +1,8 @@
 locals {
-  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   a_records = {
     "a_record1" = {
-      name    = "my_arecord1"
-      ttl     = 300
+      name         = "my_arecord1"
+      ttl          = 300
       ip_addresses = ["10.1.1.1", "10.1.1.2"]
       tags = {
         "env" = "prod"
@@ -11,8 +10,8 @@ locals {
     }
 
     "a_record2" = {
-      name    = "my_arecord2"
-      ttl     = 300
+      name         = "my_arecord2"
+      ttl          = 300
       ip_addresses = ["10.2.1.1", "10.2.1.2"]
       tags = {
         "env" = "dev"
@@ -21,8 +20,8 @@ locals {
   }
   aaaa_records = {
     "aaaa_record1" = {
-      name    = "my_aaaarecord1"
-      ttl     = 300
+      name         = "my_aaaarecord1"
+      ttl          = 300
       ip_addresses = ["fd5d:70bc:930e:d008:0000:0000:0000:7334", "fd5d:70bc:930e:d008::7335"]
       tags = {
         "env" = "prod"
@@ -30,8 +29,8 @@ locals {
     }
 
     "aaaa_record2" = {
-      name    = "my_aaaarecord2"
-      ttl     = 600
+      name         = "my_aaaarecord2"
+      ttl          = 600
       ip_addresses = ["fd4d:70bc:930e:d008:0000:0000:0000:7334", "fd4d:70bc:930e:d008::7335"]
       tags = {
         "env" = "dev"
@@ -40,8 +39,8 @@ locals {
   }
   cname_records = {
     "cname_record1" = {
-      name   = "my_cname1"
-      ttl    = 300
+      name  = "my_cname1"
+      ttl   = 300
       cname = "prod.testlab.io"
       tags = {
         "env" = "prod"
@@ -49,8 +48,8 @@ locals {
     }
 
     "cname_record2" = {
-      name   = "my_cname2"
-      ttl    = 300
+      name  = "my_cname2"
+      ttl   = 300
       cname = "dev.testlab.io"
       tags = {
         "env" = "dev"
@@ -96,10 +95,11 @@ locals {
       }
     }
   }
+  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   ptr_records = {
     "ptr_record1" = {
-      name    = "ptr1"
-      ttl     = 300
+      name         = "ptr1"
+      ttl          = 300
       domain_names = ["web1.testlab.io", "web2.testlab.io"]
       tags = {
         "env" = "prod"
@@ -107,8 +107,8 @@ locals {
     }
 
     "ptr_record2" = {
-      name    = "ptr2"
-      ttl     = 300
+      name         = "ptr2"
+      ttl          = 300
       domain_names = ["web1.testlab.io", "web2.testlab.io"]
       tags = {
         "env" = "dev"

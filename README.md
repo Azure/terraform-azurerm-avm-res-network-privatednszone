@@ -66,15 +66,9 @@ Description: The name of the private dns zone.
 
 Type: `string`
 
-### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+### <a name="input_parent_id"></a> [parent\_id](#input\_parent\_id)
 
-Description: The resource group where the resources will be deployed.
-
-Type: `string`
-
-### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
-
-Description: An existing subscription id that should be a GUID in the format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx. All letters must be lowercase.
+Description: The ID of the parent resource. This is typically the ID of the resource group or a virtual network where the DNS zone will be created.
 
 Type: `string`
 
@@ -332,7 +326,7 @@ map(object({
     name = string
     ttl  = number
     records = map(object({
-      value = string
+      value = list(string)
     }))
     tags = optional(map(string), null)
   }))

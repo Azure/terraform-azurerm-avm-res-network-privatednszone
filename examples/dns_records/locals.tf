@@ -1,5 +1,4 @@
 locals {
-  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   a_records = {
     "a_record1" = {
       name         = "my_arecord1"
@@ -95,6 +94,7 @@ locals {
       }
     }
   }
+  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   ptr_records = {
     "ptr_record1" = {
       name         = "ptr1"
