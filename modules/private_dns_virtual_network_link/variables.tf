@@ -36,6 +36,12 @@ variable "virtual_network_id" {
   }
 }
 
+variable "private_dns_zone_supports_private_link" {
+  type        = bool
+  default     = false
+  description = "Indicates whether the private DNS zone supports private link."
+}
+
 variable "registration_enabled" {
   type        = bool
   default     = false
@@ -45,7 +51,7 @@ variable "registration_enabled" {
 variable "resolution_policy" {
   type        = string
   default     = "Default"
-  description = "The resolution policy for the virtual network link. Possible values are 'Default' or 'NxDomainRedirect'."
+  description = "The Azure private link zone resolution policy for the virtual network link. Possible values are 'Default' or 'NxDomainRedirect'. If the private DNS zone is not an Azure private link zone (e.g. privatelink.blob.core.windows.net), this value is ignored."
 
   validation {
     condition     = contains(["Default", "NxDomainRedirect"], var.resolution_policy)

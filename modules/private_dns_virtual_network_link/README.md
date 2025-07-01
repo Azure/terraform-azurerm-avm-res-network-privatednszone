@@ -97,6 +97,14 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
+### <a name="input_private_dns_zone_supports_private_link"></a> [private\_dns\_zone\_supports\_private\_link](#input\_private\_dns\_zone\_supports\_private\_link)
+
+Description: Indicates whether the private DNS zone supports private link.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_registration_enabled"></a> [registration\_enabled](#input\_registration\_enabled)
 
 Description: Indicates whether the virtual network link allows automatic registration of virtual machine DNS records in the private DNS zone.
@@ -107,7 +115,7 @@ Default: `false`
 
 ### <a name="input_resolution_policy"></a> [resolution\_policy](#input\_resolution\_policy)
 
-Description: The resolution policy for the virtual network link. Possible values are 'Default' or 'NxDomainRedirect'.
+Description: The Azure private link zone resolution policy for the virtual network link. Possible values are 'Default' or 'NxDomainRedirect'. If the private DNS zone is not an Azure private link zone (e.g. privatelink.blob.core.windows.net), this value is ignored.
 
 Type: `string`
 

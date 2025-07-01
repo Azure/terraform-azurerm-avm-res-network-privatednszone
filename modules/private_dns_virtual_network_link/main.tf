@@ -3,15 +3,7 @@ resource "azapi_resource" "private_dns_zone_network_link" {
   name      = var.name
   parent_id = var.parent_id
   type      = "Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01"
-  body = {
-    properties = {
-      registrationEnabled = var.registration_enabled
-      resolutionPolicy    = var.resolution_policy
-      virtualNetwork = {
-        id = var.virtual_network_id
-      }
-    }
-  }
+  body      = var.private_dns_zone_supports_private_link ? local.private_link_private_dns_zone_body : local.custom_private_dns_zone_body
   response_export_values = {
     "id"                   = "id"
     "name"                 = "name"
