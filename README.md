@@ -88,7 +88,6 @@ map(object({
     ttl          = number
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
-    tags         = optional(map(string), null)
   }))
 ```
 
@@ -106,7 +105,6 @@ map(object({
     ttl          = number
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
-    tags         = optional(map(string), null)
   }))
 ```
 
@@ -124,7 +122,6 @@ map(object({
     ttl    = number
     record = optional(string, null)
     cname  = optional(string, null)
-    tags   = optional(map(string), null)
   }))
 ```
 
@@ -154,7 +151,6 @@ map(object({
       preference = number
       exchange   = string
     }))
-    tags = optional(map(string), null)
   }))
 ```
 
@@ -172,7 +168,6 @@ map(object({
     ttl          = number
     records      = optional(list(string), null)
     domain_names = optional(set(string), null)
-    tags         = optional(map(string), null)
   }))
 ```
 
@@ -225,7 +220,6 @@ object({
     refresh_time = optional(number, 3600)
     retry_time   = optional(number, 300)
     ttl          = optional(number, 3600)
-    tags         = optional(map(string), null)
   })
 ```
 
@@ -247,7 +241,6 @@ map(object({
       port     = number
       target   = string
     }))
-    tags = optional(map(string), null)
   }))
 ```
 
@@ -328,7 +321,6 @@ map(object({
     records = map(object({
       value = list(string)
     }))
-    tags = optional(map(string), null)
   }))
 ```
 

@@ -8,7 +8,7 @@ resource "azapi_resource" "cname_record" {
       cnameRecord = {
         cname = var.cname
       }
-      ttl         = var.ttl
+      ttl = var.ttl
     }
   }
   response_export_values = {
