@@ -5,7 +5,9 @@ resource "azapi_resource" "cname_record" {
   type      = "Microsoft.Network/privateDnsZones/CNAME@2024-06-01"
   body = {
     properties = {
-      cnameRecord = var.cname
+      cnameRecord = {
+        cname = var.cname
+      }
       ttl         = var.ttl
     }
   }

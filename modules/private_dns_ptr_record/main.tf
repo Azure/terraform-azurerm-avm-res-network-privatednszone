@@ -5,7 +5,7 @@ resource "azapi_resource" "ptr_record" {
   type      = "Microsoft.Network/privateDnsZones/PTR@2024-06-01"
   body = {
     properties = {
-      ptrRecords = var.domain_names
+      ptrRecords = local.dns_ptr_records
       ttl        = var.ttl
     }
   }

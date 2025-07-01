@@ -19,7 +19,6 @@ variable "a_records" {
     ttl          = number
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
-    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a A record."
@@ -39,7 +38,6 @@ variable "aaaa_records" {
     ttl          = number
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
-    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a AAAA record."
@@ -59,7 +57,6 @@ variable "cname_records" {
     ttl    = number
     record = optional(string, null)
     cname  = optional(string, null)
-    tags   = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
@@ -91,7 +88,6 @@ variable "mx_records" {
       preference = number
       exchange   = string
     }))
-    tags = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a MX record."
@@ -103,7 +99,6 @@ variable "ptr_records" {
     ttl          = number
     records      = optional(list(string), null)
     domain_names = optional(set(string), null)
-    tags         = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a PTR record."
@@ -155,7 +150,6 @@ variable "soa_record" {
     refresh_time = optional(number, 3600)
     retry_time   = optional(number, 300)
     ttl          = optional(number, 3600)
-    tags         = optional(map(string), null)
   })
   default     = null
   description = "optional soa_record variable, if included only email is required, rest are optional. Email must use username.corp.com and not username@corp.com"
@@ -171,7 +165,6 @@ variable "srv_records" {
       port     = number
       target   = string
     }))
-    tags = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a SRV record."
@@ -237,7 +230,6 @@ variable "txt_records" {
     records = map(object({
       value = list(string)
     }))
-    tags = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a TXT record."

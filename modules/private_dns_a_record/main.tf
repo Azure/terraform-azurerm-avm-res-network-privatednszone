@@ -5,7 +5,7 @@ resource "azapi_resource" "a_record" {
   type      = "Microsoft.Network/privateDnsZones/A@2024-06-01"
   body = {
     properties = {
-      aRecords = var.ip_addresses
+      aRecords = local.dns_a_records
       ttl      = var.ttl
     }
   }
