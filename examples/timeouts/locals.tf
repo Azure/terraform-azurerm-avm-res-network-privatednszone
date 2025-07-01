@@ -205,7 +205,7 @@ locals {
     vnetlink1 = {
       name               = "vnetlink1"
       virtual_network_id = azurerm_virtual_network.this.id
-      autoregistration   = true
+      registration_enabled   = true
       tags = {
         "env" = "prod"
       }
