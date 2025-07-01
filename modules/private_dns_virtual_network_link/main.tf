@@ -1,7 +1,7 @@
 resource "azapi_resource" "private_dns_zone_network_link" {
+  location  = "global"
   name      = var.name
   parent_id = var.parent_id
-  location  = "global"
   type      = "Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01"
   body = {
     properties = {

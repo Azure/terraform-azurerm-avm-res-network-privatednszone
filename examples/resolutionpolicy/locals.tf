@@ -210,18 +210,18 @@ locals {
   }
   virtual_network_links = {
     vnetlink1 = {
-      name               = "vnetlink1"
-      virtual_network_id = azurerm_virtual_network.vnet1.id
-      registration_enabled   = true
-      resolutionpolicy   = "NxDomainRedirect"
+      name                 = "vnetlink1"
+      virtual_network_id   = azurerm_virtual_network.vnet1.id
+      registration_enabled = true
+      resolutionpolicy     = "NxDomainRedirect"
       tags = {
         "env" = "prod"
       }
     }
     vnetlink2 = {
-      name               = "vnetlink2"
-      virtual_network_id = azurerm_virtual_network.vnet2.id
-      registration_enabled   = false
+      name                 = "vnetlink2"
+      virtual_network_id   = azurerm_virtual_network.vnet2.id
+      registration_enabled = false
       tags = {
         "env" = "dev"
       }

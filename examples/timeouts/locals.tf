@@ -203,9 +203,9 @@ locals {
   }
   virtual_network_links = {
     vnetlink1 = {
-      name               = "vnetlink1"
-      virtual_network_id = azurerm_virtual_network.this.id
-      registration_enabled   = true
+      name                 = "vnetlink1"
+      virtual_network_id   = azurerm_virtual_network.this.id
+      registration_enabled = true
       tags = {
         "env" = "prod"
       }
