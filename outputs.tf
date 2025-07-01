@@ -70,12 +70,12 @@ output "resource_id" {
 
 output "soa_record_outputs" {
   description = "The srv record output"
-  value = {
+  value = length(module.soa_record) > 0 ? {
     default = {
       id   = module.soa_record[0].resource_id
       fqdn = module.soa_record[0].resource.fqdn
     }
-  }
+  } : {}
 }
 
 output "srv_record_outputs" {
