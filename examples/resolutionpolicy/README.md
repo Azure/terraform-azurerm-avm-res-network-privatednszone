@@ -43,7 +43,7 @@ module "naming" {
   version = ">= 0.3.0"
 }
 
-module "avm-res-storage-storageaccount" {
+module "avm_storageaccount" {
   source  = "Azure/avm-res-storage-storageaccount/azurerm"
   version = "0.5.0"
 
@@ -68,8 +68,6 @@ module "avm-res-storage-storageaccount" {
 The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
-
-- <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (>= 2.40)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.0, < 5.0)
 
@@ -106,7 +104,7 @@ Description: The virtual network link output
 
 The following Modules are called:
 
-### <a name="module_avm-res-storage-storageaccount"></a> [avm-res-storage-storageaccount](#module\_avm-res-storage-storageaccount)
+### <a name="module_avm_storageaccount"></a> [avm\_storageaccount](#module\_avm\_storageaccount)
 
 Source: Azure/avm-res-storage-storageaccount/azurerm
 

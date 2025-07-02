@@ -37,7 +37,7 @@ module "naming" {
   version = ">= 0.3.0"
 }
 
-module "avm-res-storage-storageaccount" {
+module "avm_storageaccount" {
   source  = "Azure/avm-res-storage-storageaccount/azurerm"
   version = "0.5.0"
 
