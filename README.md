@@ -334,14 +334,15 @@ Type:
 
 ```hcl
 map(object({
-    vnetlinkname         = optional(string, null)
-    name                 = optional(string, null)
-    vnetid               = optional(string, null)
-    virtual_network_id   = optional(string, null)
-    autoregistration     = optional(bool, false)
-    registration_enabled = optional(bool, null)
-    resolution_policy    = optional(string, "Default")
-    tags                 = optional(map(string), null)
+    vnetlinkname                           = optional(string, null)
+    name                                   = optional(string, null)
+    vnetid                                 = optional(string, null)
+    virtual_network_id                     = optional(string, null)
+    autoregistration                       = optional(bool, false)
+    registration_enabled                   = optional(bool, null)
+    private_dns_zone_supports_private_link = optional(bool, false)
+    resolution_policy                      = optional(string, "Default")
+    tags                                   = optional(map(string), null)
   }))
 ```
 

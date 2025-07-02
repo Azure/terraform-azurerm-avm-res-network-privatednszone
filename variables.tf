@@ -237,14 +237,15 @@ variable "txt_records" {
 
 variable "virtual_network_links" {
   type = map(object({
-    vnetlinkname         = optional(string, null)
-    name                 = optional(string, null)
-    vnetid               = optional(string, null)
-    virtual_network_id   = optional(string, null)
-    autoregistration     = optional(bool, false)
-    registration_enabled = optional(bool, null)
-    resolution_policy    = optional(string, "Default")
-    tags                 = optional(map(string), null)
+    vnetlinkname                           = optional(string, null)
+    name                                   = optional(string, null)
+    vnetid                                 = optional(string, null)
+    virtual_network_id                     = optional(string, null)
+    autoregistration                       = optional(bool, false)
+    registration_enabled                   = optional(bool, null)
+    private_dns_zone_supports_private_link = optional(bool, false)
+    resolution_policy                      = optional(string, "Default")
+    tags                                   = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a virtual network link. Either vnetlinkname or name must be provided, and either vnetid or virtual_network_id must be provided."
