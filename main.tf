@@ -31,7 +31,7 @@ module "virtual_network_links" {
   name                                   = each.value.name
   parent_id                              = azapi_resource.private_dns_zone.id
   virtual_network_id                     = each.value.virtual_network_id
-  private_dns_zone_supports_private_link = each.value.private_dns_zone_supports_private_link
+  private_dns_zone_supports_private_link = lookup(each.value, "private_dns_zone_supports_private_link", false)
   registration_enabled                   = lookup(each.value, "registration_enabled", false)
   resolution_policy                      = lookup(each.value, "resolution_policy", "Default")
   tags                                   = lookup(each.value, "tags", null)
