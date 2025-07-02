@@ -52,10 +52,10 @@ module "avm_storageaccount" {
   resource_group_name = azurerm_resource_group.avmrg.name
   private_endpoints = {
     private_endpoint_1 = {
-      name                = module.naming.private_endpoint.name_unique
-      subnet_resource_id  = "${azurerm_virtual_network.vnet1.id}/subnets/subnet1"
-      subresource_name    = "blob"
-      private_dns_zone_id = module.private_link_dns_zone.resource_id
+      name                          = module.naming.private_endpoint.name_unique
+      subnet_resource_id            = "${azurerm_virtual_network.vnet1.id}/subnets/subnet1"
+      subresource_name              = "blob"
+      private_dns_zone_resource_ids = [module.private_link_dns_zone.resource_id]
     }
   }
   tags = local.tags
