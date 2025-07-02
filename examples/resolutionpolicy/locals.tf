@@ -1,7 +1,7 @@
 locals {
   domain_name      = "privatelink.blob.core.windows.net"
-  parent_id        = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   enable_telemetry = false
+  parent_id        = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   tags = {
     environment = "test"
   }

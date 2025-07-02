@@ -38,12 +38,12 @@ module "naming" {
 }
 
 module "avm-res-storage-storageaccount" {
-  source              = "Azure/avm-res-storage-storageaccount/azurerm"
-  version             = "0.5.0"
+  source  = "Azure/avm-res-storage-storageaccount/azurerm"
+  version = "0.5.0"
+
   location            = azurerm_resource_group.avmrg.location
   name                = module.naming.storage_account.name_unique
   resource_group_name = azurerm_resource_group.avmrg.name
-
   private_endpoints = {
     private_endpoint_1 = {
       name                = module.naming.private_endpoint.name_unique
@@ -52,6 +52,5 @@ module "avm-res-storage-storageaccount" {
       private_dns_zone_id = module.private_link_dns_zone.resource_id
     }
   }
-
   tags = local.tags
 }

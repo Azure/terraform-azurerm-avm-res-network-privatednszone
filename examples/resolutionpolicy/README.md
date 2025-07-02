@@ -44,12 +44,12 @@ module "naming" {
 }
 
 module "avm-res-storage-storageaccount" {
-  source              = "Azure/avm-res-storage-storageaccount/azurerm"
-  version             = "0.5.0"
+  source  = "Azure/avm-res-storage-storageaccount/azurerm"
+  version = "0.5.0"
+
   location            = azurerm_resource_group.avmrg.location
   name                = module.naming.storage_account.name_unique
   resource_group_name = azurerm_resource_group.avmrg.name
-
   private_endpoints = {
     private_endpoint_1 = {
       name                = module.naming.private_endpoint.name_unique
@@ -58,7 +58,6 @@ module "avm-res-storage-storageaccount" {
       private_dns_zone_id = module.private_link_dns_zone.resource_id
     }
   }
-
   tags = local.tags
 }
 ```
@@ -95,37 +94,9 @@ No optional inputs.
 
 The following outputs are exported:
 
-### <a name="output_a_record_outputs"></a> [a\_record\_outputs](#output\_a\_record\_outputs)
-
-Description: The a record output
-
-### <a name="output_aaaa_record_outputs"></a> [aaaa\_record\_outputs](#output\_aaaa\_record\_outputs)
-
-Description: The aaaa record output
-
-### <a name="output_cname_record_outputs"></a> [cname\_record\_outputs](#output\_cname\_record\_outputs)
-
-Description: The cname record output
-
-### <a name="output_mx_record_outputs"></a> [mx\_record\_outputs](#output\_mx\_record\_outputs)
-
-Description: The mx record output
-
 ### <a name="output_private_dns_zone_output"></a> [private\_dns\_zone\_output](#output\_private\_dns\_zone\_output)
 
 Description: The private dns zone output
-
-### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
-
-Description: The ptr record output
-
-### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
-
-Description: The srv record output
-
-### <a name="output_txt_record_outputs"></a> [txt\_record\_outputs](#output\_txt\_record\_outputs)
-
-Description: The txt record output
 
 ### <a name="output_virtual_network_link_outputs"></a> [virtual\_network\_link\_outputs](#output\_virtual\_network\_link\_outputs)
 
