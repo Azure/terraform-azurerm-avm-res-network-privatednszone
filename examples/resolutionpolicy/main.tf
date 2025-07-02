@@ -47,7 +47,7 @@ module "avm-res-storage-storageaccount" {
   private_endpoints = {
     private_endpoint_1 = {
       name                = module.naming.private_endpoint.name_unique
-      subnet_resource_id  = azurerm_virtual_network.vnet1.subnet[0].id
+      subnet_resource_id  = "${azurerm_virtual_network.vnet1.id}/subnets/subnet1"
       subresource_name    = "blob"
       private_dns_zone_id = module.private_link_dns_zone.resource_id
     }
