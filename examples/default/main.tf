@@ -1,14 +1,9 @@
 data "azurerm_client_config" "current" {}
 
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = ">= 0.3.0"
-}
-
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = module.naming.resource_group.name_unique
+  name     = "avmrg-default-test"
 }
 
 # create first sample virtual network

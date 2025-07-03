@@ -52,5 +52,13 @@ module "avm_storageaccount" {
       private_dns_zone_resource_ids = [module.private_link_dns_zone.resource_id]
     }
   }
+  role_assignments = {
+    role_assignment_1 = {
+      role_definition_id_or_name       = "Storage Blob Data Owner"
+      principal_id                     = data.azurerm_client_config.current.object_id
+      principal_type                   = "ServicePrincipal"
+      skip_service_principal_aad_check = false
+    }
+  }
   tags = local.tags
 }

@@ -6,15 +6,10 @@ This deploys the module in its simplest form.
 ```hcl
 data "azurerm_client_config" "current" {}
 
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = ">= 0.3.0"
-}
-
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = module.naming.resource_group.name_unique
+  name     = "avmrg-default-test"
 }
 
 # create first sample virtual network
@@ -137,12 +132,6 @@ Description: The virtual network link output
 ## Modules
 
 The following Modules are called:
-
-### <a name="module_naming"></a> [naming](#module\_naming)
-
-Source: Azure/naming/azurerm
-
-Version: >= 0.3.0
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
