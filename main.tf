@@ -27,9 +27,9 @@ resource "azapi_resource" "private_dns_zone" {
 resource "azapi_update_resource" "private_dns_zone_soa_record" {
   count = var.soa_record != null ? 1 : 0
 
-  name        = var.soa_record.name
-  resource_id = azapi_resource.private_dns_zone.id
-  type        = "Microsoft.Network/privateDnsZones/SOA@2024-06-01"
+  name      = var.soa_record.name
+  parent_id = azapi_resource.private_dns_zone.id
+  type      = "Microsoft.Network/privateDnsZones/SOA@2024-06-01"
   body = {
     properties = {
       soaRecord = {
