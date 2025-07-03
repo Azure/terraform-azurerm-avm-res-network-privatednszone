@@ -70,10 +70,10 @@ output "resource_id" {
 
 output "soa_record_outputs" {
   description = "The srv record output"
-  value = length(module.soa_record) > 0 ? {
+  value = length(azapi_update_resource.private_dns_zone_soa_record) > 0 ? {
     default = {
-      id   = module.soa_record[0].resource_id
-      fqdn = module.soa_record[0].resource.fqdn
+      id   = azapi_update_resource.private_dns_zone_soa_record[0].id
+      fqdn = azapi_update_resource.private_dns_zone_soa_record[0].fqdn
     }
   } : {}
 }

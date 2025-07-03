@@ -50,6 +50,7 @@ The following resources are used by this module:
 
 - [azapi_resource.private_dns_zone](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.role_assignments](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_update_resource.private_dns_zone_soa_record](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/update_resource) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
 - [azapi_client_config.telemetry](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/client_config) (data source)
@@ -437,12 +438,6 @@ Version:
 ### <a name="module_ptr_record"></a> [ptr\_record](#module\_ptr\_record)
 
 Source: ./modules/private_dns_ptr_record
-
-Version:
-
-### <a name="module_soa_record"></a> [soa\_record](#module\_soa\_record)
-
-Source: ./modules/private_dns_soa_record
 
 Version:
 

@@ -24,6 +24,40 @@ resource "azapi_resource" "private_dns_zone" {
   }
 }
 
+resource "azapi_update_resource" "private_dns_zone_soa_record" {
+  count = var.soa_record != null ? 1 : 0
+
+  name        = var.soa_record.name
+  resource_id = azapi_resource.private_dns_zone.id
+  type        = "Microsoft.Network/privateDnsZones/SOA@2024-06-01"
+  body = {
+    properties = {
+      soaRecord = {
+        email       = var.soa_record.email
+        expireTime  = var.soa_record.expire_time
+        minimumTtl  = var.soa_record.minimum_ttl
+        refreshTime = var.soa_record.refresh_time
+        retryTime   = var.soa_record.retry_time
+      }
+      ttl = var.soa_record.ttl
+    }
+  }
+  response_export_values = {
+    "id"   = "id"
+    "name" = "name"
+    "type" = "type"
+    "fqdn" = "properties.fqdn"
+    "ttl"  = "properties.ttl"
+  }
+
+  timeouts {
+    create = var.timeouts.dns_zones.create
+    delete = var.timeouts.dns_zones.delete
+    read   = var.timeouts.dns_zones.read
+    update = var.timeouts.dns_zones.update
+  }
+}
+
 module "virtual_network_links" {
   source   = "./modules/private_dns_virtual_network_link"
   for_each = local.virtual_network_links
@@ -36,21 +70,6 @@ module "virtual_network_links" {
   resolution_policy                      = lookup(each.value, "resolution_policy", "Default")
   tags                                   = lookup(each.value, "tags", null)
   timeouts                               = var.timeouts.vnet_links
-}
-
-module "soa_record" {
-  source = "./modules/private_dns_soa_record"
-  count  = var.soa_record != null ? 1 : 0
-
-  email        = var.soa_record.email
-  expire_time  = var.soa_record.expire_time
-  minimum_ttl  = var.soa_record.minimum_ttl
-  name         = var.soa_record.name
-  parent_id    = azapi_resource.private_dns_zone.id
-  refresh_time = var.soa_record.refresh_time
-  retry_time   = var.soa_record.retry_time
-  ttl          = var.soa_record.ttl
-  timeouts     = var.timeouts.dns_zones
 }
 
 module "a_record" {
