@@ -72,8 +72,7 @@ output "soa_record_outputs" {
   description = "The srv record output"
   value = length(azapi_update_resource.private_dns_zone_soa_record) > 0 ? {
     default = {
-      id  = azapi_update_resource.private_dns_zone_soa_record[0].id
-      ttl = azapi_update_resource.private_dns_zone_soa_record[0].ttl
+      id = azapi_update_resource.private_dns_zone_soa_record[0].id
     }
   } : {}
 }
