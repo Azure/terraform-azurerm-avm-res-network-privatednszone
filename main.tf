@@ -46,7 +46,6 @@ resource "azapi_update_resource" "private_dns_zone_soa_record" {
     "id"   = "id"
     "name" = "name"
     "type" = "type"
-    "fqdn" = "properties.fqdn"
     "ttl"  = "properties.ttl"
   }
 
