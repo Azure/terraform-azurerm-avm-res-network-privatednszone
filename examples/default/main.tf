@@ -1,9 +1,14 @@
 data "azurerm_client_config" "current" {}
 
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  version = ">= 0.3.0"
+}
+
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = "avmrg"
+  name     = module.naming.resource_group.name_unique
 }
 
 # create first sample virtual network
@@ -30,16 +35,6 @@ resource "azurerm_virtual_network" "vnet2" {
     address_prefixes = ["10.1.1.0/24"]
     name             = "subnet2"
   }
-}
-
-# create app registration
-resource "azuread_application" "this" {
-  display_name = "dnszonecontributor"
-}
-
-# create service principal from app
-resource "azuread_service_principal" "this" {
-  client_id = azuread_application.this.client_id
 }
 
 

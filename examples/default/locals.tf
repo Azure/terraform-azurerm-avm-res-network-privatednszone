@@ -119,7 +119,7 @@ locals {
   role_assignments = {
     role_assignment_1 = {
       role_definition_id_or_name       = "Private DNS Zone Contributor"
-      principal_id                     = azuread_service_principal.this.object_id
+      principal_id                     = azurerm_client_config.current.object_id
       skip_service_principal_aad_check = true
     }
   }

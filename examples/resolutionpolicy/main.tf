@@ -1,9 +1,14 @@
 data "azurerm_client_config" "current" {}
 
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  version = ">= 0.3.0"
+}
+
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = "avmrg"
+  name     = module.naming.resource_group.name_unique
 }
 
 # create first sample virtual network
@@ -30,11 +35,6 @@ module "private_link_dns_zone" {
   enable_telemetry      = local.enable_telemetry
   tags                  = local.tags
   virtual_network_links = local.virtual_network_links
-}
-
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = ">= 0.3.0"
 }
 
 module "avm_storageaccount" {

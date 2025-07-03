@@ -115,7 +115,6 @@ locals {
     }
 
   }
-  resource_group_name = "avmrg"
   srv_records = {
     "srv_record1" = {
       name = "srv1"

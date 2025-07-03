@@ -6,10 +6,15 @@ This deploys the module in its simplest form.
 ```hcl
 data "azurerm_client_config" "current" {}
 
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  version = ">= 0.3.0"
+}
+
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = "avmrg"
+  name     = module.naming.resource_group.name_unique
 }
 
 # create first sample virtual network
@@ -36,16 +41,6 @@ resource "azurerm_virtual_network" "vnet2" {
     address_prefixes = ["10.1.1.0/24"]
     name             = "subnet2"
   }
-}
-
-# create app registration
-resource "azuread_application" "this" {
-  display_name = "dnszonecontributor"
-}
-
-# create service principal from app
-resource "azuread_service_principal" "this" {
-  client_id = azuread_application.this.client_id
 }
 
 
@@ -87,8 +82,6 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azuread_application.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) (resource)
-- [azuread_service_principal.this](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) (resource)
 - [azurerm_resource_group.avmrg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_virtual_network.vnet1](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
 - [azurerm_virtual_network.vnet2](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
@@ -146,6 +139,12 @@ Description: The virtual network link output
 ## Modules
 
 The following Modules are called:
+
+### <a name="module_naming"></a> [naming](#module\_naming)
+
+Source: Azure/naming/azurerm
+
+Version: >= 0.3.0
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 

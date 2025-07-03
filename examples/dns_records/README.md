@@ -6,10 +6,15 @@ This is an example that adds DNS records to an existing private DNS zone using r
 ```hcl
 data "azurerm_client_config" "current" {}
 
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  version = ">= 0.3.0"
+}
+
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = local.resource_group_name
+  name     = module.naming.resource_group.name_unique
 }
 
 module "private_dns_zone" {
@@ -180,6 +185,12 @@ Version:
 Source: ../../modules/private_dns_mx_record
 
 Version:
+
+### <a name="module_naming"></a> [naming](#module\_naming)
+
+Source: Azure/naming/azurerm
+
+Version: >= 0.3.0
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
