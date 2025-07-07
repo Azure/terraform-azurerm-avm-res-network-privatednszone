@@ -15,8 +15,12 @@ module "vnet1" {
   location            = azurerm_resource_group.avmrg.location
   resource_group_name = azurerm_resource_group.avmrg.name
   enable_telemetry    = local.enable_telemetry
-  name                = module.naming.virtual_network.name
-
+  name                = "vnet1"
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
+  }
   subnets = {
     subnet1 = {
       name           = "subnet1"
@@ -27,12 +31,6 @@ module "vnet1" {
     create = "5m"
     update = "5m"
     delete = "5m"
-  }
-
-  retry = {
-    error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
   }
 }
 
@@ -46,8 +44,12 @@ module "vnet2" {
   location            = azurerm_resource_group.avmrg.location
   resource_group_name = azurerm_resource_group.avmrg.name
   enable_telemetry    = local.enable_telemetry
-  name                = "${module.naming.virtual_network.name}2"
-
+  name                = "vnet2"
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
+  }
   subnets = {
     subnet2 = {
       name           = "subnet2"
@@ -59,19 +61,11 @@ module "vnet2" {
     update = "5m"
     delete = "5m"
   }
-
-  retry = {
-    error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
-  }
 }
 
 
 # reference the module and pass in variables as needed
 module "private_dns_zone" {
-  depends_on = [time_sleep.wait_after_vnet_provisioning]
-
   # replace source with the correct link to the private_dns_zone module
   # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
@@ -90,4 +84,6 @@ module "private_dns_zone" {
   tags                  = local.tags
   txt_records           = local.txt_records
   virtual_network_links = local.virtual_network_links
+
+  depends_on = [time_sleep.wait_after_vnet_provisioning]
 }
