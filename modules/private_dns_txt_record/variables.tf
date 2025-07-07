@@ -44,6 +44,18 @@ variable "ttl" {
   }
 }
 
+variable "retry" {
+  type = object({
+    error_message_regex  = optional(list(string), ["ReferencedResourceNotProvisioned", "CannotDeleteResource"])
+    interval_seconds     = optional(number, 10)
+    max_interval_seconds = optional(number, 180)
+    multiplier           = optional(number, 1.5)
+    randomization_factor = optional(number, 0.5)
+  })
+  default     = {}
+  description = "Retry configuration for the resource operations"
+}
+
 variable "timeouts" {
   type = object({
     create = optional(string, "10m")

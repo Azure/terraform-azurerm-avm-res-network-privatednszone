@@ -22,6 +22,7 @@ resource "azapi_resource" "soa_record" {
     "fqdn" = "properties.fqdn"
     "ttl"  = "properties.ttl"
   }
+  retry = var.retry
 
   timeouts {
     create = var.timeouts.create

@@ -134,6 +134,24 @@ Type: `number`
 
 The following input variables are optional (have default values):
 
+### <a name="input_retry"></a> [retry](#input\_retry)
+
+Description: Retry configuration for the resource operations
+
+Type:
+
+```hcl
+object({
+    error_message_regex  = optional(list(string), ["ReferencedResourceNotProvisioned", "CannotDeleteResource"])
+    interval_seconds     = optional(number, 10)
+    max_interval_seconds = optional(number, 180)
+    multiplier           = optional(number, 1.5)
+    randomization_factor = optional(number, 0.5)
+  })
+```
+
+Default: `{}`
+
 ### <a name="input_timeouts"></a> [timeouts](#input\_timeouts)
 
 Description: Custom timeouts for the vdns record operations.

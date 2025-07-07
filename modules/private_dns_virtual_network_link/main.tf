@@ -20,7 +20,8 @@ resource "azapi_resource" "private_link_zone_network_link" {
     "virtual_network"      = "properties.virtualNetwork"
     "registration_enabled" = "properties.registrationEnabled"
   }
-  tags = var.tags
+  retry = var.retry
+  tags  = var.tags
 
   timeouts {
     create = var.timeouts.create

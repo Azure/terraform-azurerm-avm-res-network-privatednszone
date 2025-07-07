@@ -14,7 +14,8 @@ resource "azapi_resource" "private_dns_zone" {
     "numberOfVirtualNetworkLinks"                 = "properties.numberOfVirtualNetworkLinks"
     "numberOfVirtualNetworkLinksWithRegistration" = "properties.numberOfVirtualNetworkLinksWithRegistration"
   }
-  tags = var.tags
+  retry = var.retry
+  tags  = var.tags
 
   timeouts {
     create = var.timeouts.dns_zones.create
@@ -48,6 +49,7 @@ resource "azapi_update_resource" "private_dns_zone_soa_record" {
     "type" = "type"
     "ttl"  = "properties.ttl"
   }
+  retry = var.retry
 
   timeouts {
     create = var.timeouts.dns_zones.create

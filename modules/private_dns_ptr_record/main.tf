@@ -16,6 +16,7 @@ resource "azapi_resource" "ptr_record" {
     "fqdn" = "properties.fqdn"
     "ttl"  = "properties.ttl"
   }
+  retry = var.retry
 
   timeouts {
     create = var.timeouts.create
