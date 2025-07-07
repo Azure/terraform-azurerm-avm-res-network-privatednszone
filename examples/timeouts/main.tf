@@ -30,7 +30,11 @@ module "vnet" {
   resource_group_name = azurerm_resource_group.avmrg.name
   enable_telemetry    = local.enable_telemetry
   name                = module.naming.virtual_network.name
-
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
+  }
   subnets = {
     subnet1 = {
       name           = "subnet1"
@@ -41,12 +45,6 @@ module "vnet" {
     create = "5m"
     update = "5m"
     delete = "5m"
-  }
-
-  retry = {
-    error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
   }
 }
 
