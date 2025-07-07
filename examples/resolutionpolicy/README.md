@@ -27,24 +27,21 @@ module "vnet" {
   resource_group_name = azurerm_resource_group.avmrg.name
   enable_telemetry    = local.enable_telemetry
   name                = module.naming.virtual_network.name
-
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
+  }
   subnets = {
     subnet1 = {
       name           = "subnet1"
       address_prefix = "10.0.1.0/24"
     }
   }
-
   timeouts = {
     create = "5m"
     update = "5m"
     delete = "5m"
-  }
-
-  retry = {
-    error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
   }
 }
 
@@ -71,7 +68,7 @@ module "avm_storageaccount" {
   private_endpoints = {
     private_endpoint_1 = {
       name                          = module.naming.private_endpoint.name_unique
-      subnet_resource_id            = "${azurerm_virtual_network.vnet1.id}/subnets/subnet1"
+      subnet_resource_id            = module.vnet.subnets["subnet1"].resource_id
       subresource_name              = "blob"
       private_dns_zone_resource_ids = [module.private_link_dns_zone.resource_id]
     }
