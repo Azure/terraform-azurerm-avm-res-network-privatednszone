@@ -84,6 +84,4 @@ module "private_dns_zone" {
   tags                  = local.tags
   txt_records           = local.txt_records
   virtual_network_links = local.virtual_network_links
-
-  depends_on = [time_sleep.wait_after_vnet_provisioning]
 }
