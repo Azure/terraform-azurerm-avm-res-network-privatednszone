@@ -21,16 +21,39 @@ module "naming" {
   version = "~> 0.3"
 }
 
-resource "azurerm_resource_group" "this" {
+resource "azurerm_resource_group" "avmrg" {
   location = module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
-resource "azurerm_virtual_network" "this" {
-  location            = azurerm_resource_group.this.location
-  name                = "vnet1"
-  resource_group_name = azurerm_resource_group.this.name
-  address_space       = ["10.0.1.0/24"]
+# create first sample virtual network
+module "vnet" {
+  source  = "Azure/avm-res-network-virtualnetwork/azurerm"
+  version = "0.9.1"
+
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.avmrg.location
+  resource_group_name = azurerm_resource_group.avmrg.name
+  enable_telemetry    = local.enable_telemetry
+  name                = module.naming.virtual_network.name
+
+  subnets = {
+    subnet1 = {
+      name           = "subnet1"
+      address_prefix = "10.0.1.0/24"
+    }
+  }
+  timeouts = {
+    create = "5m"
+    update = "5m"
+    delete = "5m"
+  }
+
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
+  }
 }
 
 # reference the module and pass in variables as needed
@@ -84,8 +107,7 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
-- [azurerm_virtual_network.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
+- [azurerm_resource_group.avmrg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
 - [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 
@@ -159,6 +181,12 @@ Version:
 Source: Azure/regions/azurerm
 
 Version: ~> 0.3
+
+### <a name="module_vnet"></a> [vnet](#module\_vnet)
+
+Source: Azure/avm-res-network-virtualnetwork/azurerm
+
+Version: 0.9.1
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

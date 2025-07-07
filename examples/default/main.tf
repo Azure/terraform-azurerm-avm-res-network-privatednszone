@@ -7,34 +7,71 @@ resource "azurerm_resource_group" "avmrg" {
 }
 
 # create first sample virtual network
-resource "azurerm_virtual_network" "vnet1" {
-  location            = azurerm_resource_group.avmrg.location
-  name                = "vnet1"
-  resource_group_name = azurerm_resource_group.avmrg.name
-  address_space       = ["10.0.0.0/16"]
+module "vnet1" {
+  source  = "Azure/avm-res-network-virtualnetwork/azurerm"
+  version = "0.9.1"
 
-  subnet {
-    address_prefixes = ["10.0.1.0/24"]
-    name             = "subnet1"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.avmrg.location
+  resource_group_name = azurerm_resource_group.avmrg.name
+  enable_telemetry    = local.enable_telemetry
+  name                = module.naming.virtual_network.name
+
+  subnets = {
+    subnet1 = {
+      name           = "subnet1"
+      address_prefix = "10.0.1.0/24"
+    }
+  }
+  timeouts = {
+    create = "5m"
+    update = "5m"
+    delete = "5m"
+  }
+
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
   }
 }
 
-# create second sample virtual network
-resource "azurerm_virtual_network" "vnet2" {
-  location            = azurerm_resource_group.avmrg.location
-  name                = "vnet2"
-  resource_group_name = azurerm_resource_group.avmrg.name
-  address_space       = ["10.1.0.0/16"]
 
-  subnet {
-    address_prefixes = ["10.1.1.0/24"]
-    name             = "subnet2"
+# create second sample virtual network
+module "vnet2" {
+  source  = "Azure/avm-res-network-virtualnetwork/azurerm"
+  version = "0.9.1"
+
+  address_space       = ["10.1.0.0/16"]
+  location            = azurerm_resource_group.avmrg.location
+  resource_group_name = azurerm_resource_group.avmrg.name
+  enable_telemetry    = local.enable_telemetry
+  name                = "${module.naming.virtual_network.name}2"
+
+  subnets = {
+    subnet2 = {
+      name           = "subnet2"
+      address_prefix = "10.1.1.0/24"
+    }
+  }
+  timeouts = {
+    create = "5m"
+    update = "5m"
+    delete = "5m"
+  }
+
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
   }
 }
 
 
 # reference the module and pass in variables as needed
 module "private_dns_zone" {
+  depends_on = [time_sleep.wait_after_vnet_provisioning]
+
   # replace source with the correct link to the private_dns_zone module
   # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"

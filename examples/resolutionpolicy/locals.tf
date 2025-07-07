@@ -8,7 +8,7 @@ locals {
   virtual_network_links = {
     vnetlink1 = {
       name                                   = "vnetlink1"
-      virtual_network_id                     = azurerm_virtual_network.vnet1.id
+      virtual_network_id                     = module.vnet.resource_id
       registration_enabled                   = true
       resolution_policy                      = "NxDomainRedirect"
       private_dns_zone_supports_private_link = true

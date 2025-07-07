@@ -95,7 +95,7 @@ locals {
       }
     }
   }
-  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.this.name}"
+  parent_id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${azurerm_resource_group.avmrg.name}"
   ptr_records = {
     "ptr_record1" = {
       name         = "ptr1"
@@ -204,7 +204,7 @@ locals {
   virtual_network_links = {
     vnetlink1 = {
       name                 = "vnetlink1"
-      virtual_network_id   = azurerm_virtual_network.this.id
+      virtual_network_id   = module.vnet.resource_id
       registration_enabled = true
       tags = {
         "env" = "prod"
