@@ -121,6 +121,7 @@ locals {
       role_definition_id_or_name       = "Private DNS Zone Contributor"
       principal_id                     = data.azurerm_client_config.current.object_id
       skip_service_principal_aad_check = true
+      principal_type                   = "ServicePrincipal"
     }
   }
   soa_record = {
