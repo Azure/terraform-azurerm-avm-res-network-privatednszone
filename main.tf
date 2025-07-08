@@ -154,6 +154,7 @@ module "avm_interfaces" {
   source  = "Azure/avm-utl-interfaces/azure"
   version = "0.2.0"
 
+  enable_telemetry                          = var.enable_telemetry
   role_assignment_definition_lookup_enabled = true
   role_assignment_definition_scope          = var.parent_id
   role_assignments                          = var.role_assignments
