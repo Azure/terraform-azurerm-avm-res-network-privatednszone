@@ -1,25 +1,4 @@
-terraform {
-  required_version = ">= 1.9, < 2.0"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 4.0, < 5.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.5"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-}
+data "azurerm_client_config" "current" {}
 
 module "regions" {
   source  = "Azure/regions/azurerm"
@@ -36,35 +15,56 @@ module "naming" {
   version = "~> 0.3"
 }
 
-resource "azurerm_resource_group" "this" {
+resource "azurerm_resource_group" "avmrg" {
   location = module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
-resource "azurerm_virtual_network" "this" {
-  location            = azurerm_resource_group.this.location
-  name                = "vnet1"
-  resource_group_name = azurerm_resource_group.this.name
-  address_space       = ["10.0.1.0/24"]
+# create first sample virtual network
+module "vnet" {
+  source  = "Azure/avm-res-network-virtualnetwork/azurerm"
+  version = "0.9.1"
+
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.avmrg.location
+  resource_group_name = azurerm_resource_group.avmrg.name
+  enable_telemetry    = local.enable_telemetry
+  name                = module.naming.virtual_network.name
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
+  }
+  subnets = {
+    subnet1 = {
+      name           = "subnet1"
+      address_prefix = "10.0.1.0/24"
+    }
+  }
+  timeouts = {
+    create = "5m"
+    update = "5m"
+    delete = "5m"
+  }
 }
 
 # reference the module and pass in variables as needed
-module "private_dns_zones" {
-  # replace source with the correct link to the private_dns_zones module
-  # source                = "Azure/avm-res-network-privatednszone/azurerm"  
+module "private_dns_zone" {
+  # replace source with the correct link to the private_dns_zone module
+  # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
 
-  domain_name         = local.domain_name
-  resource_group_name = azurerm_resource_group.this.name
-  a_records           = local.a_records
-  aaaa_records        = local.aaaa_records
-  cname_records       = local.cname_records
-  enable_telemetry    = local.enable_telemetry
-  mx_records          = local.mx_records
-  ptr_records         = local.ptr_records
-  soa_record          = local.soa_record
-  srv_records         = local.srv_records
-  tags                = local.tags
+  domain_name      = local.domain_name
+  parent_id        = local.parent_id
+  a_records        = local.a_records
+  aaaa_records     = local.aaaa_records
+  cname_records    = local.cname_records
+  enable_telemetry = local.enable_telemetry
+  mx_records       = local.mx_records
+  ptr_records      = local.ptr_records
+  soa_record       = local.soa_record
+  srv_records      = local.srv_records
+  tags             = local.tags
   timeouts = {
     dns_zones = {
       create = "50m"

@@ -38,7 +38,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.0, < 5.0)
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.0)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
@@ -48,19 +48,12 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azurerm_private_dns_a_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_a_record) (resource)
-- [azurerm_private_dns_aaaa_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_aaaa_record) (resource)
-- [azurerm_private_dns_cname_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_cname_record) (resource)
-- [azurerm_private_dns_mx_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_mx_record) (resource)
-- [azurerm_private_dns_ptr_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_ptr_record) (resource)
-- [azurerm_private_dns_srv_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_srv_record) (resource)
-- [azurerm_private_dns_txt_record.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_txt_record) (resource)
-- [azurerm_private_dns_zone.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) (resource)
-- [azurerm_private_dns_zone_virtual_network_link.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) (resource)
-- [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
+- [azapi_resource.private_dns_zone](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.role_assignments](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_update_resource.private_dns_zone_soa_record](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/update_resource) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
-- [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
+- [azapi_client_config.telemetry](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/client_config) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -74,9 +67,9 @@ Description: The name of the private dns zone.
 
 Type: `string`
 
-### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+### <a name="input_parent_id"></a> [parent\_id](#input\_parent\_id)
 
-Description: The resource group where the resources will be deployed.
+Description: The ID of the parent resource. This is typically the ID of the resource group or a virtual network where the DNS zone will be created.
 
 Type: `string`
 
@@ -92,12 +85,10 @@ Type:
 
 ```hcl
 map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string))
+    ip_addresses = optional(set(string), null)
   }))
 ```
 
@@ -111,12 +102,10 @@ Type:
 
 ```hcl
 map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string))
+    ip_addresses = optional(set(string), null)
   }))
 ```
 
@@ -130,12 +119,10 @@ Type:
 
 ```hcl
 map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    record              = string
-    tags                = optional(map(string), null)
+    name   = string
+    ttl    = number
+    record = optional(string, null)
+    cname  = optional(string, null)
   }))
 ```
 
@@ -159,15 +146,12 @@ Type:
 
 ```hcl
 map(object({
-    name                = optional(string, "@")
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = optional(string, "@")
+    ttl  = number
     records = map(object({
       preference = number
       exchange   = string
     }))
-    tags = optional(map(string), null)
   }))
 ```
 
@@ -181,13 +165,29 @@ Type:
 
 ```hcl
 map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string), null)
+    domain_names = optional(set(string), null)
   }))
+```
+
+Default: `{}`
+
+### <a name="input_retry"></a> [retry](#input\_retry)
+
+Description: Retry configuration for the resource operations
+
+Type:
+
+```hcl
+object({
+    error_message_regex  = optional(list(string), ["ReferencedResourceNotProvisioned", "CannotDeleteResource"])
+    interval_seconds     = optional(number, 10)
+    max_interval_seconds = optional(number, 180)
+    multiplier           = optional(number, 1.5)
+    randomization_factor = optional(number, 0.5)
+  })
 ```
 
 Default: `{}`
@@ -233,12 +233,12 @@ Type:
 ```hcl
 object({
     email        = string
+    name         = optional(string, "@")
     expire_time  = optional(number, 2419200)
     minimum_ttl  = optional(number, 10)
     refresh_time = optional(number, 3600)
     retry_time   = optional(number, 300)
     ttl          = optional(number, 3600)
-    tags         = optional(map(string), null)
   })
 ```
 
@@ -252,17 +252,14 @@ Type:
 
 ```hcl
 map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
       priority = number
       weight   = number
       port     = number
       target   = string
     }))
-    tags = optional(map(string), null)
   }))
 ```
 
@@ -311,7 +308,24 @@ object({
   })
 ```
 
-Default: `{}`
+Default:
+
+```json
+{
+  "dns_zones": {
+    "create": "30m",
+    "delete": "30m",
+    "read": "5m",
+    "update": "30m"
+  },
+  "vnet_links": {
+    "create": "30m",
+    "delete": "30m",
+    "read": "5m",
+    "update": "30m"
+  }
+}
+```
 
 ### <a name="input_txt_records"></a> [txt\_records](#input\_txt\_records)
 
@@ -321,14 +335,11 @@ Type:
 
 ```hcl
 map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
-      value = string
+      value = list(string)
     }))
-    tags = optional(map(string), null)
   }))
 ```
 
@@ -336,16 +347,21 @@ Default: `{}`
 
 ### <a name="input_virtual_network_links"></a> [virtual\_network\_links](#input\_virtual\_network\_links)
 
-Description: A map of objects where each object contains information to create a virtual network link.
+Description: A map of objects where each object contains information to create a virtual network link. Either vnetlinkname or name must be provided, and either vnetid or virtual\_network\_id must be provided.
 
 Type:
 
 ```hcl
 map(object({
-    vnetlinkname     = string
-    vnetid           = string
-    autoregistration = optional(bool, false)
-    tags             = optional(map(string), null)
+    vnetlinkname                           = optional(string, null)
+    name                                   = optional(string, null)
+    vnetid                                 = optional(string, null)
+    virtual_network_id                     = optional(string, null)
+    autoregistration                       = optional(bool, false)
+    registration_enabled                   = optional(bool, null)
+    private_dns_zone_supports_private_link = optional(bool, false)
+    resolution_policy                      = optional(string, "Default")
+    tags                                   = optional(map(string), null)
   }))
 ```
 
@@ -387,6 +403,10 @@ Description: The private dns zone output
 
 Description: The resource id of private DNS zone
 
+### <a name="output_soa_record_outputs"></a> [soa\_record\_outputs](#output\_soa\_record\_outputs)
+
+Description: The srv record output
+
 ### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
 
 Description: The srv record output
@@ -401,7 +421,61 @@ Description: The virtual network link output
 
 ## Modules
 
-No modules.
+The following Modules are called:
+
+### <a name="module_a_record"></a> [a\_record](#module\_a\_record)
+
+Source: ./modules/private_dns_a_record
+
+Version:
+
+### <a name="module_aaaa_record"></a> [aaaa\_record](#module\_aaaa\_record)
+
+Source: ./modules/private_dns_aaaa_record
+
+Version:
+
+### <a name="module_avm_interfaces"></a> [avm\_interfaces](#module\_avm\_interfaces)
+
+Source: Azure/avm-utl-interfaces/azure
+
+Version: 0.2.0
+
+### <a name="module_cname_record"></a> [cname\_record](#module\_cname\_record)
+
+Source: ./modules/private_dns_cname_record
+
+Version:
+
+### <a name="module_mx_record"></a> [mx\_record](#module\_mx\_record)
+
+Source: ./modules/private_dns_mx_record
+
+Version:
+
+### <a name="module_ptr_record"></a> [ptr\_record](#module\_ptr\_record)
+
+Source: ./modules/private_dns_ptr_record
+
+Version:
+
+### <a name="module_srv_record"></a> [srv\_record](#module\_srv\_record)
+
+Source: ./modules/private_dns_srv_record
+
+Version:
+
+### <a name="module_txt_record"></a> [txt\_record](#module\_txt\_record)
+
+Source: ./modules/private_dns_txt_record
+
+Version:
+
+### <a name="module_virtual_network_links"></a> [virtual\_network\_links](#module\_virtual\_network\_links)
+
+Source: ./modules/private_dns_virtual_network_link
+
+Version:
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

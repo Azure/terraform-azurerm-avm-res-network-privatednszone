@@ -4,28 +4,7 @@
 This deploys the module in its simplest form with the addition of custom timeouts.
 
 ```hcl
-terraform {
-  required_version = ">= 1.9, < 2.0"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 4.0, < 5.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.5"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-}
+data "azurerm_client_config" "current" {}
 
 module "regions" {
   source  = "Azure/regions/azurerm"
@@ -42,35 +21,56 @@ module "naming" {
   version = "~> 0.3"
 }
 
-resource "azurerm_resource_group" "this" {
+resource "azurerm_resource_group" "avmrg" {
   location = module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
-resource "azurerm_virtual_network" "this" {
-  location            = azurerm_resource_group.this.location
-  name                = "vnet1"
-  resource_group_name = azurerm_resource_group.this.name
-  address_space       = ["10.0.1.0/24"]
+# create first sample virtual network
+module "vnet" {
+  source  = "Azure/avm-res-network-virtualnetwork/azurerm"
+  version = "0.9.1"
+
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.avmrg.location
+  resource_group_name = azurerm_resource_group.avmrg.name
+  enable_telemetry    = local.enable_telemetry
+  name                = module.naming.virtual_network.name
+  retry = {
+    error_message_regex = ["CannotDeleteResource"]
+    attempts            = 3
+    delay               = "10s"
+  }
+  subnets = {
+    subnet1 = {
+      name           = "subnet1"
+      address_prefix = "10.0.1.0/24"
+    }
+  }
+  timeouts = {
+    create = "5m"
+    update = "5m"
+    delete = "5m"
+  }
 }
 
 # reference the module and pass in variables as needed
-module "private_dns_zones" {
-  # replace source with the correct link to the private_dns_zones module
-  # source                = "Azure/avm-res-network-privatednszone/azurerm"  
+module "private_dns_zone" {
+  # replace source with the correct link to the private_dns_zone module
+  # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
 
-  domain_name         = local.domain_name
-  resource_group_name = azurerm_resource_group.this.name
-  a_records           = local.a_records
-  aaaa_records        = local.aaaa_records
-  cname_records       = local.cname_records
-  enable_telemetry    = local.enable_telemetry
-  mx_records          = local.mx_records
-  ptr_records         = local.ptr_records
-  soa_record          = local.soa_record
-  srv_records         = local.srv_records
-  tags                = local.tags
+  domain_name      = local.domain_name
+  parent_id        = local.parent_id
+  a_records        = local.a_records
+  aaaa_records     = local.aaaa_records
+  cname_records    = local.cname_records
+  enable_telemetry = local.enable_telemetry
+  mx_records       = local.mx_records
+  ptr_records      = local.ptr_records
+  soa_record       = local.soa_record
+  srv_records      = local.srv_records
+  tags             = local.tags
   timeouts = {
     dns_zones = {
       create = "50m"
@@ -105,9 +105,9 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
-- [azurerm_virtual_network.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
+- [azurerm_resource_group.avmrg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
@@ -168,7 +168,7 @@ Source: Azure/naming/azurerm
 
 Version: ~> 0.3
 
-### <a name="module_private_dns_zones"></a> [private\_dns\_zones](#module\_private\_dns\_zones)
+### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
 Source: ../../
 
@@ -179,6 +179,12 @@ Version:
 Source: Azure/regions/azurerm
 
 Version: ~> 0.3
+
+### <a name="module_vnet"></a> [vnet](#module\_vnet)
+
+Source: Azure/avm-res-network-virtualnetwork/azurerm
+
+Version: 0.9.1
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

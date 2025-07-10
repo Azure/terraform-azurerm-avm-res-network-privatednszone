@@ -1,21 +1,22 @@
-resource "azurerm_private_dns_zone" "this" {
-  name                = var.domain_name
-  resource_group_name = var.resource_group_name
-  tags                = var.tags
-
-  # create the soa_record block only if the var.soa_record is not empty
-  dynamic "soa_record" {
-    for_each = var.soa_record != null ? [1] : []
-
-    content {
-      email        = var.soa_record.email
-      expire_time  = var.soa_record.expire_time
-      minimum_ttl  = var.soa_record.minimum_ttl
-      refresh_time = var.soa_record.refresh_time
-      retry_time   = var.soa_record.retry_time
-      ttl          = var.soa_record.ttl
-    }
+resource "azapi_resource" "private_dns_zone" {
+  location  = "global"
+  name      = var.domain_name
+  parent_id = var.parent_id
+  # This resource creates a Private DNS Zone using the Azure API
+  type = "Microsoft.Network/privateDnsZones@2024-06-01"
+  response_export_values = {
+    "id"                                          = "id"
+    "name"                                        = "name"
+    "type"                                        = "type"
+    "location"                                    = "location"
+    "tags"                                        = "tags"
+    "numberOfRecordSets"                          = "properties.numberOfRecordSets"
+    "numberOfVirtualNetworkLinks"                 = "properties.numberOfVirtualNetworkLinks"
+    "numberOfVirtualNetworkLinksWithRegistration" = "properties.numberOfVirtualNetworkLinksWithRegistration"
   }
+  retry = var.retry
+  tags  = var.tags
+
   timeouts {
     create = var.timeouts.dns_zones.create
     delete = var.timeouts.dns_zones.delete
@@ -24,152 +25,155 @@ resource "azurerm_private_dns_zone" "this" {
   }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "this" {
-  for_each = var.virtual_network_links
+resource "azapi_update_resource" "private_dns_zone_soa_record" {
+  count = var.soa_record != null ? 1 : 0
 
-  name                  = each.value.vnetlinkname
-  private_dns_zone_name = azurerm_private_dns_zone.this.name
-  resource_group_name   = var.resource_group_name
-  virtual_network_id    = each.value.vnetid
-  registration_enabled  = lookup(each.value, "autoregistration", false)
-  tags                  = lookup(each.value, "tags", null)
+  name      = var.soa_record.name
+  parent_id = azapi_resource.private_dns_zone.id
+  type      = "Microsoft.Network/privateDnsZones/SOA@2024-06-01"
+  body = {
+    properties = {
+      soaRecord = {
+        email       = var.soa_record.email
+        expireTime  = var.soa_record.expire_time
+        minimumTtl  = var.soa_record.minimum_ttl
+        refreshTime = var.soa_record.refresh_time
+        retryTime   = var.soa_record.retry_time
+      }
+      ttl = var.soa_record.ttl
+    }
+  }
+  response_export_values = {
+    "id"   = "id"
+    "name" = "name"
+    "type" = "type"
+    "ttl"  = "properties.ttl"
+  }
+  retry = var.retry
 
   timeouts {
-    create = var.timeouts.vnet_links.create
-    delete = var.timeouts.vnet_links.delete
-    read   = var.timeouts.vnet_links.read
-    update = var.timeouts.vnet_links.update
+    create = var.timeouts.dns_zones.create
+    delete = var.timeouts.dns_zones.delete
+    read   = var.timeouts.dns_zones.read
+    update = var.timeouts.dns_zones.update
   }
 }
 
-resource "azurerm_private_dns_a_record" "this" {
+module "virtual_network_links" {
+  source   = "./modules/private_dns_virtual_network_link"
+  for_each = local.virtual_network_links
+
+  name                                   = each.value.name
+  parent_id                              = azapi_resource.private_dns_zone.id
+  virtual_network_id                     = each.value.virtual_network_id
+  private_dns_zone_supports_private_link = lookup(each.value, "private_dns_zone_supports_private_link", false)
+  registration_enabled                   = lookup(each.value, "registration_enabled", false)
+  resolution_policy                      = lookup(each.value, "resolution_policy", "Default")
+  tags                                   = lookup(each.value, "tags", null)
+  timeouts                               = var.timeouts.vnet_links
+}
+
+module "a_record" {
+  source   = "./modules/private_dns_a_record"
   for_each = var.a_records
 
-  name                = each.value.name
-  records             = each.value.records
-  resource_group_name = each.value.resource_group_name
-  ttl                 = each.value.ttl
-  zone_name           = each.value.zone_name
-  tags                = lookup(each.value, "tags", null)
-
-  depends_on = [azurerm_private_dns_zone.this]
+  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
+  name         = each.value.name
+  parent_id    = azapi_resource.private_dns_zone.id
+  ttl          = each.value.ttl
+  timeouts     = var.timeouts.dns_zones
 }
 
-
-resource "azurerm_private_dns_aaaa_record" "this" {
+module "aaaa_record" {
+  source   = "./modules/private_dns_aaaa_record"
   for_each = var.aaaa_records
 
-  name                = each.value.name
-  records             = each.value.records
-  resource_group_name = each.value.resource_group_name
-  ttl                 = each.value.ttl
-  zone_name           = each.value.zone_name
-  tags                = lookup(each.value, "tags", null)
-
-  depends_on = [azurerm_private_dns_zone.this]
+  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
+  name         = each.value.name
+  parent_id    = azapi_resource.private_dns_zone.id
+  ttl          = each.value.ttl
+  timeouts     = var.timeouts.dns_zones
 }
 
-resource "azurerm_private_dns_cname_record" "this" {
+module "cname_record" {
+  source   = "./modules/private_dns_cname_record"
   for_each = var.cname_records
 
-  name                = each.value.name
-  record              = each.value.record
-  resource_group_name = each.value.resource_group_name
-  ttl                 = each.value.ttl
-  zone_name           = each.value.zone_name
-  tags                = lookup(each.value, "tags", null)
-
-  depends_on = [azurerm_private_dns_zone.this]
+  cname     = coalesce(each.value.cname, each.value.record)
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  ttl       = each.value.ttl
+  timeouts  = var.timeouts.dns_zones
 }
 
-resource "azurerm_private_dns_mx_record" "this" {
+module "mx_record" {
+  source   = "./modules/private_dns_mx_record"
   for_each = var.mx_records
 
-  resource_group_name = each.value.resource_group_name
-  ttl                 = each.value.ttl
-  zone_name           = each.value.zone_name
-  name                = each.value.name
-  tags                = lookup(each.value, "tags", null)
-
-  dynamic "record" {
-    for_each = each.value.records
-
-    content {
-      exchange   = record.value.exchange
-      preference = record.value.preference
-    }
-  }
-
-  depends_on = [azurerm_private_dns_zone.this]
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = values(each.value.records)
+  ttl       = each.value.ttl
+  timeouts  = var.timeouts.dns_zones
 }
 
-resource "azurerm_private_dns_ptr_record" "this" {
+module "ptr_record" {
+  source   = "./modules/private_dns_ptr_record"
   for_each = var.ptr_records
 
-  name                = each.value.name
-  records             = each.value.records
-  resource_group_name = each.value.resource_group_name
-  ttl                 = each.value.ttl
-  zone_name           = each.value.zone_name
-  tags                = lookup(each.value, "tags", null)
-
-  depends_on = [azurerm_private_dns_zone.this]
+  domain_names = coalesce(each.value.domain_names, toset(each.value.records))
+  name         = each.value.name
+  parent_id    = azapi_resource.private_dns_zone.id
+  ttl          = each.value.ttl
+  timeouts     = var.timeouts.dns_zones
 }
 
-resource "azurerm_private_dns_srv_record" "this" {
+module "srv_record" {
+  source   = "./modules/private_dns_srv_record"
   for_each = var.srv_records
 
-  name                = each.value.name
-  resource_group_name = each.value.resource_group_name
-  ttl                 = each.value.ttl
-  zone_name           = each.value.zone_name
-  tags                = lookup(each.value, "tags", null)
-
-  dynamic "record" {
-    for_each = each.value.records
-
-    content {
-      port     = record.value.port
-      priority = record.value.priority
-      target   = record.value.target
-      weight   = record.value.weight
-    }
-  }
-
-  depends_on = [azurerm_private_dns_zone.this]
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = values(each.value.records)
+  ttl       = each.value.ttl
+  timeouts  = var.timeouts.dns_zones
 }
 
-
-resource "azurerm_private_dns_txt_record" "this" {
+module "txt_record" {
+  source   = "./modules/private_dns_txt_record"
   for_each = var.txt_records
 
-  name                = each.value.name
-  resource_group_name = each.value.resource_group_name
-  ttl                 = each.value.ttl
-  zone_name           = each.value.zone_name
-  tags                = lookup(each.value, "tags", null)
-
-  dynamic "record" {
-    for_each = each.value.records
-
-    content {
-      value = record.value.value
-    }
-  }
-
-  depends_on = [azurerm_private_dns_zone.this]
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  records   = values(each.value.records)
+  ttl       = each.value.ttl
+  timeouts  = var.timeouts.dns_zones
 }
 
-resource "azurerm_role_assignment" "this" {
-  for_each = var.role_assignments
+module "avm_interfaces" {
+  source  = "Azure/avm-utl-interfaces/azure"
+  version = "0.2.0"
 
-  principal_id                           = each.value.principal_id
-  scope                                  = azurerm_private_dns_zone.this.id
-  condition                              = each.value.condition
-  condition_version                      = each.value.condition_version
-  delegated_managed_identity_resource_id = each.value.delegated_managed_identity_resource_id
-  principal_type                         = each.value.principal_type
-  role_definition_id                     = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? each.value.role_definition_id_or_name : null
-  role_definition_name                   = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? null : each.value.role_definition_id_or_name
-  skip_service_principal_aad_check       = each.value.skip_service_principal_aad_check
+  enable_telemetry                          = var.enable_telemetry
+  role_assignment_definition_lookup_enabled = true
+  role_assignment_definition_scope          = var.parent_id
+  role_assignments                          = var.role_assignments
+}
+
+resource "azapi_resource" "role_assignments" {
+  for_each = module.avm_interfaces.role_assignments_azapi
+
+  name      = each.value.name
+  parent_id = azapi_resource.private_dns_zone.id
+  type      = each.value.type
+  body      = each.value.body
+  response_export_values = {
+    "id"               = "id"
+    "name"             = "name"
+    "type"             = "type"
+    "roleDefinitionId" = "properties.roleDefinitionId"
+    "principalId"      = "properties.principalId"
+    "principalType"    = "properties.principalType"
+    "scope"            = "properties.scope"
+  }
 }

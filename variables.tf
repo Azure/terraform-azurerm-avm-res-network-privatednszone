@@ -3,49 +3,71 @@ variable "domain_name" {
   description = "The name of the private dns zone."
 }
 
-# This assumes resource group is already created and its name passed to this module
-variable "resource_group_name" {
+variable "parent_id" {
   type        = string
-  description = "The resource group where the resources will be deployed."
+  description = "The ID of the parent resource. This is typically the ID of the resource group or a virtual network where the DNS zone will be created."
+
+  validation {
+    condition     = can(regex("^/subscriptions/[a-f0-9-]+/resourceGroups/[a-zA-Z0-9_.()-]+$", var.parent_id))
+    error_message = "Must be a valid Azure resource ID containing '/subscriptions/' and '/resourceGroups/'"
+  }
 }
 
 variable "a_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string))
+    ip_addresses = optional(set(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a A record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.a_records :
+      can(v.ip_addresses) && can(v.records)
+    ])
+    error_message = "Each A record must have either a non-empty records list or a non-empty ip_addresses set."
+  }
 }
 
 variable "aaaa_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string))
+    ip_addresses = optional(set(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a AAAA record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.aaaa_records :
+      can(v.ip_addresses) && can(v.records)
+    ])
+    error_message = "Each AAAA record must have either a non-empty records list or a non-empty ip_addresses set."
+  }
 }
 
 variable "cname_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    record              = string
-    tags                = optional(map(string), null)
+    name   = string
+    ttl    = number
+    record = optional(string, null)
+    cname  = optional(string, null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.cname_records :
+      coalesce(v.cname, v.record) != null
+    ])
+    error_message = "Each CNAME record must have either a non-empty record or a non-empty cname value."
+  }
 }
 
 variable "enable_telemetry" {
@@ -60,15 +82,12 @@ DESCRIPTION
 
 variable "mx_records" {
   type = map(object({
-    name                = optional(string, "@")
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = optional(string, "@")
+    ttl  = number
     records = map(object({
       preference = number
       exchange   = string
     }))
-    tags = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a MX record."
@@ -76,15 +95,33 @@ variable "mx_records" {
 
 variable "ptr_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
-    records             = list(string)
-    tags                = optional(map(string), null)
+    name         = string
+    ttl          = number
+    records      = optional(list(string), null)
+    domain_names = optional(set(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a PTR record."
+
+  validation {
+    condition = alltrue([
+      for k, v in var.ptr_records :
+      can(v.records) && can(v.domain_names)
+    ])
+    error_message = "Each PTR record must have either a non-empty records list or a non-empty domain_names set."
+  }
+}
+
+variable "retry" {
+  type = object({
+    error_message_regex  = optional(list(string), ["ReferencedResourceNotProvisioned", "CannotDeleteResource"])
+    interval_seconds     = optional(number, 10)
+    max_interval_seconds = optional(number, 180)
+    multiplier           = optional(number, 1.5)
+    randomization_factor = optional(number, 0.5)
+  })
+  default     = {}
+  description = "Retry configuration for the resource operations"
 }
 
 variable "role_assignments" {
@@ -101,7 +138,7 @@ variable "role_assignments" {
   default     = {}
   description = <<DESCRIPTION
   A map of role assignments to create on the <RESOURCE>. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-  
+
   - `role_definition_id_or_name` - The ID or name of the role definition to assign to the principal.
   - `principal_id` - The ID of the principal to assign the role to.
   - `description` - (Optional) The description of the role assignment.
@@ -110,7 +147,7 @@ variable "role_assignments" {
   - `condition_version` - (Optional) The version of the condition syntax. Leave as `null` if you are not using a condition, if you are then valid values are '2.0'.
   - `delegated_managed_identity_resource_id` - (Optional) The delegated Azure Resource Id which contains a Managed Identity. Changing this forces a new resource to be created. This field is only used in cross-tenant scenario.
   - `principal_type` - (Optional) The type of the `principal_id`. Possible values are `User`, `Group` and `ServicePrincipal`. It is necessary to explicitly set this attribute when creating role assignments if the principal creating the assignment is constrained by ABAC rules that filters on the PrincipalType attribute.
-  
+
   > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
   DESCRIPTION
   nullable    = false
@@ -119,12 +156,12 @@ variable "role_assignments" {
 variable "soa_record" {
   type = object({
     email        = string
+    name         = optional(string, "@")
     expire_time  = optional(number, 2419200)
     minimum_ttl  = optional(number, 10)
     refresh_time = optional(number, 3600)
     retry_time   = optional(number, 300)
     ttl          = optional(number, 3600)
-    tags         = optional(map(string), null)
   })
   default     = null
   description = "optional soa_record variable, if included only email is required, rest are optional. Email must use username.corp.com and not username@corp.com"
@@ -132,17 +169,14 @@ variable "soa_record" {
 
 variable "srv_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
       priority = number
       weight   = number
       port     = number
       target   = string
     }))
-    tags = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a SRV record."
@@ -171,7 +205,20 @@ variable "timeouts" {
       }), {}
     )
   })
-  default     = {}
+  default = {
+    dns_zones = {
+      create = "30m"
+      delete = "30m"
+      update = "30m"
+      read   = "5m"
+    }
+    vnet_links = {
+      create = "30m"
+      delete = "30m"
+      update = "30m"
+      read   = "5m"
+    }
+  }
   description = <<DESCRIPTION
 A map of timeouts objects, per resource type, to apply to the creation and destruction of resources the following resources:
 
@@ -190,14 +237,11 @@ DESCRIPTION
 
 variable "txt_records" {
   type = map(object({
-    name                = string
-    resource_group_name = string
-    zone_name           = string
-    ttl                 = number
+    name = string
+    ttl  = number
     records = map(object({
-      value = string
+      value = list(string)
     }))
-    tags = optional(map(string), null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a TXT record."
@@ -205,16 +249,35 @@ variable "txt_records" {
 
 variable "virtual_network_links" {
   type = map(object({
-    vnetlinkname     = string
-    vnetid           = string
-    autoregistration = optional(bool, false)
-    tags             = optional(map(string), null)
+    vnetlinkname                           = optional(string, null)
+    name                                   = optional(string, null)
+    vnetid                                 = optional(string, null)
+    virtual_network_id                     = optional(string, null)
+    autoregistration                       = optional(bool, false)
+    registration_enabled                   = optional(bool, null)
+    private_dns_zone_supports_private_link = optional(bool, false)
+    resolution_policy                      = optional(string, "Default")
+    tags                                   = optional(map(string), null)
   }))
   default     = {}
-  description = "A map of objects where each object contains information to create a virtual network link."
+  description = "A map of objects where each object contains information to create a virtual network link. Either vnetlinkname or name must be provided, and either vnetid or virtual_network_id must be provided."
 
   validation {
-    condition     = alltrue([for link in var.virtual_network_links : length(link.vnetlinkname) < 80])
-    error_message = "Each vnetlinkname must have less than 80 characters."
+    condition = alltrue([
+      for k, v in var.virtual_network_links :
+      coalesce(v.name, v.vnetlinkname) != null
+    ])
+    error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.virtual_network_links :
+      coalesce(v.virtual_network_id, v.vnetid) != null
+    ])
+    error_message = "Each virtual_network_link must have either vnetid or virtual_network_id provided."
+  }
+  validation {
+    condition     = alltrue([for link in var.virtual_network_links : length(try(link.name, link.vnetlinkname)) < 80])
+    error_message = "Each virtual network link name must have less than 80 characters."
   }
 }
