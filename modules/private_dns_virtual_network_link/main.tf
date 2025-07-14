@@ -1,4 +1,4 @@
-resource "azapi_resource" "private_link_zone_network_link" {
+resource "azapi_resource" "private_dns_zone_network_link" {
   location  = "global"
   name      = var.name
   parent_id = var.parent_id

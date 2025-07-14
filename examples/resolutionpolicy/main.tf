@@ -40,8 +40,8 @@ module "vnet" {
 }
 
 # reference the module and pass in variables as needed
-module "private_link_dns_zone" {
-  # replace source with the correct link to the private_link_dns_zone module
+module "private_dns_zone" {
+  # replace source with the correct link to the private_dns_zone module
   # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
 
@@ -64,7 +64,7 @@ module "avm_storageaccount" {
       name                          = module.naming.private_endpoint.name_unique
       subnet_resource_id            = module.vnet.subnets["subnet1"].resource_id
       subresource_name              = "blob"
-      private_dns_zone_resource_ids = [module.private_link_dns_zone.resource_id]
+      private_dns_zone_resource_ids = [module.private_dns_zone.resource_id]
     }
   }
   role_assignments = {
