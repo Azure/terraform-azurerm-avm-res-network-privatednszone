@@ -8,7 +8,7 @@ data "azurerm_client_config" "current" {}
 
 module "regions" {
   source  = "Azure/regions/azurerm"
-  version = "~> 0.3"
+  version = "0.8.2"
 }
 
 resource "random_integer" "region_index" {
@@ -18,7 +18,7 @@ resource "random_integer" "region_index" {
 
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "~> 0.3"
+  version = "0.4.2"
 }
 
 resource "azurerm_resource_group" "avmrg" {
@@ -166,7 +166,7 @@ The following Modules are called:
 
 Source: Azure/naming/azurerm
 
-Version: ~> 0.3
+Version: 0.4.2
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
@@ -178,7 +178,7 @@ Version:
 
 Source: Azure/regions/azurerm
 
-Version: ~> 0.3
+Version: 0.8.2
 
 ### <a name="module_vnet"></a> [vnet](#module\_vnet)
 
