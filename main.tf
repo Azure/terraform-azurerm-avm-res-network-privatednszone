@@ -67,7 +67,7 @@ module "virtual_network_links" {
   parent_id                              = azapi_resource.private_dns_zone.id
   virtual_network_id                     = coalesce(each.value.virtual_network_id, each.value.vnetid)
   private_dns_zone_supports_private_link = each.value.private_dns_zone_supports_private_link
-  registration_enabled                   = each.value.registration_enabled
+  registration_enabled                   = coalesce(each.value.registration_enabled, each.value.autoregistration, false)
   resolution_policy                      = each.value.resolution_policy
   tags                                   = each.value.tags
   timeouts                               = var.timeouts.vnet_links
