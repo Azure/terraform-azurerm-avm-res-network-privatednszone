@@ -260,24 +260,21 @@ variable "virtual_network_links" {
     tags                                   = optional(map(string), null)
   }))
   default     = {}
-  description = "A map of objects where each object contains information to create a virtual network link. Either vnetlinkname or name must be provided, and either vnetid or virtual_network_id must be provided."
+  description = <<-DESCRIPTION
+    A map of objects where each object contains information to create a virtual network link.
+    Either `name` or `vnetlinkname` must be provided, and either `virtual_network_id` or `vnetid` must be provided.
+  DESCRIPTION
 
   validation {
-    condition = alltrue([
-      for k, v in var.virtual_network_links :
-      coalesce(v.name, v.vnetlinkname) != null
-    ])
+    condition     = alltrue([for v in var.virtual_network_links : coalesce(v.name, v.vnetlinkname) != null])
     error_message = "Each virtual_network_link must have either vnetlinkname or name provided."
   }
   validation {
-    condition = alltrue([
-      for k, v in var.virtual_network_links :
-      coalesce(v.virtual_network_id, v.vnetid) != null
-    ])
+    condition     = alltrue([for v in var.virtual_network_links : coalesce(v.virtual_network_id, v.vnetid) != null])
     error_message = "Each virtual_network_link must have either vnetid or virtual_network_id provided."
   }
   validation {
-    condition     = alltrue([for link in var.virtual_network_links : length(try(link.name, link.vnetlinkname)) < 80])
+    condition     = alltrue([for v in var.virtual_network_links : length(coalesce(v.name, v.vnetlinkname)) < 80])
     error_message = "Each virtual network link name must have less than 80 characters."
   }
 }
