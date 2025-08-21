@@ -3,7 +3,10 @@ resource "azapi_resource" "private_dns_zone" {
   name      = var.domain_name
   parent_id = var.parent_id
   # This resource creates a Private DNS Zone using the Azure API
-  type = "Microsoft.Network/privateDnsZones@2024-06-01"
+  type           = "Microsoft.Network/privateDnsZones@2024-06-01"
+  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   response_export_values = {
     "id"                                          = "id"
     "name"                                        = "name"
@@ -14,8 +17,9 @@ resource "azapi_resource" "private_dns_zone" {
     "numberOfVirtualNetworkLinks"                 = "properties.numberOfVirtualNetworkLinks"
     "numberOfVirtualNetworkLinksWithRegistration" = "properties.numberOfVirtualNetworkLinksWithRegistration"
   }
-  retry = var.retry
-  tags  = var.tags
+  retry          = var.retry
+  tags           = var.tags
+  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 
   timeouts {
     create = var.timeouts.dns_zones.create
@@ -43,13 +47,15 @@ resource "azapi_update_resource" "private_dns_zone_soa_record" {
       ttl = var.soa_record.ttl
     }
   }
+  read_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   response_export_values = {
     "id"   = "id"
     "name" = "name"
     "type" = "type"
     "ttl"  = "properties.ttl"
   }
-  retry = var.retry
+  retry          = var.retry
+  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 
   timeouts {
     create = var.timeouts.dns_zones.create
@@ -163,10 +169,13 @@ module "avm_interfaces" {
 resource "azapi_resource" "role_assignments" {
   for_each = module.avm_interfaces.role_assignments_azapi
 
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  type      = each.value.type
-  body      = each.value.body
+  name           = each.value.name
+  parent_id      = azapi_resource.private_dns_zone.id
+  type           = each.value.type
+  body           = each.value.body
+  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   response_export_values = {
     "id"               = "id"
     "name"             = "name"
@@ -176,4 +185,5 @@ resource "azapi_resource" "role_assignments" {
     "principalType"    = "properties.principalType"
     "scope"            = "properties.scope"
   }
+  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }

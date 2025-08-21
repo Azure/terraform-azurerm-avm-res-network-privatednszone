@@ -4,7 +4,7 @@ terraform {
   required_providers {
     azapi = {
       source  = "Azure/azapi"
-      version = "~> 2.0"
+      version = "~> 2.4"
     }
     modtm = {
       source  = "azure/modtm"
