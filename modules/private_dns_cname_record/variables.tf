@@ -1,12 +1,20 @@
 variable "cname" {
   type        = string
-  description = "The CNAME record value."
+  description = "CNAME (FQDN), strict DNS rules; trailing dot optional."
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-_.]*[a-zA-Z0-9]$", var.cname)) && length(var.cname) <= 253
-    error_message = "The cname must be a valid CNAME and not exceed 253 characters."
+    condition = can(
+      regex(
+        "^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))+\\.?$",
+        var.cname
+      )
+    ) && length(replace(var.cname, "\\.$", "")) <= 253
+
+    error_message = "The CNAME must be a valid DNS name, optionally ending with a trailing dot, and must not exceed 253 characters (e.g. abc.com or abc.com.)."
   }
 }
+
+
 
 variable "name" {
   type        = string
