@@ -73,7 +73,7 @@ The following input variables are required:
 
 ### <a name="input_cname"></a> [cname](#input\_cname)
 
-Description: The CNAME record value.
+Description: CNAME (FQDN), strict DNS rules; trailing dot optional.
 
 Type: `string`
 
