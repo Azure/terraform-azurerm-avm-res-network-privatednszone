@@ -5,7 +5,7 @@ variable "cname" {
   validation {
     condition = can(
       regex(
-        "^(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)(?:\\.(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?))+\\.?$",
+        "^(([a-zA-Z0-9_]|[a-zA-Z0-9_][a-zA-Z0-9_\-]*[a-zA-Z0-9_])\.)*([A-Za-z0-9_]|[A-Za-z0-9_][A-Za-z0-9_\-]*[A-Za-z0-9_])(\.?)$",
         var.cname
       )
     ) && length(replace(var.cname, "\\.?$", "")) <= 253
