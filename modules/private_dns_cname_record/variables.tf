@@ -8,7 +8,7 @@ variable "cname" {
         "^(([a-zA-Z0-9_]|[a-zA-Z0-9_][a-zA-Z0-9_\-]*[a-zA-Z0-9_])\.)*([A-Za-z0-9_]|[A-Za-z0-9_][A-Za-z0-9_\-]*[A-Za-z0-9_])(\.?)$",
         var.cname
       )
-    ) && length(replace(var.cname, "\\.?$", "")) <= 253
+    ) && length(trimsuffix(var.cname, ".")) <= 253
 
     error_message = "The CNAME must be a valid DNS name, optionally ending with a trailing dot, and must not exceed 253 characters (e.g. abc.com or abc.com.)."
   }
