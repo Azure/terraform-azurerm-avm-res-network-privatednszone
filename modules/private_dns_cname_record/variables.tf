@@ -5,7 +5,7 @@ variable "cname" {
   validation {
     condition = can(
       regex(
-        "^(([a-zA-Z0-9_]|[a-zA-Z0-9_][a-zA-Z0-9_\-]*[a-zA-Z0-9_])\.)*([A-Za-z0-9_]|[A-Za-z0-9_][A-Za-z0-9_\-]*[A-Za-z0-9_])(\.?)$",
+        "^(([a-zA-Z0-9_]|[a-zA-Z0-9_][a-zA-Z0-9_\\-]*[a-zA-Z0-9_])\\.)*([A-Za-z0-9_]|[A-Za-z0-9_][A-Za-z0-9_\\-]*[A-Za-z0-9_])(\\.?)$",
         var.cname
       )
     ) && length(trimsuffix(var.cname, ".")) <= 253
