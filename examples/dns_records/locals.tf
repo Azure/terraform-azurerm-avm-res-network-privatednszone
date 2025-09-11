@@ -55,6 +55,16 @@ locals {
         "env" = "dev"
       }
     }
+
+    "cname_record3" = {
+      name  = "my_cname3"
+      ttl   = 300
+      cname = "uat.testlab.io."
+      tags = {
+        "env" = "uat"
+      }
+    }
+
   }
   domain_name = "testlab.io"
   mx_records = {
