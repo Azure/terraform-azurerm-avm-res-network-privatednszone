@@ -35,449 +35,80 @@ You can apply this plan to save these new output values to the Terraform state, 
 <!-- markdownlint-disable MD033 -->
 ## Requirements
 
-The following requirements are needed by this module:
-
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
-
-- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.4)
-
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
-
-- <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.5.1, < 5.0)
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9, < 2.0 |
+| <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | ~> 2.4 |
+| <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) | ~> 0.3 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5.1, < 5.0 |
 
 ## Resources
 
-The following resources are used by this module:
-
-- [azapi_resource.private_dns_zone](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
-- [azapi_resource.role_assignments](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
-- [azapi_update_resource.private_dns_zone_soa_record](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/update_resource) (resource)
-- [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
-- [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
-- [azapi_client_config.telemetry](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/client_config) (data source)
-- [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
+| Name | Type |
+|------|------|
+| [azapi_resource.lock](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) | resource |
+| [azapi_resource.private_dns_zone](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) | resource |
+| [azapi_resource.role_assignments](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) | resource |
+| [azapi_update_resource.private_dns_zone_soa_record](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/update_resource) | resource |
+| [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) | resource |
+| [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) | resource |
+| [azapi_client_config.telemetry](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/client_config) | data source |
+| [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) | data source |
 
 <!-- markdownlint-disable MD013 -->
-## Required Inputs
-
-The following input variables are required:
-
-### <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name)
-
-Description: The name of the private dns zone.
-
-Type: `string`
-
-### <a name="input_parent_id"></a> [parent\_id](#input\_parent\_id)
-
-Description: The ID of the parent resource. This is typically the ID of the resource group or a virtual network where the DNS zone will be created.
-
-Type: `string`
-
-## Optional Inputs
-
-The following input variables are optional (have default values):
-
-### <a name="input_a_records"></a> [a\_records](#input\_a\_records)
-
-Description: A map of objects where each object contains information to create a A record.
-
-Type:
-
-```hcl
-map(object({
-    name         = string
-    ttl          = number
-    records      = optional(list(string))
-    ip_addresses = optional(set(string), null)
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_aaaa_records"></a> [aaaa\_records](#input\_aaaa\_records)
-
-Description: A map of objects where each object contains information to create a AAAA record.
-
-Type:
-
-```hcl
-map(object({
-    name         = string
-    ttl          = number
-    records      = optional(list(string))
-    ip_addresses = optional(set(string), null)
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_cname_records"></a> [cname\_records](#input\_cname\_records)
-
-Description: A map of objects where each object contains information to create a CNAME record.
-
-Type:
-
-```hcl
-map(object({
-    name   = string
-    ttl    = number
-    record = optional(string, null)
-    cname  = optional(string, null)
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
-
-Description: This variable controls whether or not telemetry is enabled for the module.  
-For more information see <https://aka.ms/avm/telemetryinfo>.  
-If it is set to false, then no telemetry will be collected.
-
-Type: `bool`
-
-Default: `true`
-
-### <a name="input_mx_records"></a> [mx\_records](#input\_mx\_records)
-
-Description: A map of objects where each object contains information to create a MX record.
-
-Type:
-
-```hcl
-map(object({
-    name = optional(string, "@")
-    ttl  = number
-    records = map(object({
-      preference = number
-      exchange   = string
-    }))
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_ptr_records"></a> [ptr\_records](#input\_ptr\_records)
-
-Description: A map of objects where each object contains information to create a PTR record.
-
-Type:
-
-```hcl
-map(object({
-    name         = string
-    ttl          = number
-    records      = optional(list(string), null)
-    domain_names = optional(set(string), null)
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_retry"></a> [retry](#input\_retry)
-
-Description: Retry configuration for the resource operations
-
-Type:
-
-```hcl
-object({
-    error_message_regex  = optional(list(string), ["ReferencedResourceNotProvisioned", "CannotDeleteResource"])
-    interval_seconds     = optional(number, 10)
-    max_interval_seconds = optional(number, 180)
-    multiplier           = optional(number, 1.5)
-    randomization_factor = optional(number, 0.5)
-  })
-```
-
-Default: `{}`
-
-### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
-
-Description:   A map of role assignments to create on the <RESOURCE>. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-
-  - `role_definition_id_or_name` - The ID or name of the role definition to assign to the principal.
-  - `principal_id` - The ID of the principal to assign the role to.
-  - `description` - (Optional) The description of the role assignment.
-  - `skip_service_principal_aad_check` - (Optional) If set to true, skips the Azure Active Directory check for the service principal in the tenant. Defaults to false.
-  - `condition` - (Optional) The condition which will be used to scope the role assignment.
-  - `condition_version` - (Optional) The version of the condition syntax. Leave as `null` if you are not using a condition, if you are then valid values are '2.0'.
-  - `delegated_managed_identity_resource_id` - (Optional) The delegated Azure Resource Id which contains a Managed Identity. Changing this forces a new resource to be created. This field is only used in cross-tenant scenario.
-  - `principal_type` - (Optional) The type of the `principal_id`. Possible values are `User`, `Group` and `ServicePrincipal`. It is necessary to explicitly set this attribute when creating role assignments if the principal creating the assignment is constrained by ABAC rules that filters on the PrincipalType attribute.
-
-  > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
-
-Type:
-
-```hcl
-map(object({
-    role_definition_id_or_name             = string
-    principal_id                           = string
-    description                            = optional(string, null)
-    skip_service_principal_aad_check       = optional(bool, false)
-    condition                              = optional(string, null)
-    condition_version                      = optional(string, null)
-    delegated_managed_identity_resource_id = optional(string, null)
-    principal_type                         = optional(string, null)
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_soa_record"></a> [soa\_record](#input\_soa\_record)
-
-Description: optional soa\_record variable, if included only email is required, rest are optional. Email must use username.corp.com and not username@corp.com
-
-Type:
-
-```hcl
-object({
-    email        = string
-    name         = optional(string, "@")
-    expire_time  = optional(number, 2419200)
-    minimum_ttl  = optional(number, 10)
-    refresh_time = optional(number, 3600)
-    retry_time   = optional(number, 300)
-    ttl          = optional(number, 3600)
-  })
-```
-
-Default: `null`
-
-### <a name="input_srv_records"></a> [srv\_records](#input\_srv\_records)
-
-Description: A map of objects where each object contains information to create a SRV record.
-
-Type:
-
-```hcl
-map(object({
-    name = string
-    ttl  = number
-    records = map(object({
-      priority = number
-      weight   = number
-      port     = number
-      target   = string
-    }))
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_tags"></a> [tags](#input\_tags)
-
-Description: (Optional) Tags of the resource.
-
-Type: `map(string)`
-
-Default: `null`
-
-### <a name="input_timeouts"></a> [timeouts](#input\_timeouts)
-
-Description: A map of timeouts objects, per resource type, to apply to the creation and destruction of resources the following resources:
-
-- `dns_zones` - (Optional) The timeouts for DNS Zones.
-- `vnet_links` - (Optional) The timeouts for DNS Zones Virtual Network Links.
-
-Each timeout object has the following optional attributes:
-
-- `create` - (Optional) The timeout for creating the resource. Defaults to `5m` apart from policy assignments, where this is set to `15m`.
-- `delete` - (Optional) The timeout for deleting the resource. Defaults to `5m`.
-- `update` - (Optional) The timeout for updating the resource. Defaults to `5m`.
-- `read` - (Optional) The timeout for reading the resource. Defaults to `5m`.
-
-Type:
-
-```hcl
-object({
-    dns_zones = optional(object({
-      create = optional(string, "30m")
-      delete = optional(string, "30m")
-      update = optional(string, "30m")
-      read   = optional(string, "5m")
-      }), {}
-    )
-    vnet_links = optional(object({
-      create = optional(string, "30m")
-      delete = optional(string, "30m")
-      update = optional(string, "30m")
-      read   = optional(string, "5m")
-      }), {}
-    )
-  })
-```
-
-Default:
-
-```json
-{
-  "dns_zones": {
-    "create": "30m",
-    "delete": "30m",
-    "read": "5m",
-    "update": "30m"
-  },
-  "vnet_links": {
-    "create": "30m",
-    "delete": "30m",
-    "read": "5m",
-    "update": "30m"
-  }
-}
-```
-
-### <a name="input_txt_records"></a> [txt\_records](#input\_txt\_records)
-
-Description: A map of objects where each object contains information to create a TXT record.
-
-Type:
-
-```hcl
-map(object({
-    name = string
-    ttl  = number
-    records = map(object({
-      value = list(string)
-    }))
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_virtual_network_links"></a> [virtual\_network\_links](#input\_virtual\_network\_links)
-
-Description: A map of objects where each object contains information to create a virtual network link.  
-Either `name` or `vnetlinkname` must be provided, and either `virtual_network_id` or `vnetid` must be provided.
-
-Type:
-
-```hcl
-map(object({
-    vnetlinkname                           = optional(string, null)
-    name                                   = optional(string, null)
-    vnetid                                 = optional(string, null)
-    virtual_network_id                     = optional(string, null)
-    autoregistration                       = optional(bool, false)
-    registration_enabled                   = optional(bool, null)
-    private_dns_zone_supports_private_link = optional(bool, false)
-    resolution_policy                      = optional(string, "Default")
-    tags                                   = optional(map(string), null)
-  }))
-```
-
-Default: `{}`
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The name of the private dns zone. | `string` | n/a | yes |
+| <a name="input_parent_id"></a> [parent\_id](#input\_parent\_id) | The ID of the parent resource. This is typically the ID of the resource group or a virtual network where the DNS zone will be created. | `string` | n/a | yes |
+| <a name="input_a_records"></a> [a\_records](#input\_a\_records) | A map of objects where each object contains information to create a A record. | <pre>map(object({<br/>    name         = string<br/>    ttl          = number<br/>    records      = optional(list(string))<br/>    ip_addresses = optional(set(string), null)<br/>  }))</pre> | `{}` | no |
+| <a name="input_aaaa_records"></a> [aaaa\_records](#input\_aaaa\_records) | A map of objects where each object contains information to create a AAAA record. | <pre>map(object({<br/>    name         = string<br/>    ttl          = number<br/>    records      = optional(list(string))<br/>    ip_addresses = optional(set(string), null)<br/>  }))</pre> | `{}` | no |
+| <a name="input_cname_records"></a> [cname\_records](#input\_cname\_records) | A map of objects where each object contains information to create a CNAME record. | <pre>map(object({<br/>    name   = string<br/>    ttl    = number<br/>    record = optional(string, null)<br/>    cname  = optional(string, null)<br/>  }))</pre> | `{}` | no |
+| <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry) | This variable controls whether or not telemetry is enabled for the module.<br/>For more information see <https://aka.ms/avm/telemetryinfo>.<br/>If it is set to false, then no telemetry will be collected. | `bool` | `true` | no |
+| <a name="input_lock"></a> [lock](#input\_lock) | Controls the Resource Lock configuration for this resource. The following properties can be specified:<br/><br/>- `kind` - (Required) The type of lock. Possible values are `"CanNotDelete"` and `"ReadOnly"`.<br/>- `name` - (Optional) The name of the lock. If not specified, a name will be generated based on the `kind` value. Changing this forces the creation of a new resource. | <pre>object({<br/>    kind = string<br/>    name = optional(string, null)<br/>  })</pre> | `null` | no |
+| <a name="input_mx_records"></a> [mx\_records](#input\_mx\_records) | A map of objects where each object contains information to create a MX record. | <pre>map(object({<br/>    name = optional(string, "@")<br/>    ttl  = number<br/>    records = map(object({<br/>      preference = number<br/>      exchange   = string<br/>    }))<br/>  }))</pre> | `{}` | no |
+| <a name="input_ptr_records"></a> [ptr\_records](#input\_ptr\_records) | A map of objects where each object contains information to create a PTR record. | <pre>map(object({<br/>    name         = string<br/>    ttl          = number<br/>    records      = optional(list(string), null)<br/>    domain_names = optional(set(string), null)<br/>  }))</pre> | `{}` | no |
+| <a name="input_retry"></a> [retry](#input\_retry) | Retry configuration for the resource operations | <pre>object({<br/>    error_message_regex  = optional(list(string), ["ReferencedResourceNotProvisioned", "CannotDeleteResource"])<br/>    interval_seconds     = optional(number, 10)<br/>    max_interval_seconds = optional(number, 180)<br/>    multiplier           = optional(number, 1.5)<br/>    randomization_factor = optional(number, 0.5)<br/>  })</pre> | `{}` | no |
+| <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments) | A map of role assignments to create on the <RESOURCE>. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.<br/><br/>  - `role_definition_id_or_name` - The ID or name of the role definition to assign to the principal.<br/>  - `principal_id` - The ID of the principal to assign the role to.<br/>  - `description` - (Optional) The description of the role assignment.<br/>  - `skip_service_principal_aad_check` - (Optional) If set to true, skips the Azure Active Directory check for the service principal in the tenant. Defaults to false.<br/>  - `condition` - (Optional) The condition which will be used to scope the role assignment.<br/>  - `condition_version` - (Optional) The version of the condition syntax. Leave as `null` if you are not using a condition, if you are then valid values are '2.0'.<br/>  - `delegated_managed_identity_resource_id` - (Optional) The delegated Azure Resource Id which contains a Managed Identity. Changing this forces a new resource to be created. This field is only used in cross-tenant scenario.<br/>  - `principal_type` - (Optional) The type of the `principal_id`. Possible values are `User`, `Group` and `ServicePrincipal`. It is necessary to explicitly set this attribute when creating role assignments if the principal creating the assignment is constrained by ABAC rules that filters on the PrincipalType attribute.<br/><br/>  > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal. | <pre>map(object({<br/>    role_definition_id_or_name             = string<br/>    principal_id                           = string<br/>    description                            = optional(string, null)<br/>    skip_service_principal_aad_check       = optional(bool, false)<br/>    condition                              = optional(string, null)<br/>    condition_version                      = optional(string, null)<br/>    delegated_managed_identity_resource_id = optional(string, null)<br/>    principal_type                         = optional(string, null)<br/>  }))</pre> | `{}` | no |
+| <a name="input_soa_record"></a> [soa\_record](#input\_soa\_record) | optional soa\_record variable, if included only email is required, rest are optional. Email must use username.corp.com and not username@corp.com | <pre>object({<br/>    email        = string<br/>    name         = optional(string, "@")<br/>    expire_time  = optional(number, 2419200)<br/>    minimum_ttl  = optional(number, 10)<br/>    refresh_time = optional(number, 3600)<br/>    retry_time   = optional(number, 300)<br/>    ttl          = optional(number, 3600)<br/>  })</pre> | `null` | no |
+| <a name="input_srv_records"></a> [srv\_records](#input\_srv\_records) | A map of objects where each object contains information to create a SRV record. | <pre>map(object({<br/>    name = string<br/>    ttl  = number<br/>    records = map(object({<br/>      priority = number<br/>      weight   = number<br/>      port     = number<br/>      target   = string<br/>    }))<br/>  }))</pre> | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | (Optional) Tags of the resource. | `map(string)` | `null` | no |
+| <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | A map of timeouts objects, per resource type, to apply to the creation and destruction of resources the following resources:<br/><br/>- `dns_zones` - (Optional) The timeouts for DNS Zones.<br/>- `vnet_links` - (Optional) The timeouts for DNS Zones Virtual Network Links.<br/><br/>Each timeout object has the following optional attributes:<br/><br/>- `create` - (Optional) The timeout for creating the resource. Defaults to `5m` apart from policy assignments, where this is set to `15m`.<br/>- `delete` - (Optional) The timeout for deleting the resource. Defaults to `5m`.<br/>- `update` - (Optional) The timeout for updating the resource. Defaults to `5m`.<br/>- `read` - (Optional) The timeout for reading the resource. Defaults to `5m`. | <pre>object({<br/>    dns_zones = optional(object({<br/>      create = optional(string, "30m")<br/>      delete = optional(string, "30m")<br/>      update = optional(string, "30m")<br/>      read   = optional(string, "5m")<br/>      }), {}<br/>    )<br/>    vnet_links = optional(object({<br/>      create = optional(string, "30m")<br/>      delete = optional(string, "30m")<br/>      update = optional(string, "30m")<br/>      read   = optional(string, "5m")<br/>      }), {}<br/>    )<br/>  })</pre> | <pre>{<br/>  "dns_zones": {<br/>    "create": "30m",<br/>    "delete": "30m",<br/>    "read": "5m",<br/>    "update": "30m"<br/>  },<br/>  "vnet_links": {<br/>    "create": "30m",<br/>    "delete": "30m",<br/>    "read": "5m",<br/>    "update": "30m"<br/>  }<br/>}</pre> | no |
+| <a name="input_txt_records"></a> [txt\_records](#input\_txt\_records) | A map of objects where each object contains information to create a TXT record. | <pre>map(object({<br/>    name = string<br/>    ttl  = number<br/>    records = map(object({<br/>      value = list(string)<br/>    }))<br/>  }))</pre> | `{}` | no |
+| <a name="input_virtual_network_links"></a> [virtual\_network\_links](#input\_virtual\_network\_links) | A map of objects where each object contains information to create a virtual network link.<br/>Either `name` or `vnetlinkname` must be provided, and either `virtual_network_id` or `vnetid` must be provided. | <pre>map(object({<br/>    vnetlinkname                           = optional(string, null)<br/>    name                                   = optional(string, null)<br/>    vnetid                                 = optional(string, null)<br/>    virtual_network_id                     = optional(string, null)<br/>    autoregistration                       = optional(bool, false)<br/>    registration_enabled                   = optional(bool, null)<br/>    private_dns_zone_supports_private_link = optional(bool, false)<br/>    resolution_policy                      = optional(string, "Default")<br/>    tags                                   = optional(map(string), null)<br/>  }))</pre> | `{}` | no |
 
 ## Outputs
 
-The following outputs are exported:
-
-### <a name="output_a_record_outputs"></a> [a\_record\_outputs](#output\_a\_record\_outputs)
-
-Description: The a record output
-
-### <a name="output_aaaa_record_outputs"></a> [aaaa\_record\_outputs](#output\_aaaa\_record\_outputs)
-
-Description: The aaaa record output
-
-### <a name="output_cname_record_outputs"></a> [cname\_record\_outputs](#output\_cname\_record\_outputs)
-
-Description: The cname record output
-
-### <a name="output_mx_record_outputs"></a> [mx\_record\_outputs](#output\_mx\_record\_outputs)
-
-Description: The mx record output
-
-### <a name="output_name"></a> [name](#output\_name)
-
-Description: The name of private DNS zone
-
-### <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs)
-
-Description: The ptr record output
-
-### <a name="output_resource"></a> [resource](#output\_resource)
-
-Description: The private dns zone output
-
-### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
-
-Description: The resource id of private DNS zone
-
-### <a name="output_soa_record_outputs"></a> [soa\_record\_outputs](#output\_soa\_record\_outputs)
-
-Description: The srv record output
-
-### <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs)
-
-Description: The srv record output
-
-### <a name="output_txt_record_outputs"></a> [txt\_record\_outputs](#output\_txt\_record\_outputs)
-
-Description: The txt record output
-
-### <a name="output_virtual_network_link_outputs"></a> [virtual\_network\_link\_outputs](#output\_virtual\_network\_link\_outputs)
-
-Description: The virtual network link output
+| Name | Description |
+|------|-------------|
+| <a name="output_a_record_outputs"></a> [a\_record\_outputs](#output\_a\_record\_outputs) | The a record output |
+| <a name="output_aaaa_record_outputs"></a> [aaaa\_record\_outputs](#output\_aaaa\_record\_outputs) | The aaaa record output |
+| <a name="output_cname_record_outputs"></a> [cname\_record\_outputs](#output\_cname\_record\_outputs) | The cname record output |
+| <a name="output_lock"></a> [lock](#output\_lock) | The lock resource if configured |
+| <a name="output_mx_record_outputs"></a> [mx\_record\_outputs](#output\_mx\_record\_outputs) | The mx record output |
+| <a name="output_name"></a> [name](#output\_name) | The name of private DNS zone |
+| <a name="output_ptr_record_outputs"></a> [ptr\_record\_outputs](#output\_ptr\_record\_outputs) | The ptr record output |
+| <a name="output_resource"></a> [resource](#output\_resource) | The private dns zone output |
+| <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id) | The resource id of private DNS zone |
+| <a name="output_soa_record_outputs"></a> [soa\_record\_outputs](#output\_soa\_record\_outputs) | The srv record output |
+| <a name="output_srv_record_outputs"></a> [srv\_record\_outputs](#output\_srv\_record\_outputs) | The srv record output |
+| <a name="output_txt_record_outputs"></a> [txt\_record\_outputs](#output\_txt\_record\_outputs) | The txt record output |
+| <a name="output_virtual_network_link_outputs"></a> [virtual\_network\_link\_outputs](#output\_virtual\_network\_link\_outputs) | The virtual network link output |
 
 ## Modules
 
-The following Modules are called:
-
-### <a name="module_a_record"></a> [a\_record](#module\_a\_record)
-
-Source: ./modules/private_dns_a_record
-
-Version:
-
-### <a name="module_aaaa_record"></a> [aaaa\_record](#module\_aaaa\_record)
-
-Source: ./modules/private_dns_aaaa_record
-
-Version:
-
-### <a name="module_avm_interfaces"></a> [avm\_interfaces](#module\_avm\_interfaces)
-
-Source: Azure/avm-utl-interfaces/azure
-
-Version: 0.2.0
-
-### <a name="module_cname_record"></a> [cname\_record](#module\_cname\_record)
-
-Source: ./modules/private_dns_cname_record
-
-Version:
-
-### <a name="module_mx_record"></a> [mx\_record](#module\_mx\_record)
-
-Source: ./modules/private_dns_mx_record
-
-Version:
-
-### <a name="module_ptr_record"></a> [ptr\_record](#module\_ptr\_record)
-
-Source: ./modules/private_dns_ptr_record
-
-Version:
-
-### <a name="module_srv_record"></a> [srv\_record](#module\_srv\_record)
-
-Source: ./modules/private_dns_srv_record
-
-Version:
-
-### <a name="module_txt_record"></a> [txt\_record](#module\_txt\_record)
-
-Source: ./modules/private_dns_txt_record
-
-Version:
-
-### <a name="module_virtual_network_links"></a> [virtual\_network\_links](#module\_virtual\_network\_links)
-
-Source: ./modules/private_dns_virtual_network_link
-
-Version:
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_a_record"></a> [a\_record](#module\_a\_record) | ./modules/private_dns_a_record | n/a |
+| <a name="module_aaaa_record"></a> [aaaa\_record](#module\_aaaa\_record) | ./modules/private_dns_aaaa_record | n/a |
+| <a name="module_avm_interfaces"></a> [avm\_interfaces](#module\_avm\_interfaces) | Azure/avm-utl-interfaces/azure | 0.2.0 |
+| <a name="module_cname_record"></a> [cname\_record](#module\_cname\_record) | ./modules/private_dns_cname_record | n/a |
+| <a name="module_mx_record"></a> [mx\_record](#module\_mx\_record) | ./modules/private_dns_mx_record | n/a |
+| <a name="module_ptr_record"></a> [ptr\_record](#module\_ptr\_record) | ./modules/private_dns_ptr_record | n/a |
+| <a name="module_srv_record"></a> [srv\_record](#module\_srv\_record) | ./modules/private_dns_srv_record | n/a |
+| <a name="module_txt_record"></a> [txt\_record](#module\_txt\_record) | ./modules/private_dns_txt_record | n/a |
+| <a name="module_virtual_network_links"></a> [virtual\_network\_links](#module\_virtual\_network\_links) | ./modules/private_dns_virtual_network_link | n/a |
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection
