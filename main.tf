@@ -161,6 +161,7 @@ module "avm_interfaces" {
   version = "0.2.0"
 
   enable_telemetry                          = var.enable_telemetry
+  lock                                      = var.lock
   role_assignment_definition_lookup_enabled = true
   role_assignment_definition_scope          = var.parent_id
   role_assignments                          = var.role_assignments
@@ -188,12 +189,23 @@ resource "azapi_resource" "role_assignments" {
   update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }
 
-# required AVM resources interfaces
-resource "azurerm_management_lock" "this" {
+resource "azapi_resource" "lock" {
   count = var.lock != null ? 1 : 0
 
-  lock_level = var.lock.kind
-  name       = coalesce(var.lock.name, "lock-${var.lock.kind}")
-  scope      = azapi_resource.private_dns_zone.id
-  notes      = var.lock.kind == "CanNotDelete" ? "Cannot delete the resource or its child resources." : "Cannot delete or modify the resource or its child resources."
+  name           = module.avm_interfaces.lock_azapi.name != null ? module.avm_interfaces.lock_azapi.name : "lock-${azapi_resource.private_dns_zone.name}"
+  parent_id      = azapi_resource.private_dns_zone.id
+  type           = module.avm_interfaces.lock_azapi.type
+  body           = module.avm_interfaces.lock_azapi.body
+  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+}
+
+# To avoid issues with the idempotency check, we add a sleep resource.
+# This is not necessary in production code, but it helps to avoid issues in this example.
+resource "time_sleep" "wait_for_lock" {
+  create_duration = "20s"
+
+  depends_on = [azapi_resource.lock]
 }

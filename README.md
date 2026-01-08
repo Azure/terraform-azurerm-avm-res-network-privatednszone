@@ -51,12 +51,13 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
+- [azapi_resource.lock](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.private_dns_zone](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.role_assignments](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_update_resource.private_dns_zone_soa_record](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/update_resource) (resource)
-- [azurerm_management_lock.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
+- [time_sleep.wait_for_lock](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) (resource)
 - [azapi_client_config.telemetry](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/client_config) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
