@@ -187,3 +187,13 @@ resource "azapi_resource" "role_assignments" {
   }
   update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }
+
+# required AVM resources interfaces
+resource "azurerm_management_lock" "this" {
+  count = var.lock != null ? 1 : 0
+
+  lock_level = var.lock.kind
+  name       = coalesce(var.lock.name, "lock-${var.lock.kind}")
+  scope      = azapi_resource.private_dns_zone.id
+  notes      = var.lock.kind == "CanNotDelete" ? "Cannot delete the resource or its child resources." : "Cannot delete or modify the resource or its child resources."
+}
