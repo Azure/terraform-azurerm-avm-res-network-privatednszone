@@ -108,3 +108,8 @@ output "virtual_network_link_outputs" {
     }
   }
 }
+
+output "lock" {
+  description = "The lock resource if configured"
+  value       = var.lock != null ? azapi_resource.lock[0].output : null
+}
