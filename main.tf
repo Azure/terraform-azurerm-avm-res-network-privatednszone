@@ -200,4 +200,16 @@ resource "azapi_resource" "lock" {
   delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+
+  depends_on = [time_sleep.wait_for_resource_destroy]
+}
+
+
+# Delay destroy to avoid race with management lock removal.
+# Without this pause, Terraform attempts to delete locked resources
+# immediately after the lock is deleted, causing destroy to fail.
+resource "time_sleep" "wait_for_resource_destroy" {
+  destroy_duration = "20s"
+
+  depends_on = [azapi_resource.private_dns_zone]
 }
