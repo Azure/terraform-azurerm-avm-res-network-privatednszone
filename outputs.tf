@@ -58,11 +58,6 @@ output "ptr_record_outputs" {
   }
 }
 
-output "resource" {
-  description = "The private dns zone output"
-  value       = azapi_resource.private_dns_zone.output
-}
-
 output "resource_id" {
   description = "The resource id of private DNS zone"
   value       = azapi_resource.private_dns_zone.id

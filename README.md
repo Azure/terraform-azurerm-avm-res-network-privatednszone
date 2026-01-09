@@ -419,10 +419,6 @@ Description: The name of private DNS zone
 
 Description: The ptr record output
 
-### <a name="output_resource"></a> [resource](#output\_resource)
-
-Description: The private dns zone output
-
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: The resource id of private DNS zone
