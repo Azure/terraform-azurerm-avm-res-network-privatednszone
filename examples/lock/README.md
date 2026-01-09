@@ -7,10 +7,15 @@ This deploys the module with a resource lock.
 ```hcl
 data "azurerm_client_config" "current" {}
 
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  version = "0.4.2"
+}
+
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = "avmrg-default-test"
+  name     = module.naming.resource_group.name_unique
 }
 
 # reference the module and pass in variables as needed
@@ -82,6 +87,12 @@ Description: The private dns zone output
 ## Modules
 
 The following Modules are called:
+
+### <a name="module_naming"></a> [naming](#module\_naming)
+
+Source: Azure/naming/azurerm
+
+Version: 0.4.2
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 

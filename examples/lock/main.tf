@@ -1,9 +1,14 @@
 data "azurerm_client_config" "current" {}
 
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  version = "0.4.2"
+}
+
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = "avmrg-default-test"
+  name     = module.naming.resource_group.name_unique
 }
 
 # reference the module and pass in variables as needed
