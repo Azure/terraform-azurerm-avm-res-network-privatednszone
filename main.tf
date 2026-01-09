@@ -178,13 +178,9 @@ resource "azapi_resource" "role_assignments" {
   delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   response_export_values = {
-    "id"               = "id"
-    "name"             = "name"
-    "type"             = "type"
-    "roleDefinitionId" = "properties.roleDefinitionId"
-    "principalId"      = "properties.principalId"
-    "principalType"    = "properties.principalType"
-    "scope"            = "properties.scope"
+    "id"   = "id"
+    "name" = "name"
+    "type" = "type"
   }
   update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }
