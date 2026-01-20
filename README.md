@@ -215,6 +215,21 @@ object({
 
 Default: `{}`
 
+### <a name="input_role_assignment_name_use_random_uuid"></a> [role\_assignment\_name\_use\_random\_uuid](#input\_role\_assignment\_name\_use\_random\_uuid)
+
+Description: A control to use a random UUID for the role assignment name.  
+If set to false, the name will be a deterministic UUID based on the principal ID and role definition resource ID,  
+though this can cause issues with duplicate UUIDs as the scope of the role assignment is not taken into account.
+
+We recommend this is set to true to avoid resources becoming re-created due to computed attribute changes in the resource graph, however it can be set to false to preserve legacy behaviour.
+
+When this is set to true, you must not change the principal or role definition values in the `role_assignments` map after the initial creation of the role assignments as this will cause errors.  
+Instead, use a new key in the map with the new values and remove the old entry.
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
 Description:   A map of role assignments to create on the <RESOURCE>. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
@@ -463,7 +478,7 @@ Version:
 
 Source: Azure/avm-utl-interfaces/azure
 
-Version: 0.2.0
+Version: 0.5.0
 
 ### <a name="module_cname_record"></a> [cname\_record](#module\_cname\_record)
 
