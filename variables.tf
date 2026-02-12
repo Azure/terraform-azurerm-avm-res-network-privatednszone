@@ -144,6 +144,22 @@ variable "retry" {
   description = "Retry configuration for the resource operations"
 }
 
+variable "role_assignment_name_use_random_uuid" {
+  type        = bool
+  default     = true
+  description = <<DESCRIPTION
+A control to use a random UUID for the role assignment name.
+If set to false, the name will be a deterministic UUID based on the principal ID and role definition resource ID,
+though this can cause issues with duplicate UUIDs as the scope of the role assignment is not taken into account.
+
+We recommend this is set to true to avoid resources becoming re-created due to computed attribute changes in the resource graph, however it can be set to false to preserve legacy behaviour.
+
+When this is set to true, you must not change the principal or role definition values in the `role_assignments` map after the initial creation of the role assignments as this will cause errors.
+Instead, use a new key in the map with the new values and remove the old entry.
+DESCRIPTION
+  nullable    = false
+}
+
 variable "role_assignments" {
   type = map(object({
     role_definition_id_or_name             = string
