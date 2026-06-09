@@ -23,7 +23,7 @@ resource "azurerm_resource_group" "avmrg" {
 # create first sample virtual network
 module "vnet" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.17.1"
 
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.avmrg.location
