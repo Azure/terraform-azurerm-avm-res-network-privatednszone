@@ -14,7 +14,7 @@ resource "azurerm_resource_group" "avmrg" {
 # create first sample virtual network
 module "vnet1" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.17.1"
 
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.avmrg.location
@@ -43,7 +43,7 @@ module "vnet1" {
 # create second sample virtual network
 module "vnet2" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.17.1"
 
   address_space       = ["10.1.0.0/16"]
   location            = azurerm_resource_group.avmrg.location
