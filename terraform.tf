@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "IsurutraderST"
+
+    workspaces {
+      name = "terraform-azurerm-avm-res-network-privatednszone"
+    }
+  }
   required_version = ">= 1.9, < 2.0"
 
   required_providers {
