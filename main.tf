@@ -202,7 +202,6 @@ resource "azapi_resource" "lock" {
   depends_on = [time_sleep.wait_for_resource_destroy]
 }
 
-
 # Delay destroy to avoid race with management lock removal.
 # Without this pause, Terraform attempts to delete locked resources
 # immediately after the lock is deleted, causing destroy to fail.
