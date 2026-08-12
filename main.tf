@@ -161,8 +161,8 @@ module "avm_interfaces" {
   lock                                      = var.lock
   role_assignment_definition_lookup_enabled = true
   role_assignment_definition_scope          = var.parent_id
-  role_assignment_name_use_random_uuid      = var.role_assignment_name_use_random_uuid
   role_assignments                          = var.role_assignments
+  role_assignment_name_use_random_uuid      = var.role_assignment_name_use_random_uuid
 }
 
 resource "azapi_resource" "role_assignments" {
