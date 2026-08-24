@@ -44,7 +44,7 @@ output "mx_record_outputs" {
 
 output "name" {
   description = "The name of private DNS zone"
-  value       = azapi_resource.private_dns_zone.output.name
+  value       = azapi_resource.private_dns_zone.name
 }
 
 output "ptr_record_outputs" {
