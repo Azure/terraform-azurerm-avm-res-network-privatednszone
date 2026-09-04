@@ -478,7 +478,7 @@ Version:
 
 Source: Azure/avm-utl-interfaces/azure
 
-Version: 0.5.0
+Version: 0.6.0
 
 ### <a name="module_cname_record"></a> [cname\_record](#module\_cname\_record)
 

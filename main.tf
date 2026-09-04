@@ -149,14 +149,14 @@ module "txt_record" {
 
 module "avm_interfaces" {
   source  = "Azure/avm-utl-interfaces/azure"
-  version = "0.5.0"
+  version = "0.6.0"
 
   enable_telemetry                          = var.enable_telemetry
   lock                                      = var.lock
   role_assignment_definition_lookup_enabled = true
   role_assignment_definition_scope          = var.parent_id
-  role_assignment_name_use_random_uuid      = var.role_assignment_name_use_random_uuid
   role_assignments                          = var.role_assignments
+  role_assignment_name_use_random_uuid      = var.role_assignment_name_use_random_uuid
 }
 
 resource "azapi_resource" "role_assignments" {
