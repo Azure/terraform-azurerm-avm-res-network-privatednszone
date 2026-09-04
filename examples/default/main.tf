@@ -39,7 +39,6 @@ module "vnet1" {
   }
 }
 
-
 # create second sample virtual network
 module "vnet2" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
@@ -67,7 +66,6 @@ module "vnet2" {
     delete = "5m"
   }
 }
-
 
 # reference the module and pass in variables as needed
 module "private_dns_zone" {
