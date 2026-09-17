@@ -35,7 +35,7 @@ module "vnet" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.avmrg.location
   resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = local.enable_telemetry
+  enable_telemetry    = false
   name                = module.naming.virtual_network.name
   retry = {
     error_message_regex = ["CannotDeleteResource"]
@@ -66,7 +66,7 @@ module "private_dns_zone" {
   a_records        = local.a_records
   aaaa_records     = local.aaaa_records
   cname_records    = local.cname_records
-  enable_telemetry = local.enable_telemetry
+  enable_telemetry = false
   mx_records       = local.mx_records
   ptr_records      = local.ptr_records
   soa_record       = local.soa_record

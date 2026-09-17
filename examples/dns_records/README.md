@@ -23,8 +23,9 @@ module "private_dns_zone" {
   # source                = "Azure/avm-res-network-privatednszone/azurerm"
   source = "../../"
 
-  domain_name = local.domain_name
-  parent_id   = local.parent_id
+  domain_name      = local.domain_name
+  parent_id        = local.parent_id
+  enable_telemetry = false
 }
 
 module "a_record" {
