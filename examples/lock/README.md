@@ -26,7 +26,7 @@ module "private_dns_zone" {
 
   domain_name      = local.domain_name
   parent_id        = local.parent_id
-  enable_telemetry = local.enable_telemetry
+  enable_telemetry = false
   lock             = local.lock
   retry = {
     error_message_regex = ["CannotDeleteResource"]
