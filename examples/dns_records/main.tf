@@ -18,7 +18,7 @@ module "private_dns_zone" {
 
   domain_name      = local.domain_name
   parent_id        = local.parent_id
-  enable_telemetry = false
+  enable_telemetry = var.enable_telemetry
 }
 
 module "a_record" {
