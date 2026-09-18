@@ -26,7 +26,7 @@ module "vnet" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.avmrg.location
   resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = false
+  enable_telemetry    = var.enable_telemetry
   name                = module.naming.virtual_network.name
   retry = {
     error_message_regex = ["CannotDeleteResource"]
@@ -54,7 +54,7 @@ module "private_dns_zone" {
 
   domain_name           = local.domain_name
   parent_id             = local.parent_id
-  enable_telemetry      = false
+  enable_telemetry      = var.enable_telemetry
   tags                  = local.tags
   virtual_network_links = local.virtual_network_links
 }
@@ -66,7 +66,7 @@ module "avm_storageaccount" {
   location            = azurerm_resource_group.avmrg.location
   name                = module.naming.storage_account.name_unique
   resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = false
+  enable_telemetry    = var.enable_telemetry
   private_endpoints = {
     private_endpoint_1 = {
       name                          = module.naming.private_endpoint.name_unique
@@ -110,7 +110,17 @@ No required inputs.
 
 ## Optional Inputs
 
-No optional inputs.
+The following input variables are optional (have default values):
+
+### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
+
+Description: This variable controls whether or not telemetry is enabled for the module.  
+For more information see <https://aka.ms/avm/telemetryinfo>.  
+If it is set to false, then no telemetry will be collected.
+
+Type: `bool`
+
+Default: `false`
 
 ## Outputs
 
