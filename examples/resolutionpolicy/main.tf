@@ -16,11 +16,10 @@ module "vnet" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
   version = "0.22.2"
 
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = module.naming.virtual_network.name
+  location         = azurerm_resource_group.avmrg.location
+  address_space    = ["10.0.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = module.naming.virtual_network.name
   retry = {
     error_message_regex = ["CannotDeleteResource"]
     attempts            = 3
@@ -37,6 +36,7 @@ module "vnet" {
     update = "5m"
     delete = "5m"
   }
+  resource_group_name = azurerm_resource_group.avmrg.name
 }
 
 # reference the module and pass in variables as needed
@@ -56,10 +56,9 @@ module "avm_storageaccount" {
   source  = "Azure/avm-res-storage-storageaccount/azurerm"
   version = "0.10.0"
 
-  location            = azurerm_resource_group.avmrg.location
-  name                = module.naming.storage_account.name_unique
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
+  location         = azurerm_resource_group.avmrg.location
+  name             = module.naming.storage_account.name_unique
+  enable_telemetry = var.enable_telemetry
   private_endpoints = {
     private_endpoint_1 = {
       name                          = module.naming.private_endpoint.name_unique
@@ -76,5 +75,6 @@ module "avm_storageaccount" {
       skip_service_principal_aad_check = false
     }
   }
-  tags = local.tags
+  tags                = local.tags
+  resource_group_name = azurerm_resource_group.avmrg.name
 }

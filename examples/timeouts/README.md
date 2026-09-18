@@ -19,7 +19,7 @@ resource "random_integer" "region_index" {
 
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  version = "0.4.3"
 }
 
 resource "azurerm_resource_group" "avmrg" {
@@ -30,13 +30,12 @@ resource "azurerm_resource_group" "avmrg" {
 # create first sample virtual network
 module "vnet" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.22.2"
 
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = module.naming.virtual_network.name
+  location         = azurerm_resource_group.avmrg.location
+  address_space    = ["10.0.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = module.naming.virtual_network.name
   retry = {
     error_message_regex = ["CannotDeleteResource"]
     attempts            = 3
@@ -53,6 +52,7 @@ module "vnet" {
     update = "5m"
     delete = "5m"
   }
+  resource_group_name = azurerm_resource_group.avmrg.name
 }
 
 # reference the module and pass in variables as needed
@@ -177,7 +177,7 @@ The following Modules are called:
 
 Source: Azure/naming/azurerm
 
-Version: 0.4.2
+Version: 0.4.3
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
@@ -195,7 +195,7 @@ Version: 0.8.2
 
 Source: Azure/avm-res-network-virtualnetwork/azurerm
 
-Version: 0.9.1
+Version: 0.22.2
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

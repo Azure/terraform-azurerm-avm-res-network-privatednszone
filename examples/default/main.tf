@@ -16,11 +16,10 @@ module "vnet1" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
   version = "0.22.2"
 
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = "vnet1"
+  location         = azurerm_resource_group.avmrg.location
+  address_space    = ["10.0.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = "vnet1"
   retry = {
     error_message_regex = ["CannotDeleteResource"]
     attempts            = 3
@@ -37,6 +36,7 @@ module "vnet1" {
     update = "5m"
     delete = "5m"
   }
+  resource_group_name = azurerm_resource_group.avmrg.name
 }
 
 # create second sample virtual network
@@ -44,11 +44,10 @@ module "vnet2" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
   version = "0.22.2"
 
-  address_space       = ["10.1.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = "vnet2"
+  location         = azurerm_resource_group.avmrg.location
+  address_space    = ["10.1.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = "vnet2"
   retry = {
     error_message_regex = ["CannotDeleteResource"]
     attempts            = 3
@@ -65,6 +64,7 @@ module "vnet2" {
     update = "5m"
     delete = "5m"
   }
+  resource_group_name = azurerm_resource_group.avmrg.name
 }
 
 # reference the module and pass in variables as needed
