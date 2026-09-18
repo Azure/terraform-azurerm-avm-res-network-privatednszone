@@ -9,7 +9,7 @@ data "azurerm_client_config" "current" {}
 
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  version = "0.4.3"
 }
 
 # create the resource group
@@ -21,13 +21,12 @@ resource "azurerm_resource_group" "avmrg" {
 # create first sample virtual network
 module "vnet" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.22.2"
 
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = module.naming.virtual_network.name
+  location         = azurerm_resource_group.avmrg.location
+  address_space    = ["10.0.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = module.naming.virtual_network.name
   retry = {
     error_message_regex = ["CannotDeleteResource"]
     attempts            = 3
@@ -44,6 +43,7 @@ module "vnet" {
     update = "5m"
     delete = "5m"
   }
+  resource_group_name = azurerm_resource_group.avmrg.name
 }
 
 # reference the module and pass in variables as needed
@@ -61,12 +61,11 @@ module "private_dns_zone" {
 
 module "avm_storageaccount" {
   source  = "Azure/avm-res-storage-storageaccount/azurerm"
-  version = "0.5.0"
+  version = "0.10.0"
 
-  location            = azurerm_resource_group.avmrg.location
-  name                = module.naming.storage_account.name_unique
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
+  location         = azurerm_resource_group.avmrg.location
+  name             = module.naming.storage_account.name_unique
+  enable_telemetry = var.enable_telemetry
   private_endpoints = {
     private_endpoint_1 = {
       name                          = module.naming.private_endpoint.name_unique
@@ -83,7 +82,8 @@ module "avm_storageaccount" {
       skip_service_principal_aad_check = false
     }
   }
-  tags = local.tags
+  tags                = local.tags
+  resource_group_name = azurerm_resource_group.avmrg.name
 }
 ```
 
@@ -142,13 +142,13 @@ The following Modules are called:
 
 Source: Azure/avm-res-storage-storageaccount/azurerm
 
-Version: 0.5.0
+Version: 0.10.0
 
 ### <a name="module_naming"></a> [naming](#module\_naming)
 
 Source: Azure/naming/azurerm
 
-Version: 0.4.2
+Version: 0.4.3
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
@@ -160,7 +160,7 @@ Version:
 
 Source: Azure/avm-res-network-virtualnetwork/azurerm
 
-Version: 0.9.1
+Version: 0.22.2
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection
