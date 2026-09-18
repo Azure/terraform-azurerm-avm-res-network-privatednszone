@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/azure-verified-modules-tools/main/src/Avm.Authoring/Resources/Schemas/v1/avm-module-metadata.schema.json",
+  "moduleDisplayName": "Private DNS TXT Record",
+  "moduleDescription": "This module is used to add DNS TXT record to an existing private DNS zone.",
+  "canonicalType": "Microsoft.Network/privateDnsZones/TXT",
+  "telemetryIdPrefix": "46d3xtrf.res.27fb5b6"
+}
