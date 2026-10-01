@@ -19,7 +19,7 @@ module "vnet1" {
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.avmrg.location
   resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = local.enable_telemetry
+  enable_telemetry    = var.enable_telemetry
   name                = "vnet1"
   retry = {
     error_message_regex = ["CannotDeleteResource"]
@@ -39,7 +39,6 @@ module "vnet1" {
   }
 }
 
-
 # create second sample virtual network
 module "vnet2" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
@@ -48,7 +47,7 @@ module "vnet2" {
   address_space       = ["10.1.0.0/16"]
   location            = azurerm_resource_group.avmrg.location
   resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = local.enable_telemetry
+  enable_telemetry    = var.enable_telemetry
   name                = "vnet2"
   retry = {
     error_message_regex = ["CannotDeleteResource"]
@@ -68,7 +67,6 @@ module "vnet2" {
   }
 }
 
-
 # reference the module and pass in variables as needed
 module "private_dns_zone" {
   # replace source with the correct link to the private_dns_zone module
@@ -80,7 +78,7 @@ module "private_dns_zone" {
   a_records        = local.a_records
   aaaa_records     = local.aaaa_records
   cname_records    = local.cname_records
-  enable_telemetry = local.enable_telemetry
+  enable_telemetry = var.enable_telemetry
   mx_records       = local.mx_records
   ptr_records      = local.ptr_records
   retry = {
