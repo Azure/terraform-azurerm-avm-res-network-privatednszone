@@ -56,8 +56,7 @@ locals {
       }
     }
   }
-  domain_name      = "testlab.io"
-  enable_telemetry = false
+  domain_name = "testlab.io"
   mx_records = {
     "mx_record1" = {
       name = "primary"
