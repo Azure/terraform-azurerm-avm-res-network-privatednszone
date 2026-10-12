@@ -1,6 +1,5 @@
 locals {
-  domain_name      = "testlab.io"
-  enable_telemetry = false
+  domain_name = "testlab.io"
   lock = {
     kind = "CanNotDelete"
     name = "pvt-dns-zone-lock"
