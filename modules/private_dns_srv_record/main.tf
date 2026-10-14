@@ -5,6 +5,7 @@ resource "azapi_resource" "srv_record" {
   type      = "Microsoft.Network/privateDnsZones/SRV@2024-06-01"
   body = {
     properties = {
+      metadata   = var.metadata
       srvRecords = var.records
       ttl        = var.ttl
     }

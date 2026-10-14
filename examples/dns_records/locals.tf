@@ -4,6 +4,9 @@ locals {
       name         = "my_arecord1"
       ttl          = 300
       ip_addresses = ["10.1.1.1", "10.1.1.2"]
+      metadata = {
+        "owner" = "platform-team"
+      }
       tags = {
         "env" = "prod"
       }

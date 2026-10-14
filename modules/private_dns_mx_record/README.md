@@ -125,6 +125,14 @@ Type: `number`
 
 The following input variables are optional (have default values):
 
+### <a name="input_metadata"></a> [metadata](#input\_metadata)
+
+Description: (Optional) A map of key-value pairs of metadata to associate with the record set.
+
+Type: `map(string)`
+
+Default: `null`
+
 ### <a name="input_retry"></a> [retry](#input\_retry)
 
 Description: Retry configuration for the resource operations

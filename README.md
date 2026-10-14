@@ -92,6 +92,7 @@ Type:
 map(object({
     name         = string
     ttl          = number
+    metadata     = optional(map(string), null)
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
   }))
@@ -109,6 +110,7 @@ Type:
 map(object({
     name         = string
     ttl          = number
+    metadata     = optional(map(string), null)
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
   }))
@@ -124,10 +126,11 @@ Type:
 
 ```hcl
 map(object({
-    name   = string
-    ttl    = number
-    record = optional(string, null)
-    cname  = optional(string, null)
+    name     = string
+    ttl      = number
+    metadata = optional(map(string), null)
+    record   = optional(string, null)
+    cname    = optional(string, null)
   }))
 ```
 
@@ -169,8 +172,9 @@ Type:
 
 ```hcl
 map(object({
-    name = optional(string, "@")
-    ttl  = number
+    name     = optional(string, "@")
+    ttl      = number
+    metadata = optional(map(string), null)
     records = map(object({
       preference = number
       exchange   = string
@@ -190,6 +194,7 @@ Type:
 map(object({
     name         = string
     ttl          = number
+    metadata     = optional(map(string), null)
     records      = optional(list(string), null)
     domain_names = optional(set(string), null)
   }))
@@ -290,8 +295,9 @@ Type:
 
 ```hcl
 map(object({
-    name = string
-    ttl  = number
+    name     = string
+    ttl      = number
+    metadata = optional(map(string), null)
     records = map(object({
       priority = number
       weight   = number
@@ -373,8 +379,9 @@ Type:
 
 ```hcl
 map(object({
-    name = string
-    ttl  = number
+    name     = string
+    ttl      = number
+    metadata = optional(map(string), null)
     records = map(object({
       value = list(string)
     }))
