@@ -5,6 +5,7 @@ resource "azapi_resource" "txt_record" {
   type      = "Microsoft.Network/privateDnsZones/TXT@2024-06-01"
   body = {
     properties = {
+      metadata   = var.metadata
       txtRecords = var.records
       ttl        = var.ttl
     }

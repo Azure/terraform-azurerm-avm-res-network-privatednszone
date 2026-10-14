@@ -26,6 +26,7 @@ module "a_record" {
   for_each = local.a_records
 
   ip_addresses = each.value.ip_addresses
+  metadata     = try(each.value.metadata, null)
   name         = each.value.name
   parent_id    = module.private_dns_zone.resource_id
   ttl          = each.value.ttl

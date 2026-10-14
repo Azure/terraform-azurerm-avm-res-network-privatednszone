@@ -8,6 +8,12 @@ variable "ip_addresses" {
   }
 }
 
+variable "metadata" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) A map of key-value pairs of metadata to associate with the record set."
+}
+
 variable "name" {
   type        = string
   description = "The name of the dns record."

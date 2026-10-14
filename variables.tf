@@ -17,6 +17,7 @@ variable "a_records" {
   type = map(object({
     name         = string
     ttl          = number
+    metadata     = optional(map(string), null)
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
   }))
@@ -36,6 +37,7 @@ variable "aaaa_records" {
   type = map(object({
     name         = string
     ttl          = number
+    metadata     = optional(map(string), null)
     records      = optional(list(string))
     ip_addresses = optional(set(string), null)
   }))
@@ -53,10 +55,11 @@ variable "aaaa_records" {
 
 variable "cname_records" {
   type = map(object({
-    name   = string
-    ttl    = number
-    record = optional(string, null)
-    cname  = optional(string, null)
+    name     = string
+    ttl      = number
+    metadata = optional(map(string), null)
+    record   = optional(string, null)
+    cname    = optional(string, null)
   }))
   default     = {}
   description = "A map of objects where each object contains information to create a CNAME record."
@@ -102,8 +105,9 @@ variable "lock" {
 
 variable "mx_records" {
   type = map(object({
-    name = optional(string, "@")
-    ttl  = number
+    name     = optional(string, "@")
+    ttl      = number
+    metadata = optional(map(string), null)
     records = map(object({
       preference = number
       exchange   = string
@@ -117,6 +121,7 @@ variable "ptr_records" {
   type = map(object({
     name         = string
     ttl          = number
+    metadata     = optional(map(string), null)
     records      = optional(list(string), null)
     domain_names = optional(set(string), null)
   }))
@@ -205,8 +210,9 @@ variable "soa_record" {
 
 variable "srv_records" {
   type = map(object({
-    name = string
-    ttl  = number
+    name     = string
+    ttl      = number
+    metadata = optional(map(string), null)
     records = map(object({
       priority = number
       weight   = number
@@ -273,8 +279,9 @@ DESCRIPTION
 
 variable "txt_records" {
   type = map(object({
-    name = string
-    ttl  = number
+    name     = string
+    ttl      = number
+    metadata = optional(map(string), null)
     records = map(object({
       value = list(string)
     }))

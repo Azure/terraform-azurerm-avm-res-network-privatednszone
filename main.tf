@@ -71,6 +71,7 @@ module "virtual_network_links" {
 }
 
 module "a_record" {
+  metadata = each.value.metadata
   source   = "./modules/private_dns_a_record"
   for_each = var.a_records
 
@@ -82,6 +83,7 @@ module "a_record" {
 }
 
 module "aaaa_record" {
+  metadata = each.value.metadata
   source   = "./modules/private_dns_aaaa_record"
   for_each = var.aaaa_records
 
@@ -93,6 +95,7 @@ module "aaaa_record" {
 }
 
 module "cname_record" {
+  metadata = each.value.metadata
   source   = "./modules/private_dns_cname_record"
   for_each = var.cname_records
 
@@ -104,6 +107,7 @@ module "cname_record" {
 }
 
 module "mx_record" {
+  metadata = each.value.metadata
   source   = "./modules/private_dns_mx_record"
   for_each = var.mx_records
 
@@ -115,6 +119,7 @@ module "mx_record" {
 }
 
 module "ptr_record" {
+  metadata = each.value.metadata
   source   = "./modules/private_dns_ptr_record"
   for_each = var.ptr_records
 
@@ -126,6 +131,7 @@ module "ptr_record" {
 }
 
 module "srv_record" {
+  metadata = each.value.metadata
   source   = "./modules/private_dns_srv_record"
   for_each = var.srv_records
 
@@ -137,6 +143,7 @@ module "srv_record" {
 }
 
 module "txt_record" {
+  metadata = each.value.metadata
   source   = "./modules/private_dns_txt_record"
   for_each = var.txt_records
 

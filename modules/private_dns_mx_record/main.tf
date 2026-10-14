@@ -5,6 +5,7 @@ resource "azapi_resource" "mx_record" {
   type      = "Microsoft.Network/privateDnsZones/MX@2024-06-01"
   body = {
     properties = {
+      metadata  = var.metadata
       mxRecords = var.records
       ttl       = var.ttl
     }
