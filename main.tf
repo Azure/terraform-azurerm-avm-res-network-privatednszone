@@ -60,9 +60,11 @@ module "virtual_network_links" {
   source   = "./modules/private_dns_virtual_network_link"
   for_each = var.virtual_network_links
 
+  location                               = var.location
   name                                   = coalesce(each.value.name, each.value.vnetlinkname)
   parent_id                              = azapi_resource.private_dns_zone.id
   virtual_network_id                     = coalesce(each.value.virtual_network_id, each.value.vnetid)
+  enable_telemetry                       = var.enable_telemetry
   private_dns_zone_supports_private_link = each.value.private_dns_zone_supports_private_link
   registration_enabled                   = coalesce(each.value.registration_enabled, each.value.autoregistration, false)
   resolution_policy                      = each.value.resolution_policy
@@ -74,77 +76,91 @@ module "a_record" {
   source   = "./modules/private_dns_a_record"
   for_each = var.a_records
 
-  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
-  name         = each.value.name
-  parent_id    = azapi_resource.private_dns_zone.id
-  ttl          = each.value.ttl
-  timeouts     = var.timeouts.dns_zones
+  ip_addresses     = coalesce(each.value.ip_addresses, toset(each.value.records))
+  location         = var.location
+  name             = each.value.name
+  parent_id        = azapi_resource.private_dns_zone.id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
+  timeouts         = var.timeouts.dns_zones
 }
 
 module "aaaa_record" {
   source   = "./modules/private_dns_aaaa_record"
   for_each = var.aaaa_records
 
-  ip_addresses = coalesce(each.value.ip_addresses, toset(each.value.records))
-  name         = each.value.name
-  parent_id    = azapi_resource.private_dns_zone.id
-  ttl          = each.value.ttl
-  timeouts     = var.timeouts.dns_zones
+  ip_addresses     = coalesce(each.value.ip_addresses, toset(each.value.records))
+  location         = var.location
+  name             = each.value.name
+  parent_id        = azapi_resource.private_dns_zone.id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
+  timeouts         = var.timeouts.dns_zones
 }
 
 module "cname_record" {
   source   = "./modules/private_dns_cname_record"
   for_each = var.cname_records
 
-  cname     = coalesce(each.value.cname, each.value.record)
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  ttl       = each.value.ttl
-  timeouts  = var.timeouts.dns_zones
+  cname            = coalesce(each.value.cname, each.value.record)
+  location         = var.location
+  name             = each.value.name
+  parent_id        = azapi_resource.private_dns_zone.id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
+  timeouts         = var.timeouts.dns_zones
 }
 
 module "mx_record" {
   source   = "./modules/private_dns_mx_record"
   for_each = var.mx_records
 
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  records   = values(each.value.records)
-  ttl       = each.value.ttl
-  timeouts  = var.timeouts.dns_zones
+  location         = var.location
+  name             = each.value.name
+  parent_id        = azapi_resource.private_dns_zone.id
+  records          = values(each.value.records)
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
+  timeouts         = var.timeouts.dns_zones
 }
 
 module "ptr_record" {
   source   = "./modules/private_dns_ptr_record"
   for_each = var.ptr_records
 
-  domain_names = coalesce(each.value.domain_names, toset(each.value.records))
-  name         = each.value.name
-  parent_id    = azapi_resource.private_dns_zone.id
-  ttl          = each.value.ttl
-  timeouts     = var.timeouts.dns_zones
+  domain_names     = coalesce(each.value.domain_names, toset(each.value.records))
+  location         = var.location
+  name             = each.value.name
+  parent_id        = azapi_resource.private_dns_zone.id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
+  timeouts         = var.timeouts.dns_zones
 }
 
 module "srv_record" {
   source   = "./modules/private_dns_srv_record"
   for_each = var.srv_records
 
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  records   = values(each.value.records)
-  ttl       = each.value.ttl
-  timeouts  = var.timeouts.dns_zones
+  location         = var.location
+  name             = each.value.name
+  parent_id        = azapi_resource.private_dns_zone.id
+  records          = values(each.value.records)
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
+  timeouts         = var.timeouts.dns_zones
 }
 
 module "txt_record" {
   source   = "./modules/private_dns_txt_record"
   for_each = var.txt_records
 
-  name      = each.value.name
-  parent_id = azapi_resource.private_dns_zone.id
-  records   = values(each.value.records)
-  ttl       = each.value.ttl
-  timeouts  = var.timeouts.dns_zones
+  location         = var.location
+  name             = each.value.name
+  parent_id        = azapi_resource.private_dns_zone.id
+  records          = values(each.value.records)
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
+  timeouts         = var.timeouts.dns_zones
 }
 
 module "avm_interfaces" {

@@ -3,6 +3,12 @@ variable "domain_name" {
   description = "The name of the private dns zone."
 }
 
+variable "location" {
+  type        = string
+  description = "The Azure region for this module's resources or telemetry deployment."
+  nullable    = false
+}
+
 variable "parent_id" {
   type        = string
   description = "The ID of the parent resource. This is typically the ID of the resource group or a virtual network where the DNS zone will be created."
