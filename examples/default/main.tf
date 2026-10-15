@@ -74,6 +74,7 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name      = local.domain_name
+  location         = var.location
   parent_id        = local.parent_id
   a_records        = local.a_records
   aaaa_records     = local.aaaa_records

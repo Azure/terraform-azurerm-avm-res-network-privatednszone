@@ -25,6 +25,7 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name      = local.domain_name
+  location         = var.location
   parent_id        = local.parent_id
   enable_telemetry = var.enable_telemetry
   lock             = local.lock
@@ -85,6 +86,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's resources or telemetry deployment.
+
+Type: `string`
+
+Default: `"eastus"`
 
 ## Outputs
 

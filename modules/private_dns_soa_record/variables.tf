@@ -18,6 +18,12 @@ variable "expire_time" {
   }
 }
 
+variable "location" {
+  type        = string
+  description = "The Azure region for this module's resources or telemetry deployment."
+  nullable    = false
+}
+
 variable "minimum_ttl" {
   type        = number
   description = "The minimum time to live of the record in seconds."
@@ -80,6 +86,17 @@ variable "ttl" {
     condition     = var.ttl > 0
     error_message = "The ttl must be greater than 0."
   }
+}
+
+variable "enable_telemetry" {
+  type        = bool
+  default     = true
+  description = <<DESCRIPTION
+This variable controls whether or not telemetry is enabled for the module.
+For more information see <https://aka.ms/avm/telemetryinfo>.
+If it is set to false, then no telemetry will be collected.
+DESCRIPTION
+  nullable    = false
 }
 
 variable "retry" {

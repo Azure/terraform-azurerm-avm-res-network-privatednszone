@@ -24,6 +24,7 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name      = local.domain_name
+  location         = var.location
   parent_id        = local.parent_id
   enable_telemetry = var.enable_telemetry
 }
@@ -32,70 +33,84 @@ module "a_record" {
   source   = "../../modules/private_dns_a_record"
   for_each = local.a_records
 
-  ip_addresses = each.value.ip_addresses
-  name         = each.value.name
-  parent_id    = module.private_dns_zone.resource_id
-  ttl          = each.value.ttl
+  ip_addresses     = each.value.ip_addresses
+  location         = var.location
+  name             = each.value.name
+  parent_id        = module.private_dns_zone.resource_id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
 }
 
 module "aaaa_record" {
   source   = "../../modules/private_dns_aaaa_record"
   for_each = local.aaaa_records
 
-  ip_addresses = each.value.ip_addresses
-  name         = each.value.name
-  parent_id    = module.private_dns_zone.resource_id
-  ttl          = each.value.ttl
+  ip_addresses     = each.value.ip_addresses
+  location         = var.location
+  name             = each.value.name
+  parent_id        = module.private_dns_zone.resource_id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
 }
 
 module "cname_record" {
   source   = "../../modules/private_dns_cname_record"
   for_each = local.cname_records
 
-  cname     = each.value.cname
-  name      = each.value.name
-  parent_id = module.private_dns_zone.resource_id
-  ttl       = each.value.ttl
+  cname            = each.value.cname
+  location         = var.location
+  name             = each.value.name
+  parent_id        = module.private_dns_zone.resource_id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
 }
 
 module "mx_record" {
   source   = "../../modules/private_dns_mx_record"
   for_each = local.mx_records
 
-  name      = each.value.name
-  parent_id = module.private_dns_zone.resource_id
-  records   = values(each.value.records)
-  ttl       = each.value.ttl
+  location         = var.location
+  name             = each.value.name
+  parent_id        = module.private_dns_zone.resource_id
+  records          = values(each.value.records)
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
 }
 
 module "ptr_record" {
   source   = "../../modules/private_dns_ptr_record"
   for_each = local.ptr_records
 
-  domain_names = each.value.domain_names
-  name         = each.value.name
-  parent_id    = module.private_dns_zone.resource_id
-  ttl          = each.value.ttl
+  domain_names     = each.value.domain_names
+  location         = var.location
+  name             = each.value.name
+  parent_id        = module.private_dns_zone.resource_id
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
 }
 
 module "srv_record" {
   source   = "../../modules/private_dns_srv_record"
   for_each = local.srv_records
 
-  name      = each.value.name
-  parent_id = module.private_dns_zone.resource_id
-  records   = values(each.value.records)
-  ttl       = each.value.ttl
+  location         = var.location
+  name             = each.value.name
+  parent_id        = module.private_dns_zone.resource_id
+  records          = values(each.value.records)
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
 }
 
 module "txt_record" {
   source   = "../../modules/private_dns_txt_record"
   for_each = local.txt_records
 
-  name      = each.value.name
-  parent_id = module.private_dns_zone.resource_id
-  records   = values(each.value.records)
-  ttl       = each.value.ttl
+  location         = var.location
+  name             = each.value.name
+  parent_id        = module.private_dns_zone.resource_id
+  records          = values(each.value.records)
+  ttl              = each.value.ttl
+  enable_telemetry = var.enable_telemetry
 }
 ```
 
@@ -133,6 +148,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's resources or telemetry deployment.
+
+Type: `string`
+
+Default: `"eastus"`
 
 ## Outputs
 
