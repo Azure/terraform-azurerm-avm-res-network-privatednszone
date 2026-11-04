@@ -28,7 +28,6 @@ resource "terraform_data" "telemetry" {
   count = var.enable_telemetry ? 1 : 0
 }
 
-# tflint-ignore: avm_azapi_resource_tags_required
 resource "azapi_resource" "telemetry" {
   count = var.enable_telemetry ? 1 : 0
 

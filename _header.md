@@ -10,11 +10,17 @@ module "azure_privatednszone" {
 
   // ... mandatory variables ...
   domain_name = "your.domain.com"
-  resource_group_name = "existing_resourcegroup_name"
+  location    = "eastus"
+  parent_id   = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup"
 
   // ... other optional variables, see example ...
 }
 ```
+
+The zone is global, but telemetry is enabled by default and requires `location`
+to be a region available in the target Azure cloud. Set `enable_telemetry = false`
+to omit `location`. Enabled telemetry requires permissions to read, write, and
+delete deployments at subscription scope.
 
 ## NOTE:
 When this module is used and terraform plan is run after an initial successful deployment, the following example output(truncated for brevity) may be seen. This is due to updating of Terraform output *resource* value of *number_of_record_sets*. Running apply will only update the Terraform output but will not change infrastructure

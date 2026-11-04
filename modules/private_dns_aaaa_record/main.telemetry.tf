@@ -32,7 +32,6 @@ locals {
   avm_telemetry_version_token = replace(coalesce(local.avm_module_version, "0.0.0"), ".", "-")
 }
 
-# tflint-ignore: avm_azapi_resource_tags_required
 resource "azapi_resource" "telemetry" {
   count = var.enable_telemetry ? 1 : 0
 
@@ -64,8 +63,8 @@ resource "azapi_resource" "telemetry" {
 
   lifecycle {
     precondition {
-      error_message = "The telemetry deployment name must fit Azure's 64-character limit and contain a valid module version."
       condition     = length(local.avm_metadata.telemetryIdPrefix) + length(local.avm_telemetry_version_token) + 8 <= 64 && can(regex("^[A-Za-z0-9_-]+$", local.avm_telemetry_version_token))
+      error_message = "The telemetry deployment name must fit Azure's 64-character limit and contain a valid module version."
     }
   }
 }

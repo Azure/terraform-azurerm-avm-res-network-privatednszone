@@ -74,12 +74,12 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name      = local.domain_name
-  location         = var.location
   parent_id        = local.parent_id
   a_records        = local.a_records
   aaaa_records     = local.aaaa_records
   cname_records    = local.cname_records
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   mx_records       = local.mx_records
   ptr_records      = local.ptr_records
   retry = {

@@ -69,12 +69,6 @@ Description: The expiration time of the SOA record in seconds.
 
 Type: `number`
 
-### <a name="input_location"></a> [location](#input\_location)
-
-Description: The Azure region for this module's resources or telemetry deployment.
-
-Type: `string`
-
 ### <a name="input_minimum_ttl"></a> [minimum\_ttl](#input\_minimum\_ttl)
 
 Description: The minimum time to live of the record in seconds.
@@ -124,6 +118,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's telemetry deployment.
+
+Type: `string`
+
+Default: `null`
 
 ### <a name="input_retry"></a> [retry](#input\_retry)
 

@@ -10,7 +10,6 @@ data "azapi_client_config" "telemetry" {
   count = var.enable_telemetry ? 1 : 0
 }
 
-# tflint-ignore: avm_azapi_resource_tags_required
 resource "azapi_resource" "telemetry" {
   count = var.enable_telemetry ? 1 : 0
 

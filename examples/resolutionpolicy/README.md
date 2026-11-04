@@ -53,9 +53,9 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name           = local.domain_name
-  location              = var.location
   parent_id             = local.parent_id
   enable_telemetry      = var.enable_telemetry
+  location              = var.location
   tags                  = local.tags
   virtual_network_links = local.virtual_network_links
 }

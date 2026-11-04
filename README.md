@@ -12,11 +12,17 @@ module "azure_privatednszone" {
 
   // ... mandatory variables ...
   domain_name = "your.domain.com"
-  resource_group_name = "existing_resourcegroup_name"
+  location    = "eastus"
+  parent_id   = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup"
 
   // ... other optional variables, see example ...
 }
 ```
+
+The zone is global, but telemetry is enabled by default and requires `location`
+to be a region available in the target Azure cloud. Set `enable_telemetry = false`
+to omit `location`. Enabled telemetry requires permissions to read, write, and
+delete deployments at subscription scope.
 
 ## NOTE:
 When this module is used and terraform plan is run after an initial successful deployment, the following example output(truncated for brevity) may be seen. This is due to updating of Terraform output *resource* value of *number\_of\_record\_sets*. Running apply will only update the Terraform output but will not change infrastructure
@@ -64,12 +70,6 @@ The following input variables are required:
 ### <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name)
 
 Description: The name of the private dns zone.
-
-Type: `string`
-
-### <a name="input_location"></a> [location](#input\_location)
-
-Description: The Azure region for this module's resources or telemetry deployment.
 
 Type: `string`
 
@@ -143,6 +143,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's telemetry deployment.
+
+Type: `string`
+
+Default: `null`
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
