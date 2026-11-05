@@ -8,30 +8,29 @@ This deploys the module in its simplest form.
 data "azurerm_client_config" "current" {}
 
 module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  source  = "Azure/avm-utl-naming/azure"
+  version = "0.2.0"
 }
 
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = module.naming.resource_group.name_unique
+  name     = module.naming.names.resource_group.name_unique
 }
 
 # create first sample virtual network
 module "vnet1" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.23.0"
 
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = "vnet1"
+  location         = azurerm_resource_group.avmrg.location
+  parent_id        = azurerm_resource_group.avmrg.id
+  address_space    = ["10.0.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = "vnet1"
   retry = {
     error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
+    interval_seconds    = 10
   }
   subnets = {
     subnet1 = {
@@ -49,17 +48,16 @@ module "vnet1" {
 # create second sample virtual network
 module "vnet2" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.23.0"
 
-  address_space       = ["10.1.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = "vnet2"
+  location         = azurerm_resource_group.avmrg.location
+  parent_id        = azurerm_resource_group.avmrg.id
+  address_space    = ["10.1.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = "vnet2"
   retry = {
     error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
+    interval_seconds    = 10
   }
   subnets = {
     subnet2 = {
@@ -91,8 +89,7 @@ module "private_dns_zone" {
   ptr_records      = local.ptr_records
   retry = {
     error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
+    interval_seconds    = 10
   }
   role_assignments = local.role_assignments
   soa_record       = local.soa_record
@@ -122,7 +119,9 @@ module "private_dns_zone" {
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.11.0, < 2.0.0)
+
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.12)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.0, < 5.0)
 
@@ -206,9 +205,9 @@ The following Modules are called:
 
 ### <a name="module_naming"></a> [naming](#module\_naming)
 
-Source: Azure/naming/azurerm
+Source: Azure/avm-utl-naming/azure
 
-Version: 0.4.2
+Version: 0.2.0
 
 ### <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone)
 
@@ -220,13 +219,13 @@ Version:
 
 Source: Azure/avm-res-network-virtualnetwork/azurerm
 
-Version: 0.9.1
+Version: 0.23.0
 
 ### <a name="module_vnet2"></a> [vnet2](#module\_vnet2)
 
 Source: Azure/avm-res-network-virtualnetwork/azurerm
 
-Version: 0.9.1
+Version: 0.23.0
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

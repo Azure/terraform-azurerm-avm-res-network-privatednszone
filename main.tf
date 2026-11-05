@@ -165,20 +165,20 @@ module "txt_record" {
 
 module "avm_interfaces" {
   source  = "Azure/avm-utl-interfaces/azure"
-  version = "0.5.0"
+  version = "0.10.0"
 
   enable_telemetry                          = var.enable_telemetry
+  location                                  = var.location
   lock                                      = var.lock
   role_assignment_definition_lookup_enabled = true
   role_assignment_definition_scope          = var.parent_id
-  role_assignment_name_use_random_uuid      = var.role_assignment_name_use_random_uuid
   role_assignments                          = var.role_assignments
 }
 
 resource "azapi_resource" "role_assignments" {
   for_each = module.avm_interfaces.role_assignments_azapi
 
-  name      = each.value.name
+  name      = var.role_assignment_name_use_random_uuid ? each.value.name : uuidv5("url", format("%s%s", var.role_assignments[each.key].principal_id, each.value.body.properties.roleDefinitionId))
   parent_id = azapi_resource.private_dns_zone.id
   type      = each.value.type
   body      = each.value.body
