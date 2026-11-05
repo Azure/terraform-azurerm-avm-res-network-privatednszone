@@ -1,14 +1,14 @@
 data "azurerm_client_config" "current" {}
 
 module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  source  = "Azure/avm-utl-naming/azure"
+  version = "0.2.0"
 }
 
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = module.naming.resource_group.name_unique
+  name     = module.naming.names.resource_group.name_unique
 }
 
 # reference the module and pass in variables as needed
@@ -18,9 +18,9 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name      = local.domain_name
-  location         = var.location
   parent_id        = local.parent_id
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   lock             = local.lock
   retry = {
     error_message_regex = ["CannotDeleteResource"]

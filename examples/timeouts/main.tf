@@ -11,29 +11,28 @@ resource "random_integer" "region_index" {
 }
 
 module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  source  = "Azure/avm-utl-naming/azure"
+  version = "0.2.0"
 }
 
 resource "azurerm_resource_group" "avmrg" {
   location = module.regions.regions[random_integer.region_index.result].name
-  name     = module.naming.resource_group.name_unique
+  name     = module.naming.names.resource_group.name_unique
 }
 
 # create first sample virtual network
 module "vnet" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.23.0"
 
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = module.naming.virtual_network.name
+  location         = azurerm_resource_group.avmrg.location
+  parent_id        = azurerm_resource_group.avmrg.id
+  address_space    = ["10.0.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = module.naming.names.virtual_network.name
   retry = {
     error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
+    interval_seconds    = 10
   }
   subnets = {
     subnet1 = {
@@ -55,12 +54,12 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name      = local.domain_name
-  location         = var.location
   parent_id        = local.parent_id
   a_records        = local.a_records
   aaaa_records     = local.aaaa_records
   cname_records    = local.cname_records
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   mx_records       = local.mx_records
   ptr_records      = local.ptr_records
   soa_record       = local.soa_record

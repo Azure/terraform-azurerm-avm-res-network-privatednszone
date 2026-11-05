@@ -60,11 +60,11 @@ module "virtual_network_links" {
   source   = "./modules/private_dns_virtual_network_link"
   for_each = var.virtual_network_links
 
-  location                               = var.location
   name                                   = coalesce(each.value.name, each.value.vnetlinkname)
   parent_id                              = azapi_resource.private_dns_zone.id
   virtual_network_id                     = coalesce(each.value.virtual_network_id, each.value.vnetid)
   enable_telemetry                       = var.enable_telemetry
+  location                               = var.location
   private_dns_zone_supports_private_link = each.value.private_dns_zone_supports_private_link
   registration_enabled                   = coalesce(each.value.registration_enabled, each.value.autoregistration, false)
   resolution_policy                      = each.value.resolution_policy
@@ -77,11 +77,11 @@ module "a_record" {
   for_each = var.a_records
 
   ip_addresses     = coalesce(each.value.ip_addresses, toset(each.value.records))
-  location         = var.location
   name             = each.value.name
   parent_id        = azapi_resource.private_dns_zone.id
   ttl              = each.value.ttl
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   timeouts         = var.timeouts.dns_zones
 }
 
@@ -90,11 +90,11 @@ module "aaaa_record" {
   for_each = var.aaaa_records
 
   ip_addresses     = coalesce(each.value.ip_addresses, toset(each.value.records))
-  location         = var.location
   name             = each.value.name
   parent_id        = azapi_resource.private_dns_zone.id
   ttl              = each.value.ttl
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   timeouts         = var.timeouts.dns_zones
 }
 
@@ -103,11 +103,11 @@ module "cname_record" {
   for_each = var.cname_records
 
   cname            = coalesce(each.value.cname, each.value.record)
-  location         = var.location
   name             = each.value.name
   parent_id        = azapi_resource.private_dns_zone.id
   ttl              = each.value.ttl
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   timeouts         = var.timeouts.dns_zones
 }
 
@@ -115,12 +115,12 @@ module "mx_record" {
   source   = "./modules/private_dns_mx_record"
   for_each = var.mx_records
 
-  location         = var.location
   name             = each.value.name
   parent_id        = azapi_resource.private_dns_zone.id
   records          = values(each.value.records)
   ttl              = each.value.ttl
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   timeouts         = var.timeouts.dns_zones
 }
 
@@ -129,11 +129,11 @@ module "ptr_record" {
   for_each = var.ptr_records
 
   domain_names     = coalesce(each.value.domain_names, toset(each.value.records))
-  location         = var.location
   name             = each.value.name
   parent_id        = azapi_resource.private_dns_zone.id
   ttl              = each.value.ttl
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   timeouts         = var.timeouts.dns_zones
 }
 
@@ -141,12 +141,12 @@ module "srv_record" {
   source   = "./modules/private_dns_srv_record"
   for_each = var.srv_records
 
-  location         = var.location
   name             = each.value.name
   parent_id        = azapi_resource.private_dns_zone.id
   records          = values(each.value.records)
   ttl              = each.value.ttl
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   timeouts         = var.timeouts.dns_zones
 }
 
@@ -154,31 +154,31 @@ module "txt_record" {
   source   = "./modules/private_dns_txt_record"
   for_each = var.txt_records
 
-  location         = var.location
   name             = each.value.name
   parent_id        = azapi_resource.private_dns_zone.id
   records          = values(each.value.records)
   ttl              = each.value.ttl
   enable_telemetry = var.enable_telemetry
+  location         = var.location
   timeouts         = var.timeouts.dns_zones
 }
 
 module "avm_interfaces" {
   source  = "Azure/avm-utl-interfaces/azure"
-  version = "0.5.0"
+  version = "0.10.0"
 
   enable_telemetry                          = var.enable_telemetry
+  location                                  = var.location
   lock                                      = var.lock
   role_assignment_definition_lookup_enabled = true
   role_assignment_definition_scope          = var.parent_id
-  role_assignment_name_use_random_uuid      = var.role_assignment_name_use_random_uuid
   role_assignments                          = var.role_assignments
 }
 
 resource "azapi_resource" "role_assignments" {
   for_each = module.avm_interfaces.role_assignments_azapi
 
-  name      = each.value.name
+  name      = var.role_assignment_name_use_random_uuid ? each.value.name : uuidv5("url", format("%s%s", var.role_assignments[each.key].principal_id, each.value.body.properties.roleDefinitionId))
   parent_id = azapi_resource.private_dns_zone.id
   type      = each.value.type
   body      = each.value.body

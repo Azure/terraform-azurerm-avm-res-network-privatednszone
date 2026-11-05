@@ -1,30 +1,29 @@
 data "azurerm_client_config" "current" {}
 
 module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  source  = "Azure/avm-utl-naming/azure"
+  version = "0.2.0"
 }
 
 # create the resource group
 resource "azurerm_resource_group" "avmrg" {
   location = "EastUS"
-  name     = module.naming.resource_group.name_unique
+  name     = module.naming.names.resource_group.name_unique
 }
 
 # create first sample virtual network
 module "vnet" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "0.9.1"
+  version = "0.23.0"
 
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.avmrg.location
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
-  name                = module.naming.virtual_network.name
+  location         = azurerm_resource_group.avmrg.location
+  parent_id        = azurerm_resource_group.avmrg.id
+  address_space    = ["10.0.0.0/16"]
+  enable_telemetry = var.enable_telemetry
+  name             = module.naming.names.virtual_network.name
   retry = {
     error_message_regex = ["CannotDeleteResource"]
-    attempts            = 3
-    delay               = "10s"
+    interval_seconds    = 10
   }
   subnets = {
     subnet1 = {
@@ -46,24 +45,24 @@ module "private_dns_zone" {
   source = "../../"
 
   domain_name           = local.domain_name
-  location              = var.location
   parent_id             = local.parent_id
   enable_telemetry      = var.enable_telemetry
+  location              = var.location
   tags                  = local.tags
   virtual_network_links = local.virtual_network_links
 }
 
 module "avm_storageaccount" {
   source  = "Azure/avm-res-storage-storageaccount/azurerm"
-  version = "0.5.0"
+  version = "0.11.0"
 
-  location            = azurerm_resource_group.avmrg.location
-  name                = module.naming.storage_account.name_unique
-  resource_group_name = azurerm_resource_group.avmrg.name
-  enable_telemetry    = var.enable_telemetry
+  location         = azurerm_resource_group.avmrg.location
+  name             = module.naming.names.storage_account.name_unique
+  parent_id        = azurerm_resource_group.avmrg.id
+  enable_telemetry = var.enable_telemetry
   private_endpoints = {
     private_endpoint_1 = {
-      name                          = module.naming.private_endpoint.name_unique
+      name                          = module.naming.names.private_endpoint.name_unique
       subnet_resource_id            = module.vnet.subnets["subnet1"].resource_id
       subresource_name              = "blob"
       private_dns_zone_resource_ids = [module.private_dns_zone.resource_id]
