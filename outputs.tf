@@ -4,7 +4,7 @@ output "a_record_outputs" {
     for record_name, record in module.a_record :
     record_name => {
       id   = record.resource_id
-      fqdn = record.resource.fqdn
+      fqdn = try(record.resource.fqdn, null)
     }
   }
 }
@@ -15,7 +15,7 @@ output "aaaa_record_outputs" {
     for record_name, record in module.aaaa_record :
     record_name => {
       id   = record.resource_id
-      fqdn = record.resource.fqdn
+      fqdn = try(record.resource.fqdn, null)
     }
   }
 }
@@ -26,7 +26,7 @@ output "cname_record_outputs" {
     for record_name, record in module.cname_record :
     record_name => {
       id   = record.resource_id
-      fqdn = record.resource.fqdn
+      fqdn = try(record.resource.fqdn, null)
     }
   }
 }
@@ -37,7 +37,7 @@ output "mx_record_outputs" {
     for record_name, record in module.mx_record :
     record_name => {
       id   = record.resource_id
-      fqdn = record.resource.fqdn
+      fqdn = try(record.resource.fqdn, null)
     }
   }
 }
@@ -53,7 +53,7 @@ output "ptr_record_outputs" {
     for record_name, record in module.ptr_record :
     record_name => {
       id   = record.resource_id
-      fqdn = record.resource.fqdn
+      fqdn = try(record.resource.fqdn, null)
     }
   }
 }
@@ -83,7 +83,7 @@ output "srv_record_outputs" {
     for record_name, record in module.srv_record :
     record_name => {
       id   = record.resource_id
-      fqdn = record.resource.fqdn
+      fqdn = try(record.resource.fqdn, null)
     }
   }
 }
@@ -94,7 +94,7 @@ output "txt_record_outputs" {
     for record_name, record in module.txt_record :
     record_name => {
       id   = record.resource_id
-      fqdn = record.resource.fqdn
+      fqdn = try(record.resource.fqdn, null)
     }
   }
 }
